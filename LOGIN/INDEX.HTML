@@ -5,7 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login </title>
         <style>
-            :root{
+            @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manufacturing+Consent&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+        :root{
                 --color-background:#f0f0f0;
                 --color-text:#333;
                 --color-border:#ccc;
@@ -17,13 +19,153 @@
                 --color-social-hover:#f0f0f0;
                 --color-floting-lable:#5f6368;
                 --color-white:#fff;
-
-
-                
             }
+            *{
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+                font-family: 'Work Sans', sans-serif;
+            }
+            body{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color:blue;
+                height: 100vh;
+            }
+            .container{
+                background-color: #ffffff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                border: 1px solid #777;
+                border-radius: .5rem;
+                padding: 1rem;
+                gap: 2rem;
+            }
+            .first{
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+            }
+            .first-img{
+                color: black;
+                height: 50vh;
+            }
+            .first-head{
+                font-size: 2.5rem;
+            }
+            .second{
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .inputs{
+                width: 26rem;
+            }
+            .input-field{
+                padding: .5rem;
+                border-radius: .5rem;
+                border-color: #0056b3
+            }
+            .third{
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .signup{
+                display: flex;
+                gap: 3rem;
+            }
+            .checkbox{
+                display: flex;
+                justify-content: space-around;
+                gap: 3rem;
+            }
+            #email{
+                 width: 25rem;
+            }
+            #password{
+                width: 25rem;
+            }
+            button{
+                width: 25rem;
+                padding: .5rem;
+                border-radius: .3rem;
+                background-color:rgb(36, 153, 231);
+                font-size: 1rem;
+                transform: all .3s ease;
+            }
+            button:hover{
+                background-color: rgb(107, 146, 237);
+            }
+            .logo{
+                height: 5vh;
+                padding: .1rem;
+                border: 1px solid black;
+                border-radius: .3rem;
+                transition: all .3s ease;
+            }
+           
+            .logo:hover{
+                 transform: translate(1.1);
+            }
+        
+
         </style>
     </head>
         <body>
-            
+            <div class="container">
+                <div class="first">
+                    <div class="left">
+                       
+                        <h2 class="first-head">
+                            Login
+                        </h2>
+                    </div>
+                    <div class="right">
+                        <!-- <img src="blob.svg"  class="first-img">
+                        <img src="blob.svg"  class="first-img">
+                        <img src="blob.svg"  class="first-img">
+                         -->
+                    </div>
+                    
+                </div>
+                <div class="second">
+                    <div class="inputs">
+                        <input type="email" id="email" class="input-field" placeholder="Email Address" required>
+                        <label for="email" class="input-lable"></label>
+                    </div>
+                    <div class="inputs">
+                        <input type="password" id="password" class="input-field" placeholder="Password" required>
+                        <label for="password" class="input-lable"></label>
+                    </div>
+                    <div class="checkbox">
+                        <div class="1">
+                            <input type="checkbox" id="checkbox" class="input-field">
+                        <label for="checkbox">Remember me</label>
+                        </div>
+                        
+                        <a href="#">Forget Password</a>
+                    </div>
+                    
+                </div>
+                <div class="third">
+                    <button class="sign">Sign in</button>
+                    or
+                    <div class="logos">
+                        <a href="#"><img src="google.svg" class="logo"></a>
+                        
+                        <a href=""><img src="facebook.svg" class="logo"></a>
+                        <a href=""><img src="apple.svg" class="logo"></a>
+                    </div>  
+                    <div class="signup">
+                        <p>Don’t have an account?</p>
+                    <a href="#">Sign up</a>
+                    </div>
+                    
+                </div>
+            </div>
         </body>
     </html>
