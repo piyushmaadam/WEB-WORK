@@ -1,0 +1,286 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>4K Movies</title>
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+            body{
+                background-color: black;
+                /* height: 100vh; */
+            }
+            .top{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 1rem;
+            }
+            .logo-icon{
+                height: 8vh;
+            }
+            .nav1{
+                display: flex;
+                gap: 2rem;
+                margin-left: 4rem;
+                
+            }
+            .nav1-links{
+                font-size: 1.5rem;
+                text-decoration: none;
+                color: white;
+                padding: .3rem 1.1rem;
+                border-radius: .3rem;
+                transform: all .2s ease;
+            }
+            .nav1-links:hover{
+                background-color: rgb(48, 45, 45);
+            }
+            .slider {
+                display: flex;
+                gap: 15px;
+                padding: 20px;
+            }
+            
+            .slider-img {
+                width: 100%;
+                height: 8vh;
+                border-radius: 8px;
+            }
+            .nav2{
+                margin-top: 1rem;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                background-color: rgb(55, 51, 51);
+                border-radius: .20rem;
+                border: 1px solid burlywood;
+                padding: 1rem;
+            }
+            .nav2-links{
+                font-size: 1.5rem;
+                text-decoration: none;
+                color: white;
+                padding: .3rem 1.1rem;
+                border-radius: .3rem;
+                transform: all .2s ease;
+            }
+            .nav2-links:hover{
+                background-color: rgb(39, 38, 38);
+            }
+            .dropdown {
+                display: none;
+                position: absolute;
+                background-color: rgb(55, 51, 51);
+                border-radius: .20rem;
+                margin-top: .5rem;
+                min-width: 180px;
+            }
+            .nav2 li:hover .dropdown {
+                display: block;
+            }
+          
+            .drop-links{
+                display: flex;
+                justify-content: start;
+                align-items: center;
+                text-decoration: none;
+                font-size: 1.5rem;
+                color: white;
+                padding: .3rem 1.1rem;
+                border-radius: .3rem;
+                transform: all .2s ease;
+            }
+            .drop-links:hover{
+                 background-color: rgb(39, 38, 38);
+            }
+            ul li{
+                list-style: none;
+            }
+            .main-section{
+                max-width: 1280px;
+                margin: 0 auto;
+            }
+            .semi-header-section{
+                display: flex;
+                justify-content: start;
+                align-items: center;
+                border-radius: .20rem;
+                max-width: 1280px;
+                margin: 1rem auto;
+                background-color: rgb(40, 33, 33);
+                padding: 1rem;
+            }
+            .semi-header{
+                color: white;
+            }
+            .movie-cards{
+                display: grid;
+                grid-template-columns: repeat(5,1fr);
+                column-gap: 2rem;
+                row-gap: 1rem;
+            }
+            .card{
+                height: 55.5vh;
+                width: 14.5vw;
+                border: 1px solid green;
+                background-color:rgb(34, 31, 31);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                row-gap: 1rem;
+                padding: 1rem;
+                overflow: hidden;
+                margin:1rem 0;
+                border-radius: .20rem;
+                box-shadow: 1px 1px 30px green;
+            }
+            .movie-poster-container{
+                margin: 0;
+                overflow: hidden;
+            }
+            .movie-poster{
+                height: 35vh;
+                width: 13.5vw;
+                transition: all 0.2s ease;
+               
+            }
+            .movie-poster:hover{
+                transform: scale(1.3);
+            }
+            .movie-info{
+                color: white;
+                text-decoration: none;
+                font-size: 1.1rem;
+                font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+         
+           
+        
+        </style>
+    </head>
+        <body>
+            <div class="main">
+                <div class="header">
+                    <div class="top">
+                        <div class="logo">
+                            <img src="Download Free Vectors, Images, Photos & Videos _ Vecteezy.jpeg" alt="" class="logo-icon">
+                        </div>
+                        <div class="nav1">
+                            <a href="" class="nav1-links">Disclaimer</a> 
+                            <a href="" class="nav1-links">How To Download?</a>
+                            <a href="" class="nav1-links">Join Our Group!</a>
+                            <a href="" class="nav1-links">Movie Request Page</a>
+                        </div>
+                    </div>
+                    <div class="nav2">
+                        <a href="#home" class="nav2-links">Home</a>
+                        <a href="#bollywood" class="nav2-links">Bollywood</a>
+                        <a href="#hollywood" class="nav2-links">Hollywood</a>
+                        <a href="#hindi-dubbed" class="nav2-links">Hindi Dubbed</a>
+                        <a href="#south-hindi" class="nav2-links">South Hindi</a>
+                        <a href="#web-series" class="nav2-links">Web Series</a>
+                        <a href="#18+" class="nav2-links">18+</a>
+                        <ul>
+                            <li style="position: relative;">
+                                <a href="#genres" class="nav2-links">GENREs</a>
+                                <div class="dropdown">
+                                    <a href="#comedy" class="drop-links">Comedy</a>
+                                    <a href="#horror" class="drop-links">Horro</a>
+                                    <a href="#thriller" class="drop-links">Thriller</a>
+                                    <a href="#romcom" class="drop-links">Rom Com</a>
+                                    <a href="#drama" class="drop-links">Drama</a>
+                                    <a href="#crime" class="drop-links">Crime</a>
+                                    <a href="#fantacy" class="drop-links">Fantacy</a>
+                                    <a href="#adventure" class="drop-links">Adventure</a>
+                                    <a href="#biography" class="drop-links">BioGraphy</a>
+                                    <a href="#animation" class="drop-links">Animation</a>
+                                    <a href="#scifi" class="drop-links">Sci Fi</a>
+                                 </div>
+                            </li>
+                        </ul>
+                            
+                      
+                    </div>
+                </div>
+                <div class="main-section">
+                    <div class="semi-header-section">
+                        <h1 class="semi-header">
+                            &copy;
+                            Latest Releases
+                        </h1>    
+                    </div>
+                    <div class="movie-cards">
+                            <div class="card">
+                                <div class="movie-poster-container">
+                                     <a href=""><img src="Pushpa 2 The Rule Poster.jpeg" class="movie-poster"></a>
+                                </div>
+                               <a href="#" class="movie-info">Superman (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                            <div class="card">
+                                <div class="movie-poster-container">
+                                    <a href=""><img src="2.jpg" class="movie-poster"></a>
+                                </div>
+                                <a href="#" class="movie-info">Maa (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                            <div class="card">
+                                <div class="movie-poster-container">
+                                    <a href=""><img src="3.jpg" class="movie-poster"></a>
+                                </div>
+                                <a href="#" class="movie-info">War 2 (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                            <div class="card">
+                               <div class="movie-poster-container">
+                                    <a href=""><img src="4.jpg" class="movie-poster"></a>
+                                </div>
+                                <a href="#" class="movie-info">Maareesan (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                            <div class="card">
+                                <div class="movie-poster-container">
+                                    <a href=""><img src="5.jpg" class="movie-poster"></a>
+                                </div>
+                                <a href="#" class="movie-info">Weapons (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                            <div class="card">
+                               <div class="movie-poster-container">
+                                    <a href=""><img src="6.jpg" class="movie-poster"></a>
+                                </div>
+                                <a href="#" class="movie-info">The Bad Guys 2 (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                            <div class="card">
+                                <div class="movie-poster-container">
+                                    <a href=""><img src="7.jpg" class="movie-poster"></a>
+                                </div>
+                                <a href="#" class="movie-info">Hari Hara Virramallu (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                            <div class="card">
+                               <div class="movie-poster-container">
+                                    <a href=""><img src="8.jpg" class="movie-poster"></a>
+                                </div>
+                                <a href="#" class="movie-info">Hostage (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                            <div class="card">
+                               <div class="movie-poster-container">
+                                    <a href=""><img src="9.jpg" class="movie-poster"></a>
+                                </div>
+                                <a href="#" class="movie-info">Accident Or Conspirasy GODHRA (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                            <div class="card">
+                               <div class="movie-poster-container">
+                                    <a href=""><img src="10.jpg" class="movie-poster"></a>
+                                </div>
+                                <a href="#" class="movie-info">Cheif Of War (2025) iMAX DS4K WEB-DL [Hindi (DD5.1) & English] 4K 1080p 720p & 480p Dual Audio [x264/10Bit-HEVC] | Full Movie</a>
+                            </div>
+                    </div>
+                </div>
+               
+                
+            </div>
+        </body>
+    </html>
