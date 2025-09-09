@@ -1,0 +1,144 @@
+*{
+    margin: 0%;
+    padding: 0%;
+}
+.main{
+    width: 100%;
+    /* background: url(second.jpeg);  */
+    /* background: url(aerial-beautiful-shot-seashore-with-hills-background-sunset.jpg); */
+    /* background: url(rm218-bb-07.jpg); */
+    background: url(grey-gradient-4000x4000-19814.png);
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    position: relative;
+    font-family:Georgia, 'Times New Roman', Times, serif
+}
+#xlogo{
+    height: 30px;
+    width: 30px;
+    border-radius: 10px;
+}
+#xlogo:hover{
+    height: 40px;
+    width: 40px;
+    /* background-color: blue; */
+    transition: .3s ease;
+}
+#llogo{
+    height: 30px;
+    width: 30px;
+    border-radius: 10px;
+}
+#llogo:hover{
+    height: 40px;
+    width: 40px;
+    /* background-color: blue; */
+    transition: .3s ease;
+}
+#flogo{
+    height: 30px;
+    width: 30px;
+    border-radius: 10px;
+}
+#flogo:hover{
+    height: 40px;
+    width: 40px;
+    /* background-color: blue; */
+    transition: .3s ease;
+}
+
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    
+.logo{
+    width: 60px;
+    cursor: pointer;
+    margin-left: 6%;
+    margin-top: 15px;
+}
+
+
+}
+ul li{
+    display: inline;
+    padding-right: 20px;
+    
+}
+ul li a{
+    font-size: 15px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    transition: .4s ease;
+    text-decoration: none;
+}
+ul li a:hover{
+    color: blue;
+}
+.info{
+    margin-left: 5%;
+    margin-top: 10%;
+}
+.info h1{
+    font: bold;
+    font-size: 50px;
+}
+.info h3{
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 2px;
+}
+.info span{
+    color: rgb(222, 190, 48);
+}
+.info a{
+    margin: 26px 0;
+    text-decoration: none;
+    padding: 7px;
+    border-radius: 10px;
+    color: beige;
+    background: black;
+    display: inline-block;
+    transition: .4s ease;
+}
+.info a:hover{
+    background: blue;
+}
+.image{
+    height: 60%;
+    width: 30%;
+    position: absolute;
+    right: 150px;
+    bottom: 0px;
+
+}
+.image img{
+    /* width: 50%; */
+    position: absolute;
+    height: 140%;
+    left: 40%;
+    bottom: 0;
+    transition: left 2s ease;
+    transform: translate(-0%);
+}
+.image  :hover{
+    left: 55%;
+}
+.social-links{
+    margin-left: 20px;
+}
+.social-links a{
+    text-decoration: none;
+    margin-left: 15px;
+    color: blue;
+    border-radius: 6px;
+    background-color: beige;
+    transition: .2s ease;
+
+}
+.social-links a:hover{
+    color: red ;
+}

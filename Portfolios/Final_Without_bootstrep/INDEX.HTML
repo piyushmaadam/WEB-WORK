@@ -1,0 +1,204 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Portfolio</title>
+        <link rel="shortcut icon" href="redondo circular bandera marco, redondo color fondo, modelo resumen logo.jpg" type="image/x-icon">
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+            }
+            .main{
+               
+                background-color: black;
+                height: 100vh;
+                width: 100vw;
+                box-sizing: border-box;
+
+            }
+            .photo img{
+                border-radius: 50%;
+                width: 300px;
+                height: 300px;
+                margin-top: 180px;
+                margin-left: 50px;
+               
+            }
+            .navbar{
+                display: flex;
+            }
+            .navbar .logo img{
+                margin-top: 15px;
+                margin-left: 120px;
+                height: 55px;
+                width: 55px;
+                border-radius: 19px;
+            }
+            .navbar ul{
+               
+                display: flex;
+                justify-content: start;
+                margin-left: 10px;
+                margin-top: 10px;
+                 
+            }
+            .navbar ul li{
+                padding: 10px;
+                margin: 10px;
+            }
+            .navbar ul li:hover{
+               
+                transition: all .3s ease; transform: scale(1.1);
+            }
+            #about{
+                margin-left: 700px;
+                background-color: blue;
+                color: aliceblue;
+            }
+            .button h2{
+                margin-left: 500px;
+                margin-top: 29px;
+                background-color: rgb(14, 182, 157);
+                padding-left: 15px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-right: 15px;
+                transition: color 0.3s ease, transform 0.3s ease;
+            }
+            .button h2:hover{
+                background-color: rgb(13, 0, 255);
+                transform: scale(1.1);
+                
+            }
+          
+            a{
+                text-decoration: none;
+                font-family: Arial, Helvetica, sans-serif;
+                font-weight:bold;
+                font-size: 20px;
+            }
+           
+            .info{
+                margin-left: 600px;
+                margin-top: -290px;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+            .info h3{
+                color: rgb(39, 180, 41);
+                font-size: 25px;
+                margin-left: 3px;
+            }
+            .info h1{
+               
+                font-size: 50px;
+                font-family:Verdana, Geneva, Tahoma, sans-serif;
+            }
+            #Front{
+                color: aliceblue;
+                font-family:Verdana, Geneva, Tahoma, sans-serif;
+            }
+            #Web{
+                color: rgb(29, 195, 29);
+            }
+            .info p{
+                color: aliceblue;
+                font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+               
+                font-size: 20px;
+                margin-top: 10px;
+            }
+            button{
+                color:rgb(17, 176, 65);
+                background-color: black;
+                margin-top: 50px;
+                border: 2px solid green;
+                font-size: 25px;
+                padding-left: 30px;
+                padding-right: 30px;
+                padding-bottom: 5px;
+                padding-top: 5px;
+            }
+            button:hover{
+                background-color: rgb(10, 10, 61);
+                transform: scale(1.1);
+                transition: color 0.3s ease, transform 0.3s ease;
+            }
+          
+            #insta{
+                height: 60px;
+                width: 60px;
+                position: relative;
+                top: 30px;
+                padding-left: 10px;
+            }
+            #l{
+                position: relative;
+                top: 20px;
+                padding-left: 10px;
+                height: 40px;
+                width: 40px;
+            }
+            #x{ position: relative;
+                top: 20px;
+                padding-left: 10px;
+                height: 35px;
+                width: 35px;
+            }
+            .social:hover{
+                transform: scale(1.1);
+                transition: all .3s ease;
+            }
+
+            
+            
+        </style>
+    </head>
+        <body>
+            <div class="main">
+                
+                <div class="navbar">
+                    <div class="logo">
+                        <img src="boy3.jpg" >
+                    </div>
+                    <ul>
+                        <li><a href="#Home">HOME</a></li>
+                        <li><a href="#Skills">SKILLS</a></li>
+                        <li><a href="#Contact">CONTACT</a></li>
+                       
+                    </ul>
+                    <div class="button">
+                        <h2 style="color: aliceblue;">ABOUT</h2>
+                    </div>
+                   
+                </div>
+                <div class="second">
+                    <div class="photo">
+                        <img src="PhotoOfMY.jpg" >
+                    </div>
+                    <div class="info">
+                        <h3>Piyush_Yadav</h3>
+                        <h1 id="Front">Front-End </h1>
+                        <h1 id="Web">Web Developer</h1>
+                        <p>
+                            Hi, I'm Piyush Ahir, a Front-End Web Developer. I enjoy <br>building modern, responsive websites usingbr
+                            HTML, CSS, and JavaScript. <br>I'm passionate about clean design, userbr
+                            experience, and bringing ideas <br>to life in the browser.
+                        </p>
+                    
+                    <button id="Button2">HIRE ME</button>
+                        
+                    <div >
+                        <a href="https://x.com/piyush_v_maadam?t=CuNunygPXtOp4V-1adNwsA&s=08" target="_blank"><img src="x.jpg" id="x" class="social"></a>
+                        <a href="https://www.instagram.com/_piyush_v_maadam?igsh=MWMzMndpcHNsMzQ4eg==" target="_blank"><img src="insta.jpg" id="insta" class="social"></a>
+                        <a href="https://www.linkedin.com/in/piyush-v-maadam-02b794306?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><img src="linkdin.jpg" id="l" class="social"></a>
+                    </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </body>
+    </html>

@@ -1,0 +1,132 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Portfolio_With_Bootstrap</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="shortcut icon" href="Crown Symbol Logo Tattoo Design Stencil Vector Illustration _ Premium Vector.jpg" type="image/x-icon">
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+            }
+            .mainContainer{
+                height: 100vh;
+                width: 100vw;
+                background: radial-gradient(circle at 30% center, #2b2b2b 0%, #1a1a1a 70%, #121212 100%);
+            }
+        
+            .logo img{
+                height: 45px;
+                width: 45px;
+                border-radius: 20px;
+                border: rgb(64, 217, 64) solid;
+                margin-left: 20px;
+            }
+             .logo img:hover{
+                transform: scale(1.2);
+                transition: all .3s ease;
+             }
+            .nav-link{
+                font-size: 20px;
+            }
+            .info{
+                display: flex;
+                justify-content: space-between;
+            }
+            .text{
+                color: aliceblue;
+                position: relative;
+                top: 200px;
+                left: 150px;
+                
+            }
+            .photo{
+                position: relative;
+                top: 200px;
+                right: 200px;
+            }
+            .photo img{
+                height: 300px;
+                width: 300px;
+                border-radius: 500px;
+                border: greenyellow solid   ;
+            }
+            .photo img:hover{
+                transform: scale(1.2);
+                transition: all .3s ease;
+            }
+            h3{
+                font-size: 20px;
+                margin-bottom: 0;
+                margin-left: 7px;
+
+            }
+            H1{
+                font-size: 90PX;
+                margin-top: 0;
+                margin-bottom: 0;
+                line-height: 85px;
+                font-family: 'Times New Roman', Times, serif;
+            }
+            p{
+                font-size: 20px;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+           .socials img{
+            height: 30px;
+            margin-right: 10px;
+            }
+            .socials img:hover{
+                 transform: scale(1.2);
+                transition: all .3s ease;
+            }
+        
+        </style>
+    
+    </head>
+        <body>
+            <div class="mainContainer">
+                <div class="navbar">
+                    <div class="logo">
+                        <img src="boy2.jpg">
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link "  href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link "  href="#">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="info">
+                     <div class="text">
+                        <h3>Hii I'M PIYUSH</h3>
+                        <h1> <span style="color: yellow;">F</span>RONT- <span style="color: yellow;">E</span>ND</h1> 
+                        <h1> <span style="color: yellow;">D</span>EVELOPER</h1> 
+                        <p>Hi, I'm Piyush Ahir, a Front-End Web Developer. I enjoy
+                            building modern, responsive websites <br>usingbr HTML, CSS, and JavaScript.
+                            I'm passionate about clean design, userbr experience,<br> and bringing ideas
+                            to life in the browser.
+                        </p>
+                        <div class="socials">
+                           <a href="https://www.instagram.com/_piyush_v_maadam?igsh=MWMzMndpcHNsMzQ4eg==" target="_blank"><img src="instagram.svg" id="i"></a>
+                           <a href="https://x.com/piyush_v_maadam?t=CuNunygPXtOp4V-1adNwsA&s=08" target="_blank"><img src="twitter-x.svg" id="x"></a>
+                           <a href="https://www.linkedin.com/in/piyush-v-maadam-02b794306?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><img src="linkedin.svg" id="l"></a>
+                        </div>
+                     </div>
+                     <div class="photo">
+                        <img src="PhotoOfMY.jpg" >
+                     </div>
+                </div>
+            </div>
+        </body>
+    </html>
