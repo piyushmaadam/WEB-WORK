@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agastya International School</title>
+    <link rel="icon" type="image/x-icon" href="https://via.placeholder.com/32?text=Logo">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="shortcut icon" href="Final Logo_R.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lato', Arial, sans-serif;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0 5vw;
+            background-color: #ECECEC;
+            overflow-x: hidden;
+        }
+
+        nav {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            background-color: rgba(236, 236, 236, 0.95);
+            padding: 1vw 5vw;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        nav.scrolled {
+            background-color: rgba(16, 163, 127, 0.9);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #logo img {
+            width: 3vw;
+            height: 4vw;
+            transition: transform 0.3s ease;
+        }
+
+        #logo img:hover {
+            transform: scale(1.1);
+        }
+
+        #rnav {
+            align-items: center;
+            display: flex;
+            gap: 10px;
+        }
+
+        #lnav {
+            display: flex;
+            align-items: center;
+            gap: 1.55vw;
+        }
+
+        #ulinks {
+            display: flex;
+            align-items: center;
+            gap: 1.55vw;
+        }
+
+        #ulinks a {
+            text-decoration: none;
+            font-weight: 800;
+            position: relative;
+        }
+
+        #ulinks a li {
+            font-weight: 200;
+            color: #1C1C1C;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        #ulinks a:hover li {
+            color: #10A37F;
+        }
+
+        #ulinks a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #10A37F;
+            transition: width 0.3s ease;
+        }
+
+        #ulinks a:hover::after {
+            width: 100%;
+        }
+
+        #tophead {
+            display: flex;
+            justify-content: center;
+            margin: 8vw 0 1.5vw;
+        }
+
+        #tophead h1 {
+            font-size: 4.3vw;
+            color: #10A37F;
+        }
+
+        #tophead h1 span {
+            color: #10A37F;
+        }
+
+        #hero {
+            width: 100%;
+            height: 70vh;
+            margin-top: 4vw;
+            background: #000;
+        }
+
+        #hero .swiper {
+            width: 100%;
+            height: 100%;
+        }
+
+        #hero .swiper-slide {
+            background-color: #ECECEC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #hero .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            object-fit: cover;
+            object-position: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+            transition: transform 0.3s ease;
+        }
+
+        #hero .swiper-slide img:hover {
+            transform: scale(1.02);
+        }
+
+        #hero .swiper-button-prev,
+        #hero .swiper-button-next {
+            width: 1.5vw;
+            height: 1.5vw;
+            color: #ECECEC;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        #hero .swiper-button-prev:hover,
+        #hero .swiper-button-next:hover {
+            background-color: rgba(16, 163, 127, 0.8);
+        }
+
+        .section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #about {
+            width: 100%;
+            padding: 1vw;
+            text-align: center;
+        }
+
+        #about h1 {
+            font-size: 3.3vw;
+            margin-bottom: 5vw;
+            color: #10A37F;
+        }
+
+        #about h1 span {
+            color: #10A37F;
+        }
+
+        #detail {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 2.5vw;
+        }
+
+        #imgcont {
+            width: 70%;
+            height: 30vw;
+        }
+
+        #imgcont img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+            object-position: 0px 18%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+            transition: .5s ease;
+        }
+
+        #imgcont img:hover {
+            box-shadow: -10px -8px 0px #10A37F;
+            transform: scale(1.02);
+        }
+
+        #txt {
+            width: 50%;
+        }
+
+        #txt h1 {
+            font-size: 1.3vw;
+            color: #1C1C1C;
+            opacity: .65;
+        }
+
+        #txt h1 span {
+            color: crimson;
+            opacity: .9;
+        }
+
+        #txt p {
+            opacity: .7;
+            font-size: 1.5vw;
+        }
+
+        hr {
+            width: 50%;
+        }
+
+        #facility {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 3vw;
+            margin-top: 5vw;
+        }
+
+        #fhead {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2vw;
+        }
+
+        #fhead h1 {
+            color: #10A37F;
+            font-size: 3.3vw;
+        }
+
+        #fhead h1 span {
+            color: #10A37F;
+        }
+
+        #fdata {
+            width: 100%;
+            padding: 3vw;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+
+        #fdata .swiper {
+            width: 100%;
+            padding-bottom: 3vw;
+        }
+
+        #fdata .swiper-slide {
+            width: 300px;
+            height: 300px;
+        }
+
+        #fdata .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+
+        #fdata .swiper-slide img:hover {
+            transform: scale(1.05);
+        }
+
+        #school_facility {
+            margin-top: 5vw;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sfhead {
+            display: flex;
+            justify-content: center;
+        }
+
+        #sfhead h1 {
+            margin-bottom: 2vw;
+            color: #10A37F;
+            font-size: 3.3vw;
+        }
+
+        #sfhead h1 span {
+            color: #10A37F;
+        }
+
+        #sfinformation {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 2vw;
+            gap: 1vw;
+        }
+
+        #schoolinfo, #hostelinfo {
+            width: 50%;
+            padding: 2vw;
+            background: #cacacac5;
+            border-radius: 5px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #schoolinfo:hover, #hostelinfo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #sih1, #hih1 {
+            color: crimson;
+        }
+
+        #sih2, #hih2 {
+            font-size: 1.2vw;
+        }
+
+        #sip span, #hip span {
+            color: #C8102E;
+        }
+
+        #part3 {
+            width: 100%;
+            height: auto;
+        }
+
+        #chead {
+            margin-top: 5vw;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5vw;
+        }
+
+        #chead h1 {
+            font-size: 3.3vw;
+            color: #10A37F;
+        }
+
+        #chead h1 span {
+            color: #10A37F;
+        }
+
+        #contact {
+            width: 100%;
+            padding: 3vw;
+            display: flex;
+            justify-content: space-between;
+            background: #cacacac5;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 3rem;
+        }
+
+        #cdetails {
+            padding: 2vw;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5vw;
+        }
+
+        #chd h1 {
+            line-height: .85;
+            color: crimson;
+        }
+
+        #chd h1 span {
+            color: crimson;
+        }
+
+        #chd h1:nth-child(1) {
+            font-size: 4vw;
+        }
+
+        #chd h1:nth-child(3) {
+            font-size: 3vw;
+        }
+
+        #call, #mail {
+            display: flex;
+            align-items: center;
+            gap: 1.2vw;
+        }
+
+        #call i, #mail i {
+            padding: 1vw;
+            border-radius: 50%;
+            background: #BAB9B9;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #call i:hover, #mail i:hover {
+            background-color: #10A37F;
+            transform: scale(1.1);
+        }
+
+        #call p, #mail p {
+            color: #1C1C1C;
+        }
+
+        #line {
+            width: 1px;
+        }
+
+        #location {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5vw;
+            justify-content: center;
+            
+        }
+
+        #caddrs {
+            width: 85%;
+        }
+
+        #caddrs p span {
+            color: #C8102E;
+        }
+
+        #caddrs p {
+            color: #1C1C1C;
+        }
+
+        #caddrs i, #map i {
+            margin-left: 2vw;
+        }
+
+        #map {
+            width: 100%;
+            height: 80%;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        #map:hover iframe {
+            transform: scale(1.02);
+        }
+
+        #caddrs, #map {
+            display: flex;
+            flex-direction: row;
+            gap: 2vw;
+        }
+
+        /* Login button */
+        .payment-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: .6rem 1.1rem;
+            border-radius: 999px;
+            border: 2px solid #FF6B35;
+            background: transparent;
+            color: #FF6B35;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background-color .25s ease, color .25s ease, transform .15s ease;
+            margin-right: .5rem;
+        }
+
+        .payment-btn:hover {
+            background: #FF6B35;
+            color: #ECECEC;
+            transform: translateY(-1px);
+        }
+
+        .payment-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: .6rem 1.1rem;
+            border-radius: 999px;
+            border: 2px solid #10A37F;
+            background: transparent;
+            color: #10A37F;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background-color .25s ease, color .25s ease, transform .15s ease;
+        }
+
+        .login-btn:hover {
+            background: #10A37F;
+            color: #ECECEC;
+            transform: translateY(-1px);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Login modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 1rem;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 420px;
+            background: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.25);
+            overflow: hidden;
+            transform: translateY(8px);
+            animation: modalIn .3s ease forwards;
+        }
+
+        @keyframes modalIn {
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            background: #10A37F;
+            color: #ECECEC;
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: #ECECEC;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: .9rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+        }
+
+        .input-group label {
+            font-size: .9rem;
+            color: #1C1C1C;
+            opacity: .75;
+            font-weight: 700;
+        }
+
+        .input-group input {
+            padding: .7rem .9rem;
+            border-radius: 8px;
+            border: 2px solid #D9D9D9;
+            outline: none;
+            transition: border-color .2s ease, box-shadow .2s ease;
+            background: #FAFAFA;
+        }
+
+        .input-group input:focus {
+            border-color: #10A37F;
+            box-shadow: 0 0 0 3px rgba(16,163,127,.15);
+            background: #FFFFFF;
+        }
+
+        .modal-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .75rem;
+            margin-top: .25rem;
+        }
+
+        .submit-btn {
+            flex: 1;
+            padding: .75rem 1rem;
+            border-radius: 10px;
+            border: none;
+            background: #10A37F;
+            color: #ECECEC;
+            font-weight: 800;
+            cursor: pointer;
+            transition: filter .2s ease, transform .15s ease;
+        }
+
+        .submit-btn:hover { filter: brightness(0.95); transform: translateY(-1px); }
+        .submit-btn:active { transform: translateY(0); }
+
+        .helper-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .5rem;
+            margin-top: .25rem;
+        }
+
+        .helper-row a {
+            color: #10A37F;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        /* Payment modal styles */
+        .payment-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 1rem;
+        }
+
+        .payment-modal.open {
+            display: flex;
+        }
+
+        .payment-card {
+            width: 100%;
+            max-width: 480px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,.3);
+            overflow: hidden;
+            transform: translateY(8px);
+            animation: modalIn .3s ease forwards;
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 1.5rem 1rem;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            color: #FFFFFF;
+        }
+
+        .payment-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .payment-close {
+            background: transparent;
+            border: none;
+            color: #FFFFFF;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: .25rem;
+            border-radius: 50%;
+            transition: background-color .2s ease;
+        }
+
+        .payment-close:hover {
+            background: rgba(255,255,255,.2);
+        }
+
+        .payment-body {
+            padding: 1.5rem;
+        }
+
+        .amount-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #F8F9FA;
+            border-radius: 12px;
+            border: 2px dashed #E9ECEF;
+        }
+
+        .amount-label {
+            font-size: .9rem;
+            color: #6C757D;
+            margin-bottom: .5rem;
+        }
+
+        .amount-input {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #FF6B35;
+            border: none;
+            background: transparent;
+            text-align: center;
+            width: 100%;
+            outline: none;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all .3s ease;
+            background: #FFFFFF;
+        }
+
+        .payment-method:hover {
+            border-color: #FF6B35;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,107,53,.15);
+        }
+
+        .payment-method.selected {
+            border-color: #FF6B35;
+            background: rgba(255,107,53,.05);
+        }
+
+        .method-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: #FFFFFF;
+        }
+
+        .gpay-icon { background: linear-gradient(135deg, #4285F4, #34A853); }
+        .upi-icon { background: linear-gradient(135deg, #6C5CE7, #A29BFE); }
+        .card-icon { background: linear-gradient(135deg, #00B894, #00CEC9); }
+
+        .method-info {
+            flex: 1;
+        }
+
+        .method-name {
+            font-weight: 700;
+            color: #2D3436;
+            margin-bottom: .25rem;
+        }
+
+        .method-desc {
+            font-size: .85rem;
+            color: #636E72;
+        }
+
+        .method-arrow {
+            color: #B2BEC3;
+            font-size: 1.2rem;
+        }
+
+        .payment-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .pay-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            color: #FFFFFF;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all .3s ease;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,107,53,.3);
+        }
+
+        .pay-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cancel-btn {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid #E9ECEF;
+            background: transparent;
+            color: #6C757D;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .3s ease;
+        }
+
+        .cancel-btn:hover {
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="part1" class="section">
+            <div id="tophead">
+                <!-- <h1 class="gsap-heading">Agastya <span>International</span> School</h1> -->
+            </div>
+            <br>
+            <nav>
+                <div id="rnav">
+                    <div id="logo">
+                        <img src="Final Logo_R.png" alt="Logo">
+                    </div>
+                </div>
+                <div id="lnav">
+                    <div id="links">
+                        <ul id="ulinks">
+                            <a href="#home"><li>Home</li></a>
+                            <a href="#about"><li>About</li></a>
+                            <a href="#facility"><li>Facilities</li></a>
+                            <a href="#school_facility"><li>School & Hostel</li></a>
+                            <a href="#contact"><li>Contact</li></a>
+                        </ul>
+                    </div>
+                    <div id="auth">
+                        <button id="paymentBtn" class="payment-btn" aria-haspopup="dialog" aria-controls="paymentModal">
+                            <i class="ri-wallet-3-line" style="margin-right:.35rem"></i> Pay Fees
+                        </button>
+                        <button id="loginBtn" class="login-btn" aria-haspopup="dialog" aria-controls="loginModal">
+                            <i class="ri-user-3-line" style="margin-right:.35rem"></i> Login
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <div id="hero" class="section">
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="4.jpg" alt="AIS1"></div>
+                        <div class="swiper-slide"><img src="12.jpg" alt="AIS2"></div>
+                        <div class="swiper-slide"><img src="14.jpg" alt="AIS3"></div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="part2" class="section">
+            <div id="about">
+                <h1 class="gsap-heading"><span>A</span>bout <span>U</span>s</h1>
+            </div>
+            <div id="detail">
+                <div id="imgcont" class="about-img">
+                    <img src="g3.jpg" alt="AIS9">
+                </div>
+                <div id="txt">
+                    <h1><span>About</span> Us<hr></h1>
+                    <p>Day School | Regular School | Residential School <br>STD: 1 to 12 [Science, Commerce, Arts]</p>
+                    <br>
+                    <h1><span>School</span> Motive<hr></h1>
+                    <p>
+                        Commitment To Learning <br>
+                        Accepting Responsibility <br>
+                        Respect For Self, Others and Environment <br>
+                        Safe and Welcoming Environment <br>
+                        Family and Community Involvement <br>
+                    </p>
+                </div>
+            </div>
+
+            <div id="facility" class="section">
+                <div id="fhead">
+                    <h1 class="gsap-heading"><span>O</span>ur <span>F</span>acilities</h1>
+                </div>
+                <div id="fdata">
+                    <div class="swiper mySwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide"><img src="1.jpg" /></div>
+                            <div class="swiper-slide"><img src="2.jpg"  /></div>
+                            <div class="swiper-slide"><img src="3.jpg"  /></div>
+                            <div class="swiper-slide"><img src="5.jpg"  /></div>
+                            <div class="swiper-slide"><img src="7.jpg"  /></div>
+                            <div class="swiper-slide"><img src="8.jpg"  /></div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="school_facility" class="section">
+            <div id="sfhead">
+                <h1 class="gsap-heading"><span>S</span>chool <span>&</span> <span>H</span>ostel</h1>
+            </div>
+            <div id="sfinformation">
+                <div id="schoolinfo">
+                    <h1 id="sih1">School</h1>
+                    <h1 id="sih2">Agastya International School | Boys & Girls</h1>
+                    <hr>
+                    <br>
+                    <p id="sip">
+                        <span>Agastya International School | Boys School</span> <br> Pri-Primary, Primary, Secondary, Higher Secondary_[science, commerce, arts] <br><br> 
+                        <span>Agastya International School | Girls School</span> <br> Pri-Primary, Primary, Secondary, Higher Secondary_[science, commerce, arts]
+                    </p>
+                </div>
+                <div id="hostelinfo">
+                    <h1 id="hih1">Hostel</h1>
+                    <h1 id="hih2">Agastya Hostel | Boys & Girls</h1>
+                    <hr>
+                    <br>
+                    <p id="hip">
+                        <span>Agastya International School | Boys Hostel</span> <br> Address: As per school campus <br><br> 
+                        <span>Agastya International School | Girls Hostel</span> <br> Address: As per school campus
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="part3" class="section">
+            <div id="chead">
+                <h1 class="gsap-heading"><span>C</span>ontact <span>U</span>s</h1>
+            </div>
+            <div id="contact">
+                <div id="cdetails">
+                    <div id="chd">
+                        <h1>Get <span>Connected</span></h1><br>
+                        <h1><span>With</span> Us</h1>
+                    </div>
+                    <div id="call">
+                        <i class="ri-phone-fill"></i>
+                        <p>+91 9904295912</p>
+                    </div>
+                    <div id="mail">
+                        <i class="ri-mail-fill"></i>
+                        <p>admin@agastyaeducation.com</p>
+                    </div>
+                </div>
+                <hr id="line">
+                <div id="location">
+                    <div id="caddrs">
+                        <i class="ri-map-pin-line"></i>
+                        <p><span>Address</span> : At.Ramnagar, Near parade Ground, Jam-Khambhalia, Dist. Devbhumi Dwarka-361305</p>
+                    </div>
+                    <div id="map">
+                        <i class="ri-map-2-line"></i>
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3694.7952584110694!2d69.6315733752323!3d22.17186427977922!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3956fda23a5a7131%3A0xcd9b8558e617a50d!2sAgastya%20International%20School%20(AIS)!5e0!3m2!1sen!2sin!4v1702659457463!5m2!1sen!2sin"
+                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="payment-modal" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
+        <div class="payment-card">
+            <div class="payment-header">
+                <div class="payment-title" id="paymentTitle">💳 Payment Portal</div>
+                <button id="paymentClose" class="payment-close" aria-label="Close payment modal">✕</button>
+            </div>
+            <div class="payment-body">
+                <div class="amount-section">
+                    <div class="amount-label">Enter Amount</div>
+                    <input type="number" class="amount-input" id="paymentAmount" placeholder="0" min="1" step="0.01">
+                </div>
+                
+                <div class="payment-methods">
+                    <div class="payment-method" data-method="gpay">
+                        <div class="method-icon gpay-icon">
+                            <i class="ri-google-pay-line"></i>
+                        </div>
+                        <div class="method-info">
+                            <div class="method-name">Google Pay</div>
+                            <div class="method-desc">Pay with your Google Pay account</div>
+                        </div>
+                        <div class="method-arrow">
+                            <i class="ri-arrow-right-line"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-method" data-method="upi">
+                        <div class="method-icon upi-icon">
+                            <i class="ri-bank-line"></i>
+                        </div>
+                        <div class="method-info">
+                            <div class="method-name">UPI ID</div>
+                            <div class="method-desc">Enter your UPI ID for payment</div>
+                        </div>
+                        <div class="method-arrow">
+                            <i class="ri-arrow-right-line"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-method" data-method="card">
+                        <div class="method-icon card-icon">
+                            <i class="ri-scanner-line"></i>
+                        </div>
+                        <div class="method-info">
+                            <div class="method-name">Card Scanner</div>
+                            <div class="method-desc">Scan your debit/credit card</div>
+                        </div>
+                        <div class="method-arrow">
+                            <i class="ri-arrow-right-line"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="payment-actions">
+                    <button class="cancel-btn" id="paymentCancel">Cancel</button>
+                    <button class="pay-btn" id="proceedPayment" disabled>Proceed to Pay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title" id="loginTitle">Welcome back</div>
+                <button id="modalClose" class="modal-close" aria-label="Close login modal">✕</button>
+            </div>
+            <form id="loginForm" class="modal-body">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" placeholder="you@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" placeholder="Enter your password" minlength="6" required>
+                </div>
+                <div class="helper-row">
+                    <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+                        <input type="checkbox" id="remember" name="remember"> Remember me
+                    </label>
+                    <a href="#" onclick="event.preventDefault(); alert('Please contact admin to reset.');">Forgot password?</a>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="submit-btn">Log in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper for Hero Section
+        try {
+            var swiper = new Swiper("#hero .mySwiper", {
+                spaceBetween: 15,
+                centeredSlides: true,
+                autoplay: {
+                    delay: 2500,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: "#hero .swiper-button-next",
+                    prevEl: "#hero .swiper-button-prev",
+                },
+            });
+        } catch (e) {
+            console.error("Swiper Hero initialization failed:", e);
+        }
+
+        // Initialize Swiper for Facilities Section
+        try {
+            var swiper = new Swiper("#fdata .mySwiper", {
+                effect: "coverflow",
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: "auto",
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows: true,
+                },
+                pagination: {
+                    el: "#fdata .swiper-pagination",
+                },
+            });
+        } catch (e) {
+            console.error("Swiper Facilities initialization failed:", e);
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navbar links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Section fade-in animations
+        gsap.utils.toArray('.section').forEach(section => {
+            gsap.fromTo(section, 
+                { opacity: 0, y: 20, scale: 0.95 },
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1, 
+                    duration: 0.6, 
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 80%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        // Heading bounce animation
+        gsap.utils.toArray('.gsap-heading').forEach(heading => {
+            gsap.from(heading, {
+                y: -20,
+                opacity: 0,
+                duration: 0.8,
+                ease: "bounce.out",
+                scrollTrigger: {
+                    trigger: heading,
+                    start: "top 90%",
+                    toggleActions: "play none none none"
+                }
+            });
+        });
+
+        // Payment modal logic
+        (function() {
+            const paymentBtn = document.getElementById('paymentBtn');
+            const paymentModal = document.getElementById('paymentModal');
+            const paymentClose = document.getElementById('paymentClose');
+            const paymentCancel = document.getElementById('paymentCancel');
+            const proceedBtn = document.getElementById('proceedPayment');
+            const amountInput = document.getElementById('paymentAmount');
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            
+            let selectedMethod = null;
+            let paymentAmount = 0;
+
+            function openPaymentModal() {
+                paymentModal.classList.add('open');
+                // focus amount input after open
+                setTimeout(() => {
+                    amountInput.focus();
+                }, 50);
+            }
+
+            function closePaymentModal() {
+                paymentModal.classList.remove('open');
+                // reset form
+                selectedMethod = null;
+                paymentAmount = 0;
+                amountInput.value = '';
+                proceedBtn.disabled = true;
+                paymentMethods.forEach(method => method.classList.remove('selected'));
+            }
+
+            // Open modal
+            if (paymentBtn) paymentBtn.addEventListener('click', openPaymentModal);
+            
+            // Close modal
+            if (paymentClose) paymentClose.addEventListener('click', closePaymentModal);
+            if (paymentCancel) paymentCancel.addEventListener('click', closePaymentModal);
+
+            // Click outside to close
+            paymentModal && paymentModal.addEventListener('click', (e) => {
+                if (e.target === paymentModal) closePaymentModal();
+            });
+
+            // ESC to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && paymentModal.classList.contains('open')) {
+                    closePaymentModal();
+                }
+            });
+
+            // Amount input handler
+            amountInput && amountInput.addEventListener('input', (e) => {
+                paymentAmount = parseFloat(e.target.value) || 0;
+                updateProceedButton();
+            });
+
+            // Payment method selection
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', () => {
+                    // Remove previous selection
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    
+                    // Add selection to clicked method
+                    method.classList.add('selected');
+                    selectedMethod = method.dataset.method;
+                    updateProceedButton();
+                });
+            });
+
+            function updateProceedButton() {
+                const isValid = paymentAmount > 0 && selectedMethod;
+                proceedBtn.disabled = !isValid;
+            }
+
+            // Proceed to payment
+            proceedBtn && proceedBtn.addEventListener('click', () => {
+                if (!selectedMethod || paymentAmount <= 0) return;
+
+                const methodNames = {
+                    'gpay': 'Google Pay',
+                    'upi': 'UPI ID',
+                    'card': 'Card Scanner'
+                };
+
+                // Simulate payment processing
+                proceedBtn.textContent = 'Processing...';
+                proceedBtn.disabled = true;
+
+                setTimeout(() => {
+                    alert(`Payment of ₹${paymentAmount} via ${methodNames[selectedMethod]} initiated successfully!`);
+                    closePaymentModal();
+                    proceedBtn.textContent = 'Proceed to Pay';
+                }, 2000);
+            });
+        })();
+
+        // Login modal logic
+        (function() {
+            const loginBtn = document.getElementById('loginBtn');
+            const modal = document.getElementById('loginModal');
+            const closeBtn = document.getElementById('modalClose');
+            const form = document.getElementById('loginForm');
+
+            function openModal() {
+                modal.classList.add('open');
+                // focus first input after open for accessibility
+                setTimeout(() => {
+                    const firstInput = modal.querySelector('input');
+                    if (firstInput) firstInput.focus();
+                }, 50);
+            }
+
+            function closeModal() {
+                modal.classList.remove('open');
+            }
+
+            if (loginBtn) loginBtn.addEventListener('click', openModal);
+            if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+            // click outside to close
+            modal && modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            // esc to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+            });
+
+            // basic demo submit handler
+            form && form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const data = new FormData(form);
+                const email = data.get('email');
+                const password = data.get('password');
+                // Replace this with real auth call
+                alert(`Logged in as: ${email}`);
+                closeModal();
+                form.reset();
+            });
+        })();
+    </script>
+</body>
+</html>
