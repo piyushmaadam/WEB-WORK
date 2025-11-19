@@ -1,397 +1,43 @@
-
-
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<head id="Head1"><link rel="icon" type="image/png" href="image/favicon.ico" /><title>
-	MYSY
-</title><meta http-equiv="Expires" content="0" /><meta http-equiv="Cache-Control" content="no-cache" /><meta http-equiv="Pragma" content="no-cache" />
-    <noscript>
-        <div style="font-size: 25px; top: 0px; left: 0px; color: White; width: 100%; height: 100%; position: absolute; background-color: #000000; opacity: 0.7; vertical-align: middle; padding-top: 300px; text-align: center; z-index: 1005;">
-            Javascript is disabled.<br />
-            Please Enable browser javascript first and then hit F5.
-        </div>
-    </noscript>
-    <link href="styleres\resmysy.css" rel="stylesheet" type="text/css" />
-    <script src="http://localhost/yuva/js/jquery-3.7.0.min.js"></script>
-   
-    <script src="js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-        function myFunction() {
-            var x = document.getElementById("myTopnav");
-            if (x.className === "topnav") {
-                x.className += " responsive";
-            } else {
-                x.className = "topnav";
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MYSY</title>
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
             }
-        }
-    </script>
-    
+            .topsection{
+                height: 100%;
+                width: 50rem;
+                display: flex;
+                flex-direction: row;
+                column-gap: 5rem;
+                background-color: aqua;
+            }
+            .logo-topsection{
+                background-color: rgb(83, 97, 97);
+            }
+            .logo-topsection img{
+                height: 15rem;
+                border-radius: 3rem;
+            }
+            #logo-text{
+                font-family:Verdana, Geneva, Tahoma, sans-serif;
+                font-size: 2.5rem;
 
-    <link href="Styles/scroll.css" rel="stylesheet" type="text/css" />
-    <link href="js/bootstrap.min.css" rel="stylesheet" />
-
-   
-    <script src="js/jquery.min.js"></script>
-   <script src="js/bootstrap.min.js"></script>
-     
-
+            }
+        </style>
     </head>
-<body>
-    <form method="post" action="./" id="Form1" autocomplete="off">
-<div class="aspNetHidden">
-<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
-<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
-<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="Nd4Xq4SOehwbTi7j80iC+110CT0/PXfTRP3Gp2HtwW/GQqQlljt+GikvUM2/UDC/BRFcyn0H0jVjbKYvEvrGL/YM8Bdq7j6XUrCZ72EjprM=" />
-</div>
-
-<script type="text/javascript">
-//<![CDATA[
-var theForm = document.forms['Form1'];
-if (!theForm) {
-    theForm = document.Form1;
-}
-function __doPostBack(eventTarget, eventArgument) {
-    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
-        theForm.__EVENTTARGET.value = eventTarget;
-        theForm.__EVENTARGUMENT.value = eventArgument;
-        theForm.submit();
-    }
-}
-//]]>
-</script>
-
-
-<div class="aspNetHidden">
-
-	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="AFCC5921" />
-	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
-	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="jm60LKgvzsBJfQYoy4gppL6dg4LMPjKHP7Nl1sulnvBU9L56H3mzpMCwsQLnWyfe7Omua1736Z4Vb+9evtxQPo6w3CElr3ErKdYH6sXQkceJmxZGEIFzNGODzKpQ01QIIf5IhWix7jbSOsdWw15xzUtg86USNStyZruFFHwSsY2OfekMeMWNIjb7bZE8Qm//" />
-</div>
-        <div class="header">
-            <img class="img" src="Images/Emblem.png" class="img" />
-            <h1>Mukhyamantri Yuva Swavalamban Yojana</h1>
-            <h2>Education Department, Gujarat State.</h2>
-        </div>
-        <div id="myTopnav" class="topnav">
-            <a href="Noticeboard/FAQs.pdf" id="n1" target="_newtab">FAQ'S</a>
-            <div id="n2" class="dropdown1" style="float: left; overflow: hidden; color: white; background-color: #561420;">
-                <button class="dropbtn" class="active" style="float: left; overflow: hidden; color: white; padding: 14px 16px; background-color: #561420;">
-                    User manual <i class="fa fa-caret-down"></i>
-                </button>
-                <div class="dropdown-content">
-                    <a href="frm_admin_inst.aspx" id="n21">For Officers
-                    (SSO users)</a>
+        <body>
+            <div class="topsection">
+                <div class="logo-topsection">
+                        <img src="5.jpg" alt="">
                 </div>
-            </div>
-            <a href="Frm_open_stat.aspx" id="n3">Student status</a>
-            <a href="Noticeboard/Department list new_latest.pdf" id="n4" target="_newtab">Contact us</a>
-            
-            <div id="n6" class="dropdown1" style="text-align: right;">
-                <button class="dropbtn" class="active">
-                    Login/Register for 2025-2026<i class="fa fa-caret-down"></i>
-                </button>
-                <div class="dropdown-content">
-                    <a href="Frm_Stu_Login.aspx" id="A1">Fresh Application
-                    </a>
-                    <a href="Frm_Stu_Login_ren.aspx" id="n61">Renewal Application
-                    </a>
-                    <a href="Frm_Del_notice.aspx" id="A2">Delayed Application
-                    </a>
-                </div>
-            </div>
-
-
-            
-            
-            <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
-            
-        </div>
-        <div style="min-height: 50%;" class="simtext">
-            
-    <div>
-        <table width="100%" cellpadding="0" cellspacing="0">
-            <tr>
-                <td id="Td3" class="noticetitle" align="center" colspan="2">
-                    <span id="MainContent_Label3" style="display:inline-block;font-weight:bold;height:16px;width:100%;">Notice Board</span>
-                </td>
-            </tr>
-            <tr valign="top" >
-                
-                <td style="border: 1px solid black;  width:98%">
-
-     
-
-                    <div >
-
-
-
-                        <ul>
-
-
-                                 <li><a href="Noticeboard/Important instruction 2025-26.pdf" target="_newtab" style="text-decoration: none;
-                                color: #561420;">Instructions to Students 2025-26. (વિદ્યાર્થીઓ માટેની સૂચનાઓ) </a></li>
-
-
-                             <li><a href="Noticeboard/Documents Formates 2025-26.pdf" target="_newtab" style="text-decoration: none;
-                                color: #561420;">Document formats. (2025-26). ( દસ્તાવેજોના ફોરમેટ) </a></li>
-
-
-
-
-                             <li><a href="frm_stu_gr.aspx" id="MainContent_A3" target="_self" style="text-decoration: none;
-                                color: #561420;">Government G.R. (ગુજરાત સરકાર દ્વારા  રજૂ કરેલ ઠરાવોની યાદી)</a>
-                               </li>
-
-                               <li><a href="Frm_stu_tot_rej.aspx" id="MainContent_A4" target="_self" style="text-decoration: none;
-                                border-style: none; border-color: inherit; border-width: 0px; color: #561420;">List of Help Centres (દસ્તાવેજો વેરીફાઈ કરાવવા માટેના હેલ્પ સેન્ટરની યાદી) </a></li>
-
-                         
-
-                               <li><a href="Noticeboard/Department list new_latest.pdf" target="_newtab" style="text-decoration: none;
-                                color: #561420;">List of Departments. (અરજી મંજૂર/નામંજૂર કરતા વિવિધ ખાતાની યાદી)</a></li>
-
-
-                                <li><a href="Noticeboard/Important instrucations for Aadhaar linking.pdf" target="_newtab"
-                                style="text-decoration: none; color: #561420;">Important instrucations for Aadhaar linking (આધાર કાર્ડ નંબર બેંક ખાતા સાથે લિંક કેવી રીતે કરાવવું તેની સૂચનાઓ) </a></li>
-
-                            
-                                    <li><a href="Noticeboard/Department wise all courses.pdf" target="_newtab" style="text-decoration: none;
-                                color: #561420;">Department wise course list (દરેક વિદ્યાર્થીએ પોતાના કોર્ષ અનુસાર ડીપાર્ટમેન્ટ પસંદ કરવાનું રહેશે.)</a></li>
-
-
-  <li><a href="Noticeboard/sso_user_manual.pdf" target="_newtab" style="text-decoration: none;
-                                color: #561420;">મુખ્યમંત્રી યુવા સ્વાવલંબન યોજના(MYSY) અંતર્ગત  ડોકયુમેન્ટ વેરિફિકેશન કરાવવા  માટે કોલેજ/યુનિવર્સીટી ખાતે  હેલ્પ-સેન્ટર ચાલુ કરવા માટેની પ્રક્રિયા.</a></li>
-
-
-                            
-
-  <li><a href="Noticeboard/E-KYC MYSY 19-10-24.pdf" target="_newtab" style="text-decoration: none;
-                                color: Red ;"> મુખ્યમંત્રી યુવા સ્વાવલંબન યોજના (MYSY) અંતર્ગત સહાય મેળવવા Aadhar Biometric e- KYC કરાવવા બાબતની જાણકારી</a>
-
-
-</li>
-
-  <li><a href="Noticeboard/E-gram centre list.pdf" target="_newtab" style="text-decoration: none;
-                                color: Red; ">મુખ્યમંત્રી યુવા સ્વાવલંબન યોજના(MYSY) ઈ-ગ્રામ કેન્દ્રોની યાદી (e- KYC માટે) </a>
-
-</li>
-
-
-  <li><a href="Noticeboard/Video clip for adhar E-KYC.mp4" target="_newtab" style="text-decoration: none;
-                                color: Red; ">આધાર E-KYC  કેવી રીતે કરવું તેની સમજુતી અંગેનો વિડીયો</a>
-
-
-</li>
-
-                            
-
-
-
-  <li><a href="Noticeboard/Password policy-CMSS.pdf" target="_newtab" style="text-decoration: none;     color: Red; font-size: large; font-weight: bold;" >Important instructions regarding password</a>
-
-
-</li>
-
-
-
-
-
-                           
-
-
-                             
-
-
-                            <p>
-                                &nbsp;</p>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td id="Td1" class="noticetitle" align="center" colspan="2">
-                    <span id="MainContent_Label1" style="display:inline-block;font-weight:bold;height:16px;width:100%;">Instructions</span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div style="border: 1px solid black;">
-                           
-
-
-
-
-
-
-
-
-                           
-<div>
-
-    <div>
-         <a style='color: Red; font-size: large; font-weight: bold;'>
-
-                                મુખ્યમંત્રી યુવા સ્વાવલંબન યોજના અંતર્ગત શૈક્ષણિક વર્ષ ૨૦૨૫-૨૬માં B.Sc., B. Com, B.A., B.C.A., B.B.A., જેવા ઉચ્ચ શિક્ષણના અભ્યાસક્રમો માટે Fresh, Renewal અને Delayed માં ઓનલાઇન અરજી કરવાની છેલ્લી તા.૩૧/૧૦/૨૦૨૫ (સાંજે ૬ વાગ્યા સુધી) છે અને હેલ્પ સેન્ટરમાં ડોકયુમેન્ટ વેરિફિકેશન કરવાની છેલ્લી તા.૦૭/૧૧/૨૦૨૫ રહેશે. ત્યારબાદ કોઈ પણ અરજી સ્વીકારવામાં  આવશે નહિ, જેની દરેક વિદ્યાર્થીઓએ ખાસ નોંધ લેવી.
-             <img alt="" src="image/nunew_e0.gif" style="height: 10px; width: 20px; vertical-align: middle" />
-                                </a>
-    </div>
-</br>
-
-      <div>
-         <a style='color: Red; font-size: large; font-weight: bold;'>
-
-                                Technical Degree & Diploma, Medical/ Paramedical, Nursing, Agriculture, Veterinary ના અભ્યાસક્રમો માટે સપ્ટેમ્બર માસમાં ઓનલાઈન અરજી માટે લિંક શરૂ કરવામાં આવશે, જે માટે વેબસાઈટ જોતા રહેવું.
-             <img alt="" src="image/nunew_e0.gif" style="height: 10px; width: 20px; vertical-align: middle" />
-                                </a>
-    </div>
-    <br />
-
- 
-    <br />
-
-
-    <br />
-
-<div>
-
-
-
-                            <a style='text-decoration: none; color: #561420;'>
-
-                                .રજીસ્ટ્રેશન કરતા પહેલા અને રિન્યુઅલ અરજી કરતા પહેલા દરેક વિદ્યાર્થીએ નોટીસબોર્ડ પરની બધી વિગતોની ખાસ સૂચનાઓ અચૂક વાંચી લેવી. ત્યારબાદ જ ઓનલાઈન રજીસ્ટ્રેશન કરી અરજી માટે ફોર્મ ભરવું. 
-                                </a>
-
-
-                        </div>
-
-                       
-
-
-                   
-
-                        <div>
-                            <a style='text-decoration: none; color: #561420;'>
-                               
-                                <a id="MainContent_HyperLink1" href="https://kcg.gujarat.gov.in/interest-subsidy-scheme-education-loan" style="color:#561420;">Interest Subsidy Scheme on Education Loan યોજનાનો પણ લાભ મેળવવા માટે અહી ક્લિક કરો..</a>
-                        </div>
-                        <div>
-                            <a style='text-decoration: none; color: #561420;'>
-                               
-                                <a id="MainContent_HyperLink2" href="https://scholarships.gujarat.gov.in" style="color:#561420;">CMSS યોજનાનો પણ લાભ મેળવવા માટે અહી ક્લિક કરો..</a>
-                        </div>
-                       
-                  
-                      
-                    
-                               
-
-                       
-
-                       
-
-                     
-                      
-
-                      
-                    </div>
-
-
-
-                </td>
-            </tr>
-
-             <tr>
-                <td id="Tdinst" class="noticetitle" align="center" colspan="2">
-                    <span id="MainContent_Label2" style="display:inline-block;font-weight:bold;height:16px;width:100%;">Important Instructions</span>
-
-                </td>
-            </tr>
-		 <tr>
-                <td colspan="2">
-
-                </td>
-            </tr>
-              
-        </table>
-    </div>
-
-     <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog" style="width: 827px!important;Height:271px">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-             
-                    </div>
-                    <div class="modal-body">
-                        <a target="_blank">
-                            <img id="MainContent_Image2" src="Images/G20%20Logo_VK-01.jpg" style="height:271px;width:800px;" />
-                        </a>
-                    </div>
-            
-                </div>
+                <span id="logo-text"> MYSY SCHOLORSHIP FOR STUDENTS </span>
 
             </div>
-        </div>
-
-
-     
-
-        </div>
-        <div class="footer">
-            <table style="width: 100%;" border="0">
-                <tr>
-                    <td>
-                        <strong>MYSY helpline numbers: 079-26566000,7043333181 (10:30 AM to 6:00 PM) </strong></td>
-                </tr>
-
-
-
-                
-                <tr>
-
-                    <td>
-                      
-                         <a 
-                        style="color: #fff;">Kcg Emailid :- mysy-kcg[at]gujgov[dot]edu[dot]in </a>
-                    </td>
-                </tr>
-
-                <tr>
-<tr>
-                    <td>
-<strong>Follow us on Instagram for regular updates. </strong>
-
-                    </td>
-
-                </tr>
-                       
-
-                    <td>
-                        
-                         <a href="https://instagram.com/mysykcg?igshid=ZDdkNTZiNTM=" target="_blank"
-                        style="color: #fff;">Instagram id- mysykcg </a>-
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <a id="hl_contact" href="Frm_Stu_contact.aspx" style="color: #fff;">Contact Us</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 100%; text-align: center; color: #fff;">Designed, Developed &amp; Hosted by : <a href="https://guj.nic.in/" target="_blank"
-                        style="color: #fff;">National Informatics Centre, Gujarat State Centre </a>-
-                    All Rights Reserved
-                    <a id="lnkPrvcy" href="javascript:__doPostBack(&#39;ctl00$lnkPrvcy&#39;,&#39;&#39;)" style="color: #fff;">Privacy Policy</a>
-                        <input type="hidden" name="ctl00$STUDENTID_" id="STUDENTID_" />
-                        <input type="hidden" name="ctl00$HDN_student" id="HDN_student" />
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="clear">
-        </div>
-    </form>
-</html>
+        </body>
+    </html>
