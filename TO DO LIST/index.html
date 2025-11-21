@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .input-area {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    #new-task {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px 0 0 8px;
+      outline: none;
+    }
+    #new-task:focus {
+      border-color: #007bff;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 0 8px 8px 0;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      background: #f9f9f9;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: 0.2s;
+    }
+    li.completed {
+      text-decoration: line-through;
+      opacity: 0.6;
+      background: #e9ecef;
+    }
+    .delete-btn {
+      background: #dc3545;
+      padding: 6px 10px;
+      font-size: 14px;
+      border-radius: 6px;
+    }
+    .delete-btn:hover {
+      background: #c82333;
+    }
+    .empty-message {
+      text-align: center;
+      color: #888;
+      font-style: italic;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>My To-Do List</h1>
+
+    <div class="input-area">
+      <input type="text" id="new-task" placeholder="Add a new task..." />
+      <button id="add-btn">Add</button>
+    </div>
+
+    <ul id="task-list"></ul>
+    <p class="empty-message" id="empty-msg">No tasks yet! Add one above.</p>
+  </div>
+
+  <script>
+    // DOM Elements
+    const taskInput = document.getElementById("new-task");
+    const addBtn = document.getElementById("add-btn");
+    const taskList = document.getElementById("task-list");
+    const emptyMsg = document.getElementById("empty-msg");
+
+    // Load tasks from localStorage when page loads
+    function loadTasks() {
+      const saved = localStorage.getItem("tasks");
+      if (tasks) {
+        const taskArray = JSON.parse(tasks);
+        taskArray.forEach(task => addTaskToDOM(task.text, task.completed));
+      }
+    }
+
+    // Save tasks to localStorage
+    function saveTasks() {
+      const tasks = [];
+      document.querySelectorAll("li").forEach(li => {
+        tasks.push({
+          text: li.querySelector("span").textContent,
+          completed: li.classList.contains("completed")
+        });
+      });
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    // Add new task
+    function addTask() {
+      const text = taskInput.value.trim();
+      if (text === "") {
+        alert("Please write something!");
+        return;
+      }
+
+      addTaskToDOM(text, false);
+      saveTasks();
+
+      taskInput.value = "";
+      checkEmpty();
+    }
+
+    // Add task HTML to the list
+    function addTaskToDOM(text, completed = false) {
+      const li = document.createElement("li");
+      if (completed) li.classList.add("completed");
+
+      li.innerHTML = `
+        <span>${text}</span>
+        <button class="delete-btn">Delete</button>
+      `;
+
+      // Toggle complete on click on text
+      li.querySelector("span").addEventListener("click", () => {
+        li.classList.toggle("completed");
+        saveTasks();
+      });
+
+      // Delete task
+      li.querySelector(".delete-btn").addEventListener("click", () => {
+        li.remove();
+        saveTasks();
+        checkEmpty();
+      });
+
+      taskList.appendChild(li);
+    }
+
+    // Show/hide "No tasks" message
+    function checkEmpty() {
+      emptyMsg.style.display = taskList.children.length === 0 ? "block" : "none";
+    }
+
+    // Event Listeners
+    addBtn.addEventListener("click", addTask);
+    taskInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+
+    // Start the app
+    loadTasks();
+    checkEmpty();
+  </script>
+</body>
+</html>
