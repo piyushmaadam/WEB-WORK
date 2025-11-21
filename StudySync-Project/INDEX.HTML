@@ -1,0 +1,775 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>StudySync</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manufacturing+Consent&display=swap');
+            *{
+                padding: 0;
+                margin: 0;
+                font-family:'Inter' sans-serif ;
+                text-decoration: none;
+            }
+            body{
+                /* height: 1000vh; */
+                text-align: center;
+                padding: 2rem;
+            }
+            .header-content{
+                display: flex;
+                justify-content: space-between;
+                max-width: 1280px;
+                margin: 0 auto;
+                padding: .5rem;
+            }
+            .logo{
+                display: flex;
+                text-decoration: none;
+                align-items: center;
+                font-size: 2rem;
+                gap: 0.5rem;
+                font-weight: bold;
+            }
+            .logo-icon{
+                
+                width: 1.96rem;
+            }
+            .logo-text{
+                font-weight: bold;
+                font-size: 2rem;
+            }
+            .nav{
+                display:none ;
+                align-items: center;
+                gap: 1rem;
+            }
+            @media  screen and (min-width:775px){
+                .nav{
+                     display: flex;
+                    }
+            }  
+            .nav-link{
+                color: rgb(122, 137, 151);
+                font-size: 1.6rem;
+                transform: color .2s;
+            }
+            .nav-link:hover{
+                color: rgb(67, 67, 183);
+            }
+            .contact-button {
+                
+                border: none;
+                color: rgb(255, 255, 255);
+                font-size: 1.2rem;
+                background-color: blue;
+                border-radius: .4rem;
+                 padding: .8rem 1.3rem;
+                transform: all .2s;
+            }
+            .contact-button:hover{
+                background-color: rgb(108, 108, 220);
+            }
+            @media screen and ( max-width:775px) {
+                .contact-button{
+                    display: none;
+                }
+            }
+            .menu-button{
+                display:none ;
+                background-color: white;
+                border: none;
+            }
+            @media screen and (max-width:775px){
+                .menu-button{
+                    display :block ;
+                }    
+
+            }
+            .menu-icon{
+                height: 1.5rem;
+                width: 1.5rem;
+            }
+           
+            .main{
+                max-width: 1280px;
+                display: flex;
+                gap: 1rem;
+                flex-direction: column;
+                text-align: center;
+                margin:  2rem auto; 
+
+            }
+            .left-section{
+                display: flex;
+                flex-direction: column;
+                gap: 1.3rem;
+                justify-content: center;
+                text-align: center;
+                animation: LeftToRight 1s forwards ease;
+            }
+            @keyframes LeftToRight{
+                0%{
+                    opacity: 0;
+                    transform: translateX(-100%);
+                }
+                100%{
+                    opacity: 1;
+                    transform: translateX(0%);
+                }
+            }
+            .lable{
+                font-size: 1.2rem;
+                color: rgb(48, 48, 222);
+                font-weight: bold;
+            }
+            .title{
+                font-size: 2.5rem;
+                font-weight:bold;
+                font-family: 'Times New Roman', Times, serif;
+            }
+            .discription{
+                font-size: 1.2rem;
+                color: rgb(82, 77, 70);
+            }
+            .button-group{
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                align-items: center;
+            }
+            .start-button{
+                background-color: rgb(89, 89, 225);
+                color: white;
+                border-radius:  .3rem;
+                padding: .8rem 1.3rem;
+                font-size: 1.2rem;
+                transform: all .2s;
+            }
+            .start-button:hover{
+                background-color: rgb(138, 138, 185);
+            }
+            .tour-button{
+                background-color: rgb(64, 64, 75);
+                color: white;
+                border-radius:  .3rem;
+                padding-left: 1.3rem;
+                padding-right: 1.3rem;
+                padding-top: .8rem;
+                padding-bottom: 0.8rem;
+                font-size: 1.2rem;
+                transform: all .2s;
+            }
+            .tour-button:hover{
+                background-color: rgb(156, 122, 122);
+            }
+            .right-section{
+                
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .img-container{
+                border-radius: 1rem;
+                height:50vh;
+                overflow: hidden;
+                box-shadow: 0px 4px 6px black;
+            }
+            .right-img{
+                border-radius: .5rem;
+                height: 100%;
+                width: 100%;
+            }
+            @media screen and (min-width:850px){
+                .main{
+                    flex-direction: row;
+                }
+                .left-section{
+                    text-align: left;
+                    width: 50%;
+                    
+                }
+                .discription{
+                    padding-left:  0;
+                    width: 75%;
+                }
+                .title{
+                    font-size: 4rem;
+                    padding-left: 0;
+                }
+                .button-group{
+                    justify-content: start;
+                }
+                .img-container{
+                    height: 70vh;
+                }
+            }
+            .company{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+                animation: LeftToRight 1s forwards ease;
+            }
+            .company-info{
+                 background-color: rgb(221, 223, 212);
+                display: grid;
+                grid-template-columns: repeat(4,1fr);
+                gap: 2rem;
+                width: 50%;
+                padding: 2rem;
+                border-radius: .5rem;
+            }
+            .company-logo{
+                height: 2rem;
+            }
+            .apps{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 1.5rem;
+                gap: .2rem;
+            }
+            @media screen and (max-width:1200px){
+                .company-info{
+                   grid-template-columns: repeat(2,1fr);  
+                }
+            }
+            @media screen and (max-width:600px){
+               .company-info{
+                gap: .5rem;
+               } 
+            }
+            .card-section{
+                background-color: rgb(221, 223, 212);
+                width: 100%;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+                padding-bottom: 1rem;
+                
+            }
+            .card-content{
+                max-width: 1280px;
+                margin: 0 auto;
+            }
+            .written-container{
+                display: flex;
+                flex-direction: column;
+                gap: .80rem;
+                margin-top: 2rem;
+                padding: 1rem;
+            }
+            .wc-header{
+                font-size: 2.3rem;
+            }
+            .wc-info{
+                text-align: center;
+                font-size: 1.3rem;
+            }
+            .cards-container{
+                display: grid;
+                grid-template-columns: repeat(2,1fr);
+                margin: 2rem auto;
+                place-items: center;
+                row-gap: 1.6rem;
+                column-gap: 1.1rem;
+                width: 50rem;
+
+            }
+            .cc-card{
+                background-color: blue;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+                padding: 2rem;
+                border-radius: 2rem;
+                width: 19rem;
+                height: 10rem;
+            }
+            .card-logo-container{
+                background-color: white;
+                border-radius: 1000px;
+                width: 2.5vw;
+                margin: 0;
+                padding: .3rem;
+            }
+            .card-logo{
+                height: 2rem;
+                /* color: white; */
+                
+                
+            }
+            .card-title{
+                color: white;
+                font-size: 2rem;
+            }
+            .card-info{
+                color: white;
+            }
+            #card2{
+                background-color: green;
+            }
+            #card3{
+                background-color: rgb(189, 189, 74);
+            }
+            #card4{
+                background-color: pink;
+            }
+            #card5{
+                background-color: rgb(229, 85, 85);
+            }
+            #card6{
+                background-color: rgb(128, 0, 70);
+            }
+            @media screen and (max-width:900px){
+                .cards-container{
+                    grid-template-columns: repeat(1,1fr);
+                    place-self: center;
+                }
+            }
+           
+            .testimonial-content{
+                max-width: 1180px;
+                margin: 0 auto;
+            }
+            .testimonila-header{
+                font-size: 2rem;
+            }
+            .testimonial-card{
+                border: 1px  solid black;
+                width: 27vw;
+                height: 23vh;
+                padding: 1rem;
+                border-radius: 1rem;
+                display: flex;
+                flex-direction: column;
+                gap: .5rem;
+                
+                transition: all .2s ease;
+            }
+            .testimonial-card:hover{
+                box-shadow: 0px 0px 10px rgb(186, 163, 163);
+                border: 1px solid blue;
+                transform: scale(1.01);
+            }
+            .people-img{
+                height: 9vh;
+            }
+            .testimonial-grid{
+                margin-top: 1rem;
+                display: flex;
+                row-gap: 1rem;
+                column-gap: 1rem;
+            }
+            .newsletter-section{
+                margin-top: 1rem;
+            }
+            .newsletter-content{
+                width: 80%;
+                display: flex;
+                margin: 0 auto;
+                gap: 0;
+                
+            }
+            .left_section{
+                width: 50%;
+                padding: 0;
+                
+            }
+            .left-img{
+                width: 100%;
+                height: 48vh;
+                border-radius: 1rem;
+            }
+            .right_section{
+                background-color: rgb(221, 223, 212);
+                display: flex;
+                justify-content: center;
+                align-items: start;
+                flex-direction: column;
+                width:50% ;
+                /* height: 100%; */
+                height: 44vh;
+                padding: 1rem;
+                gap: .5rem;
+                border-radius: 1rem;
+            }
+            .right_header{
+                color: blue;
+                font-size: 2.5rem;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+            .right_info{
+                font-size: 1rem;
+            }
+            .input{
+                height: 2rem;
+                border-radius: .2rem;
+            }
+            button{
+                font-size: 1rem;
+                padding: .6rem 1.2rem;
+                background-color: blue;
+                border: none;
+                border-radius: .6rem;
+                color: white;
+                transition: all .2s ease;
+            }
+            button:hover{
+                background-color: rgb(108, 108, 220);
+            }
+            .footer-content{
+                width: 1280px;
+                margin: 0 auto;
+            }
+            .table-section{
+                display: flex;
+                justify-content: center;
+                padding: 2rem;
+            }
+            .upper-half{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 2rem;
+            }
+            .footer-content{
+                width: 1280px;
+                display: flex;
+                flex-direction: column;
+            }
+            .link_section{
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                padding: 2rem;
+                justify-content: start;
+                align-items: start;
+            }
+            .ul{
+                list-style: none;
+                font-size: 1.5rem;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .fst{
+                display: grid;
+                grid-template-columns: repeat(4,1fr);
+                align-self: center;
+                column-gap: 6rem;
+            
+            }
+            .upper-logo-section{
+                font-size: 2rem;
+            }
+            .upper-logo{
+                height: 2rem;
+            }
+            .upper{
+                font-size: 1.3rem;
+            }
+            .snd{
+                display: flex;
+                flex-direction: row;
+                gap: 1.4rem;
+            }
+           
+
+        </style>
+    </head>
+        <body>
+            <div class="header">
+                <header class="header-content">
+                    <a href="#logo" class="logo">
+                        <img src="StudySyn.svg" alt="" class="logo-icon">
+                        <span class="logo-text">
+                            StudySync
+                        </span>
+                    </a>
+                    <nav class="nav">
+                        <a href="#home" class="nav-link">Home</a>
+                        <a href="#features" class="nav-link">Features</a>
+                        <a href="#pricing" class="nav-link">Pricing</a>
+                        <a href="#blog" class="nav-link">Blog</a>
+                        <a href="#about" class="nav-link">About</a>
+                    </nav>
+                    <a href="#contact" class="contact-button">
+                        Contact Us
+                    </a>
+                    <button class="menu-button">
+                        <img src="Hamburger.svg" class="menu-icon">
+                    </button>
+                </header>
+            </div>
+            <div class="content">
+                <div class="main">
+                    <div class="left-section">
+                        <p class="lable">Very Proud To introduce</p>
+                        <h1 class="title">Seamless learning For Brighter Future</h1>
+                        <p class="discription">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis iste sunt tenetur cum mollitia pariatur! Eaque similique ut adipisci deserunt minima aperiam dolores voluptatem fuga.</p>
+                        <div class="button-group">
+                            <a href="#start" class="start-button">Start Now</a>
+                            <a href="#tour" class="tour-button">Take Tour</a>
+                        </div>
+                    </div>
+                    <div class="right-section">
+                        <div class="img-container">
+                             <img src="usgs-hoS3dzgpHzw-unsplash.jpg" alt="" class="right-img">
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="company">
+                <h1 class="company-title">Trusted by The Best</h1>
+                <div class="company-info">
+                    <div class="apps">
+                        <img src="Google.svg"  class="company-logo">
+                        Google
+                    </div>
+                    <div class="apps">
+                        <img src="Microsoft.svg" alt="" class="company-logo">
+                        Microsoft
+                    </div>
+                    <div class="apps">
+                        <img src="linkedin.svg" alt="" class="company-logo">
+                        Linkdin
+                    </div>
+                    <div class="apps">
+                        <img src="VectorEdu.svg" alt="" class="company-logo" ">
+                        VectorEdu
+                    </div>
+                </div>
+            </div>
+            <div class="card-section">
+                <div class="card-content">
+                    <div class="written-container">
+                        <h1 class="wc-header">
+                            Our Competitve Advantage
+                        </h1>
+                        <p class="wc-info">
+                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maxime molestiae totam accusantium <br> nesciunt sunt dicta quibusdam non sit recusandae explicabo!
+                        </p>
+                    </div>
+                    <div class="cards-container">
+                        <div class="cc-card" id="card1">
+                            <div class="card-logo-container">
+                                <img src="PersonalizedLearn.svg" alt="" class="card-logo">
+                            </div>
+                            <div class="card-title">
+                                Personalize Learning
+                            </div>
+                            <p class="card-info">
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla iusto  <br> libero numquam, molestiae pariatur molestias?
+                            </p>
+                        </div>
+                         <div class="cc-card" id="card2">
+                            <div class="card-logo-container"> <img src="PersonalizedLearn.svg" alt="" class="card-logo"></div>
+                           
+                            <div class="card-title">
+                                Self Awarness
+                            </div>
+                            <p class="card-info">
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla iusto  <br> libero numquam, molestiae pariatur molestias?
+                            </p>
+                        </div>
+                         <div class="cc-card" id="card3">
+                             <div class="card-logo-container"><img src="PersonalizedLearn.svg" alt="" class="card-logo"></div>
+                            
+                            <div class="card-title">
+                                Digital Thinking
+                            </div>
+                            <p class="card-info">
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla iusto  <br> libero numquam, molestiae pariatur molestias?
+                            </p>
+                        </div>
+                         <div class="cc-card" id="card4">
+                            <div class="card-logo-container"><img src="PersonalizedLearn.svg" alt="" class="card-logo"></div>
+                            
+                            <div class="card-title">
+                                Creative Thinking
+                            </div>
+                            <p class="card-info">
+                                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla iusto  <br> libero numquam, molestiae pariatur molestias?
+                            </p>
+                        </div>
+                        <div class="cc-card" id="card5">
+                            <div class="card-logo-container"><img src="PersonalizedLearn.svg" alt="" class="card-logo"></div>
+                            
+                            <div class="card-title">
+                                Industiral Knowledge
+                            </div>
+                            <p class="card-info">
+                                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla iusto  <br> libero numquam, molestiae pariatur molestias?
+                            </p>
+                        </div>
+                        <div class="cc-card" id="card6">
+                            <div class="card-logo-container"><img src="PersonalizedLearn.svg" alt="" class="card-logo"></div>
+                            
+                            <div class="card-title">
+                                Personalize Learning
+                            </div>
+                            <p class="card-info">
+                                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla iusto  <br> libero numquam, molestiae pariatur molestias?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-section">
+                <div class="testimonial-content">
+                    <h2 class="testimonila-header">
+                        What Others say about us
+                    </h2>
+                    <div class="testimonial-grid">
+                        <div class="testimonial-card">
+                            <!-- card-1 -->
+                            <p class="info">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus minus asperiores magni labore fugit libero
+                            </p>
+                            <div class="people-img-container">
+                                <img src="avatar1.png" alt="" class="people-img">
+                            </div>
+                            <div class="name-section">
+                                <h2 style="color: blue;">
+                                    Sarah Jhonson
+                                </h2>
+                                <p>
+                                    8th Grade English Teacher
+                                </p>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <!-- card-2 -->
+                            <p class="info">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus minus asperiores magni labore fugit libero
+                            </p>
+                            <div class="people-img-container">
+                                <img src="avatar2.png" alt="" class="people-img">
+                            </div>
+                            <div class="name-section">
+                                <h2 style="color: blue;">
+                                    Mark Devis
+                                </h2>
+                                <p>
+                                    Parent
+                                </p>
+                            </div>
+                        
+                        </div>
+                        <div class="testimonial-card">
+                            <!-- card-3 -->
+                            <p class="info">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus minus asperiores magni labore fugit libero
+                            </p>
+                            <div class="people-img-container">
+                                <img src="avatar3.png" alt="" class="people-img">
+                            </div>
+                            <div class="name-section">
+                                <h2 style="color: blue;">
+                                    Dr James clerk
+                                </h2>
+                                <p>
+                                   School Administrator
+                                </p>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="newsletter-section">
+                <div class="newsletter-content">
+                    <!-- left-side -->
+                     <div class="left_section">
+                        <img src="cool.jpeg" alt="" class="left-img">
+                    </div>
+                      <!-- right-side -->
+                    <div class="right_section">
+                        <h2 class="right_header">
+                            Get The Latest Update 
+                        </h2>
+                        <p class="right_info">
+                            Sign up for our newsletter
+                        </p>
+                        <div class="right-iniput">
+                            <input type="text" class="input" placeholder="  Email">
+                            <button>Send</button>
+                        </div>
+                        <p class="link-section">
+                            By signing up to our newsletter you agree to our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>
+                        </p>
+                    </div>
+                     
+                </div>
+            </div>
+            <div class="footer-section">
+                <div class="footer-content">
+                    <div class="upper-half">
+                        <div class="link_section">
+                            <div class="upper-logo-section">
+                                <img src="StudySyn.svg" alt="" class="upper-logo">
+                                <span>StudySync</span>
+                            </div>
+                            <p class="upper">
+                                Seamless Future For Bright Future
+                            </p>
+                            <div class="snd">
+                                 <a href=""><img src="instagram.svg" alt=""></a>
+                                <a href=""><img src="twitter.svg" alt=""></a>
+                                <a href=""><img src="github.svg" alt=""></a>
+                                <a href=""><img src="linkedin-copy.svg" alt=""></a>
+                            </div>
+                           
+                            
+                        </div>
+                        <div class="table-section">
+                            <div class="fst">
+                                <ul class="ul">
+                                    <li style="font-weight: 900;">Product</li><br>
+                                    <li>Overview</li>
+                                    <li>Pricning</li>
+                                    <li>Solution</li>
+                                    <li>Customer</li>
+                                </ul>
+                                <ul class="ul">
+                                    <li style="font-weight: 900;">Company</li><br>
+                                    <li>About</li>
+                                    <li>Investor <br>
+                                        Relationship
+                                    </li>
+                                    <li>Jobs</li>
+                                    <li>Press</li>
+                                </ul>
+                                <ul class="ul">
+                                    <li style="font-weight: 900;">Support</li><br>
+                                    <li>Contact</li>
+                                    <li>Documentation</li>
+                                    <li>Chat</li>
+                                    <li>FAQ</li>
+                                </ul>
+                                <ul class="ul">
+                                    <li style="font-weight: 900;">Legal</li><br>
+                                    <li>Terms of services</li>
+                                    <li>Privacy Policy</li>
+                                    <li>Coocki setting</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lower-half">
+                            <span>
+                                &copy;
+                                 2025-StudySync all rights reserved
+                            </span>
+                    </div>
+                </div>
+            </div>
+        </body>
+    </html>

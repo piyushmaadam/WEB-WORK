@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>StudySync — Seamless Learning</title>
+
+  <!-- Google font (simpler import) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #fff;
+      --muted: #6f7a85;
+      --blue: #5961e1;
+      --blue-600: #4460d6;
+      --card-bg: #dde0d4;
+      --radius: 12px;
+      --max-width: 1200px;
+      --gap: 1rem;
+      --text: #222;
+    }
+
+    /* Reset + base */
+    *{box-sizing: border-box}
+    html,body{height:100%}
+    body{
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--text);
+      background:var(--bg);
+      margin:0;
+      -webkit-font-smoothing:antialiased;
+      line-height:1.4;
+      padding:1.25rem;
+    }
+
+    /* Skip link for accessibility */
+    .skip-link{
+      position: absolute;
+      left: -999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus{
+      left: 1rem;
+      top: 1rem;
+      width: auto;
+      height: auto;
+      padding:.5rem 1rem;
+      background:var(--blue);
+      color:#fff;
+      border-radius:6px;
+      z-index:1000;
+    }
+
+    /* Layout wrapper */
+    .container{
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header.header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--gap);
+      padding:.5rem 0;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:.6rem;
+      text-decoration:none;
+      color:var(--text);
+    }
+    .brand img{width:42px;height:42px;object-fit:contain}
+    .brand .site-title{font-weight:700;font-size:1.25rem;letter-spacing:.2px}
+
+    /* nav */
+    nav.primary{
+      display:flex;
+      gap:1rem;
+      align-items:center;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:1rem;
+      align-items:center;
+    }
+    .nav-links a{
+      color:var(--muted);
+      text-decoration:none;
+      font-weight:600;
+      padding:.35rem .5rem;
+      border-radius:6px;
+      font-size:1rem;
+    }
+    .nav-links a:focus,
+    .nav-links a:hover{ color:var(--blue); outline: none; }
+
+    .cta{
+      background:var(--blue);
+      color:#fff;
+      border:none;
+      padding:.6rem .9rem;
+      border-radius:8px;
+      cursor:pointer;
+      text-decoration:none;
+      font-weight:700;
+    }
+    .cta:focus{ outline:3px solid rgba(89,97,225,.25) }
+
+    /* Mobile toggle */
+    .menu-toggle{
+      display:none;
+      background:transparent;
+      border:0;
+      padding:.2rem;
+      cursor:pointer;
+    }
+
+    /* Hero */
+    .hero{
+      display:flex;
+      flex-direction:column;
+      gap:1.25rem;
+      align-items:center;
+      margin:1.5rem 0 2rem;
+      padding:1rem 0;
+    }
+
+    .hero-inner{
+      display:flex;
+      gap:2rem;
+      width:100%;
+      align-items:center;
+      justify-content:space-between;
+      flex-direction:column;
+    }
+
+    .hero-left{max-width:720px}
+    .badge{
+      color:var(--blue);
+      font-weight:700;
+      font-size:.95rem;
+      margin-bottom:.35rem;
+    }
+    h1.title{
+      font-size:2rem;
+      margin:.25rem 0;
+      line-height:1.05;
+      font-weight:800;
+      font-family: "Inter", system-ui;
+    }
+    p.lead{color:var(--muted); font-size:1rem; margin-top:.5rem}
+
+    .hero-actions{display:flex;gap:.75rem; margin-top:.85rem; flex-wrap:wrap}
+    .btn-primary{
+      background:var(--blue);
+      color:white;
+      padding:.65rem 1rem;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      text-decoration:none;
+      font-weight:700;
+    }
+    .btn-ghost{
+      background:transparent;
+      border:1px solid rgba(0,0,0,.08);
+      padding:.65rem 1rem;
+      border-radius:8px;
+      cursor:pointer;
+      text-decoration:none;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    /* Hero image */
+    .hero-right{width:100%; max-width:540px}
+    .hero-image{
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,.12);
+      height:280px;
+      background:linear-gradient(180deg,#f4f6fb,#e9edf8);
+      display:block;
+      width:100%;
+      object-fit:cover;
+    }
+
+    /* Companies */
+    .companies{display:flex;flex-direction:column;align-items:center;gap:.75rem;margin:1.25rem 0}
+    .companies .info{background:var(--card-bg);padding:1rem;border-radius:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;width:100%;max-width:820px;align-items:center;justify-items:center}
+    .companies img{height:28px;object-fit:contain}
+    @media (max-width:900px){ .companies .info{grid-template-columns:repeat(2,1fr); } }
+
+    /* Cards */
+    .card-section{background:var(--card-bg); padding:1.25rem;border-radius:12px;margin:1.25rem 0}
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:1rem;
+      margin-top:1rem;
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      padding:1rem;
+      border-radius:12px;
+      min-height:130px;
+      display:flex;
+      flex-direction:column;
+      gap:.5rem;
+      align-items:flex-start;
+      justify-content:center;
+      color:#fff;
+    }
+    .card .title{font-weight:700;font-size:1.1rem}
+    .card p{font-size:.95rem;color:rgba(255,255,255,.95)}
+
+    /* Provide distinct background colors using data attributes to keep style clean */
+    .card[data-bg="blue"]{background:linear-gradient(180deg,#5961e1,#3f48c6)}
+    .card[data-bg="green"]{background:linear-gradient(180deg,#34b36b,#2c9f5f)}
+    .card[data-bg="yellow"]{background:linear-gradient(180deg,#d6c65a,#bba93d)}
+    .card[data-bg="pink"]{background:linear-gradient(180deg,#ff99b8,#ff5e8c)}
+    .card[data-bg="red"]{background:linear-gradient(180deg,#e45b5b,#b43f3f)}
+    .card[data-bg="purple"]{background:linear-gradient(180deg,#7a2d61,#5a1a4a)}
+
+    @media (max-width:1000px){
+      .cards-grid{grid-template-columns:repeat(2,1fr)}
+      .hero-inner{flex-direction:column}
+      .hero-image{height:240px}
+    }
+    @media (max-width:640px){
+      .nav-links{display:none}
+      .menu-toggle{display:inline-block}
+      .cards-grid{grid-template-columns:repeat(1,1fr)}
+      .hero-image{height:200px}
+    }
+
+    /* Testimonials */
+    .testimonials{margin:1.5rem 0}
+    .test-grid{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+    .testimonial{
+      background:white;border-radius:10px;padding:1rem;max-width:320px;box-shadow:0 6px 20px rgba(0,0,0,.06)
+    }
+
+    /* Newsletter + footer */
+    .newsletter{display:flex;gap:1rem;align-items:center;justify-content:space-between;padding:1rem;border-radius:10px;overflow:hidden}
+    .newsletter img{width:100%;height:160px;object-fit:cover;border-radius:10px}
+    .newsletter .form{flex:1;padding-left:1rem}
+    .newsletter input[type="email"]{padding:.6rem .75rem;border-radius:8px;border:1px solid rgba(0,0,0,.08);width:100%;margin-bottom:.5rem}
+    .newsletter button{padding:.6rem .9rem;border-radius:8px;border:0;background:var(--blue);color:#fff}
+
+    footer.site-footer{margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(0,0,0,.06)}
+    .footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+    .footer-grid h4{margin-bottom:.5rem}
+    @media (max-width:900px){ .footer-grid{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:480px){ .footer-grid{grid-template-columns:repeat(1,1fr)} }
+
+    /* Reduced motion preference */
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none;transition:none!important}
+    }
+
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="container">
+    <header class="header" role="banner" aria-label="Main header">
+      <a class="brand" href="#home">
+        <img src="StudySyn.svg" alt="StudySync logo">
+        <span class="site-title">StudySync</span>
+      </a>
+
+      <nav class="primary" role="navigation" aria-label="Primary navigation">
+        <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open main menu">
+          ☰
+        </button>
+
+        <div class="nav-links" id="navLinks">
+          <a href="#home">Home</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#blog">Blog</a>
+          <a href="#about">About</a>
+        </div>
+
+        <a class="cta" href="#contact">Contact Us</a>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <main id="main" class="hero" role="main" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <p class="badge">Proudly introducing</p>
+          <h1 id="hero-title" class="title">Seamless learning for a brighter future</h1>
+          <p class="lead">Personalized learning, industry-ready skills and creative thinking — all in one place. Built for students, teachers and institutions.</p>
+
+          <div class="hero-actions" role="group" aria-label="Hero actions">
+            <a class="btn-primary" href="#start">Start Now</a>
+            <a class="btn-ghost" href="#tour">Take Tour</a>
+          </div>
+        </div>
+
+        <div class="hero-right" aria-hidden="false">
+          <!-- Use a descriptive alt for your real image. This is placeholder path. -->
+          <img class="hero-image" src="usgs-hoS3dzgpHzw-unsplash.jpg" alt="Students collaborating on a laptop">
+        </div>
+      </div>
+    </main>
+
+    <!-- Trusted companies -->
+    <section class="companies" aria-label="Trusted by">
+      <h3 style="margin:0;font-weight:700">Trusted by the best</h3>
+      <div class="info" role="list" aria-label="Partner logos">
+        <div role="listitem"><img src="Google.svg" alt="Google logo"> <div style="font-size:.9rem;color:#222">Google</div></div>
+        <div role="listitem"><img src="Microsoft.svg" alt="Microsoft logo"> <div style="font-size:.9rem;color:#222">Microsoft</div></div>
+        <div role="listitem"><img src="linkedin.svg" alt="LinkedIn logo"> <div style="font-size:.9rem;color:#222">LinkedIn</div></div>
+        <div role="listitem"><img src="VectorEdu.svg" alt="VectorEdu logo"> <div style="font-size:.9rem;color:#222">VectorEdu</div></div>
+      </div>
+    </section>
+
+    <!-- Cards / advantages -->
+    <section class="card-section" id="features" aria-label="Our competitive advantages">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem">
+        <div>
+          <h2 style="margin:.25rem 0">Our Competitive Advantage</h2>
+          <p style="color:var(--muted)">Meaningful learning, practical outcomes — built with educators and students in mind.</p>
+        </div>
+      </div>
+
+      <div class="cards-grid" aria-hidden="false" style="margin-top:1rem">
+        <div class="card" data-bg="blue">
+          <div style="font-weight:700">Personalized Learning</div>
+          <p>Adaptive study paths, practice tests and progress tracking for each learner.</p>
+        </div>
+
+        <div class="card" data-bg="green">
+          <div style="font-weight:700">Self Awareness</div>
+          <p>Insights and analytics to help learners discover strengths and gaps.</p>
+        </div>
+
+        <div class="card" data-bg="yellow">
+          <div style="font-weight:700">Digital Thinking</div>
+          <p>Modern tools and project-based outcomes that mirror real-world tasks.</p>
+        </div>
+
+        <div class="card" data-bg="pink">
+          <div style="font-weight:700">Creative Thinking</div>
+          <p>Activities and prompts to encourage ideation and divergent thinking.</p>
+        </div>
+
+        <div class="card" data-bg="red">
+          <div style="font-weight:700">Industrial Knowledge</div>
+          <p>Collaboration with industry to keep content relevant and practical.</p>
+        </div>
+
+        <div class="card" data-bg="purple">
+          <div style="font-weight:700">Skills for tomorrow</div>
+          <p>Soft and technical skills taught with measurable outcomes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" aria-label="Testimonials">
+      <h3 style="margin:0 0 .5rem 0">What others say about us</h3>
+      <div class="test-grid">
+        <article class="testimonial" aria-label="Testimonial by Sarah Johnson">
+          <p>"Great platform — my students engage more and make noticeable progress."</p>
+          <div style="display:flex;gap:.6rem;align-items:center;margin-top:.6rem">
+            <img src="avatar1.png" alt="" style="height:44px;border-radius:50%">
+            <div>
+              <div style="font-weight:700;color:var(--blue)">Sarah Johnson</div>
+              <div style="font-size:.9rem;color:var(--muted)">8th Grade English Teacher</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="testimonial" aria-label="Testimonial by Mark Devis">
+          <p>"Parents appreciate the insight dashboards and ease of use."</p>
+          <div style="display:flex;gap:.6rem;align-items:center;margin-top:.6rem">
+            <img src="avatar2.png" alt="" style="height:44px;border-radius:50%">
+            <div>
+              <div style="font-weight:700;color:var(--blue)">Mark Devis</div>
+              <div style="font-size:.9rem;color:var(--muted)">Parent</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="testimonial" aria-label="Testimonial by Dr James Clerk">
+          <p>"The admin controls are simple and powerful for managing multiple classrooms."</p>
+          <div style="display:flex;gap:.6rem;align-items:center;margin-top:.6rem">
+            <img src="avatar3.png" alt="" style="height:44px;border-radius:50%">
+            <div>
+              <div style="font-weight:700;color:var(--blue)">Dr James Clerk</div>
+              <div style="font-size:.9rem;color:var(--muted)">School Administrator</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter" aria-label="Newsletter signup" style="margin-top:1.25rem">
+      <img src="cool.jpeg" alt="Students reading" style="max-width:320px;border-radius:10px">
+      <div class="form">
+        <h3 style="margin:0 0 .4rem 0;color:var(--blue)">Get the latest updates</h3>
+        <p style="margin:0 0 .6rem 0;color:var(--muted)">Sign up for our newsletter — tips, product updates and offers.</p>
+        <form onsubmit="event.preventDefault(); alert('Thanks!');" aria-label="Subscribe form">
+          <label for="email" style="display:none">Email</label>
+          <input id="email" type="email" placeholder="Enter your email" required>
+          <div style="margin-top:.5rem;display:flex;gap:.5rem">
+            <button type="submit">Send</button>
+            <a href="#terms" style="align-self:center;color:var(--muted);text-decoration:underline;font-size:.9rem">Terms & Privacy</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-grid" style="margin-top:1rem">
+        <div>
+          <h4>Product</h4>
+          <ul style="list-style:none;padding:0;margin:0;color:var(--muted)">
+            <li>Overview</li>
+            <li>Pricing</li>
+            <li>Solution</li>
+            <li>Customer</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul style="list-style:none;padding:0;margin:0;color:var(--muted)">
+            <li>About</li>
+            <li>Investor Relations</li>
+            <li>Jobs</li>
+            <li>Press</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul style="list-style:none;padding:0;margin:0;color:var(--muted)">
+            <li>Contact</li>
+            <li>Documentation</li>
+            <li>Chat</li>
+            <li>FAQ</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul style="list-style:none;padding:0;margin:0;color:var(--muted)">
+            <li>Terms of service</li>
+            <li>Privacy policy</li>
+            <li>Cookie settings</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem;display:flex;justify-content:space-between;align-items:center">
+        <div>&copy; 2025 StudySync — All rights reserved</div>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <a href="#" aria-label="Instagram"><img src="instagram.svg" alt="" style="height:20px"></a>
+          <a href="#" aria-label="Twitter"><img src="twitter.svg" alt="" style="height:20px"></a>
+          <a href="#" aria-label="GitHub"><img src="github.svg" alt="" style="height:20px"></a>
+          <a href="#" aria-label="LinkedIn"><img src="linkedin-copy.svg" alt="" style="height:20px"></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Mobile nav toggle (small, accessible)
+    (function(){
+      const btn = document.getElementById('menuToggle');
+      const nav = document.getElementById('navLinks');
+      btn?.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        if(nav.style.display === 'flex'){ nav.style.display = ''; }
+        else { nav.style.display = 'flex'; nav.style.flexDirection = 'column'; nav.style.gap = '0.5rem'; }
+      });
+    })();
+  </script>
+</body>
+</html>
