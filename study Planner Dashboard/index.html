@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner Dashboard</title>
+    <style>
+        /* ===============================
+           RESET & BASE STYLES
+        ================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #111827;
+            --bg-card-soft: #1f2937;
+            --accent: #3b82f6;
+            --accent-soft: #1d4ed8;
+            --accent-light: #60a5fa;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --danger: #f97373;
+            --success: #22c55e;
+            --warning: #facc15;
+            --border-subtle: #1f2937;
+            --radius-lg: 18px;
+            --radius-full: 999px;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top left, #1f2937, #020617);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            padding: 20px;
+        }
+
+        /* ===============================
+           LAYOUT WRAPPER
+        ================================== */
+        .app-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.9));
+            border-radius: 26px;
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            padding: 18px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* ===============================
+           TOP NAVBAR
+        ================================== */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 10px 0 10px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 16px;
+            background: radial-gradient(circle at 20% 20%, #60a5fa, #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .logo-text h1 {
+            font-size: 18px;
+        }
+
+        .logo-text span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-subtle);
+            padding: 7px 12px;
+            padding-left: 28px;
+            font-size: 12px;
+            color: var(--text-main);
+            outline: none;
+            width: 180px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            border: 2px solid #22c55e;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #022c22;
+        }
+
+        /* ===============================
+           MAIN GRID
+        ================================== */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2.1fr 1.4fr;
+            gap: 16px;
+        }
+
+        /* ===============================
+           LEFT COLUMN
+        ================================== */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .hero-card {
+            background: radial-gradient(circle at top right, rgba(37,99,235,0.4), rgba(15,23,42,1));
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(148,163,184,0.18);
+            padding: 18px 18px 16px 18px;
+            display: grid;
+            grid-template-columns: 2.1fr 1.4fr;
+            gap: 14px;
+        }
+
+        .hero-text h2 {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .hero-text p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .tag-pill {
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            color: var(--text-muted);
+        }
+
+        .tag-pill--accent {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            border-color: transparent;
+            color: white;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            padding: 7px 16px;
+            font-size: 12px;
+            border-radius: var(--radius-full);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.55);
+        }
+
+        .btn-ghost {
+            padding: 7px 14px;
+            font-size: 12px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            font-size: 11px;
+        }
+
+        .hero-stat-box {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            padding: 8px 10px;
+        }
+
+        .hero-stat-label {
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .hero-stat-value {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .hero-stat-sub {
+            margin-top: 2px;
+            font-size: 10px;
+            color: var(--accent-light);
+        }
+
+        /* ===============================
+           TODAY TASKS
+        ================================== */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+            padding: 14px 14px 12px 14px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 15px;
+        }
+
+        .card-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .card-link {
+            font-size: 11px;
+            color: var(--accent-light);
+            cursor: pointer;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .task {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            background: var(--bg-card-soft);
+            border: 1px solid rgba(31, 41, 55, 0.95);
+        }
+
+        .task-priority {
+            width: 6px;
+            border-radius: 999px;
+            background: var(--accent);
+        }
+
+        .task-priority--high {
+            background: var(--danger);
+        }
+
+        .task-priority--medium {
+            background: var(--warning);
+        }
+
+        .task-priority--low {
+            background: var(--success);
+        }
+
+        .task-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .task-title {
+            font-size: 13px;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .task-meta span::before {
+            content: "• ";
+        }
+
+        .task-time {
+            font-size: 11px;
+            color: var(--accent-light);
+        }
+
+        /* ===============================
+           SUBJECT GRID
+        ================================== */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 9px;
+            margin-top: 10px;
+        }
+
+        .subject-card {
+            background: var(--bg-card-soft);
+            border-radius: 14px;
+            padding: 8px 9px;
+            border: 1px solid rgba(30, 64, 175, 0.7);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subject-name {
+            font-size: 12px;
+        }
+
+        .subject-tag {
+            font-size: 9px;
+            padding: 2px 7px;
+            border-radius: var(--radius-full);
+            background: rgba(37, 99, 235, 0.25);
+            color: var(--accent-light);
+        }
+
+        .subject-progress-bar {
+            position: relative;
+            height: 5px;
+            border-radius: 999px;
+            background: #020617;
+            overflow: hidden;
+        }
+
+        .subject-progress-fill {
+            height: 100%;
+            width: 60%;
+            background: linear-gradient(90deg, #22c55e, #a3e635);
+        }
+
+        .subject-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* ===============================
+           RIGHT COLUMN
+        ================================== */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .calendar-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .month-label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .month-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .circle-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: transparent;
+            font-size: 11px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            font-size: 11px;
+        }
+
+        .calendar-day-name {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 999px;
+            cursor: default;
+            border: 1px solid transparent;
+        }
+
+        .calendar-day--muted {
+            color: var(--text-muted);
+        }
+
+        .calendar-day--active {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            border-color: transparent;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
+        }
+
+        .calendar-day--has-task {
+            border-color: rgba(59, 130, 246, 0.8);
+        }
+
+        .streak-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+            padding: 13px 14px;
+        }
+
+        .streak-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .streak-labels {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .streak-labels span:first-child {
+            font-size: 14px;
+        }
+
+        .streak-labels span:last-child {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .streak-badge {
+            padding: 7px 11px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: rgba(22, 163, 74, 0.15);
+            border: 1px solid rgba(22, 163, 74, 0.65);
+            color: #bbf7d0;
+        }
+
+        .streak-graph {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .streak-bar {
+            height: 32px;
+            border-radius: 999px;
+            background: radial-gradient(circle at top, rgba(148, 163, 184, 0.35), rgba(15, 23, 42, 1));
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .streak-bar-fill {
+            width: 70%;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #22c55e, #166534);
+        }
+
+        .streak-bar:nth-child(3) .streak-bar-fill,
+        .streak-bar:nth-child(4) .streak-bar-fill {
+            height: 80%;
+        }
+
+        .streak-bar:nth-child(5) .streak-bar-fill {
+            height: 100%;
+        }
+
+        .streak-bar:nth-child(6) .streak-bar-fill {
+            height: 30%;
+        }
+
+        .streak-bar:nth-child(7) .streak-bar-fill {
+            height: 55%;
+        }
+
+        .streak-legend {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* ===============================
+           RESPONSIVE
+        ================================== */
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .app-wrapper {
+                border-radius: 0;
+                padding: 12px;
+            }
+
+            .top-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .nav-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .subject-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- TOP NAVBAR -->
+        <header class="top-nav">
+            <div class="logo-area">
+                <div class="logo-badge">S</div>
+                <div class="logo-text">
+                    <h1>StudyFlow</h1>
+                    <span>Smart planner for daily learning</span>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Search subjects, tasks..." />
+                </div>
+                <div class="avatar">PM</div>
+            </div>
+        </header>
+
+        <!-- MAIN GRID -->
+        <main class="main-grid">
+            <!-- LEFT COLUMN -->
+            <section class="left-column">
+                <!-- HERO CARD -->
+                <section class="hero-card">
+                    <div class="hero-text">
+                        <h2>Good Evening, Piyush 👋</h2>
+                        <p>Stay on track with your semester goals. Finish today’s tasks and keep your streak alive.</p>
+
+                        <div class="hero-tags">
+                            <span class="tag-pill tag-pill--accent">Today Focus: DSA + DBMS</span>
+                            <span class="tag-pill">Target: 3 hrs</span>
+                            <span class="tag-pill">Exam: 21 days left</span>
+                        </div>
+
+                        <div class="hero-cta">
+                            <button class="btn-primary">Start Focus Session</button>
+                            <button class="btn-ghost">View Weekly Plan</button>
+                        </div>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat-box">
+                            <div class="hero-stat-label">Today Study Time</div>
+                            <div class="hero-stat-value">1h 15m</div>
+                            <div class="hero-stat-sub">+25m vs yesterday</div>
+                        </div>
+                        <div class="hero-stat-box">
+                            <div class="hero-stat-label">Chapters Completed</div>
+                            <div class="hero-stat-value">32 / 50</div>
+                            <div class="hero-stat-sub">64% of syllabus done</div>
+                        </div>
+                        <div class="hero-stat-box">
+                            <div class="hero-stat-label">Pending Tasks</div>
+                            <div class="hero-stat-value">5</div>
+                            <div class="hero-stat-sub">2 high priority</div>
+                        </div>
+                        <div class="hero-stat-box">
+                            <div class="hero-stat-label">Current Streak</div>
+                            <div class="hero-stat-value">7 days 🔥</div>
+                            <div class="hero-stat-sub">Keep it going!</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TODAY TASKS -->
+                <section class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Today’s Tasks</h3>
+                            <p class="card-subtitle">Finish at least 3 to stay on track.</p>
+                        </div>
+                        <span class="card-link">View all</span>
+                    </div>
+                    <div class="task-list">
+                        <article class="task">
+                            <div class="task-priority task-priority--high"></div>
+                            <div class="task-main">
+                                <div class="task-title">Revise DBMS: Normalization (1NF, 2NF, 3NF)</div>
+                                <div class="task-meta">
+                                    <span>DBMS</span>
+                                    <span>Chapter 5</span>
+                                    <span>Notes + PYQ</span>
+                                </div>
+                            </div>
+                            <div class="task-time">45 min</div>
+                        </article>
+
+                        <article class="task">
+                            <div class="task-priority task-priority--medium"></div>
+                            <div class="task-main">
+                                <div class="task-title">Practice DSA: 5 problems on Arrays</div>
+                                <div class="task-meta">
+                                    <span>DSA</span>
+                                    <span>LeetCode / GFG</span>
+                                </div>
+                            </div>
+                            <div class="task-time">60 min</div>
+                        </article>
+
+                        <article class="task">
+                            <div class="task-priority task-priority--low"></div>
+                            <div class="task-main">
+                                <div class="task-title">Read English: 2 pages from novel</div>
+                                <div class="task-meta">
+                                    <span>Communication skills</span>
+                                    <span>Fluency + vocab</span>
+                                </div>
+                            </div>
+                            <div class="task-time">20 min</div>
+                        </article>
+
+                        <article class="task">
+                            <div class="task-priority task-priority--medium"></div>
+                            <div class="task-main">
+                                <div class="task-title">Revise Computer Networks: OSI vs TCP/IP</div>
+                                <div class="task-meta">
+                                    <span>CN</span>
+                                    <span>Short notes</span>
+                                </div>
+                            </div>
+                            <div class="task-time">30 min</div>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- SUBJECT OVERVIEW -->
+                <section class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">Subject Overview</h3>
+                            <p class="card-subtitle">Track progress of each subject this semester.</p>
+                        </div>
+                        <span class="card-link">Customize</span>
+                    </div>
+
+                    <div class="subject-grid">
+                        <article class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-name">DBMS</span>
+                                <span class="subject-tag">Core</span>
+                            </div>
+                            <div class="subject-progress-bar">
+                                <div class="subject-progress-fill" style="width: 70%;"></div>
+                            </div>
+                            <div class="subject-meta">
+                                <span>7 / 10 chapters</span>
+                                <span>2 weeks left</span>
+                            </div>
+                        </article>
+
+                        <article class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-name">Data Structures</span>
+                                <span class="subject-tag">Important</span>
+                            </div>
+                            <div class="subject-progress-bar">
+                                <div class="subject-progress-fill" style="width: 55%;"></div>
+                            </div>
+                            <div class="subject-meta">
+                                <span>5 / 9 chapters</span>
+                                <span>Daily practice</span>
+                            </div>
+                        </article>
+
+                        <article class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-name">Computer Networks</span>
+                                <span class="subject-tag">Theory</span>
+                            </div>
+                            <div class="subject-progress-bar">
+                                <div class="subject-progress-fill" style="width: 40%;"></div>
+                            </div>
+                            <div class="subject-meta">
+                                <span>3 / 8 chapters</span>
+                                <span>Start this week</span>
+                            </div>
+                        </article>
+
+                        <article class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-name">OS</span>
+                                <span class="subject-tag">Core</span>
+                            </div>
+                            <div class="subject-progress-bar">
+                                <div class="subject-progress-fill" style="width: 35%;"></div>
+                            </div>
+                            <div class="subject-meta">
+                                <span>2 / 7 chapters</span>
+                                <span>Lab + theory</span>
+                            </div>
+                        </article>
+
+                        <article class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-name">Maths</span>
+                                <span class="subject-tag">Practice</span>
+                            </div>
+                            <div class="subject-progress-bar">
+                                <div class="subject-progress-fill" style="width: 60%;"></div>
+                            </div>
+                            <div class="subject-meta">
+                                <span>6 / 10 units</span>
+                                <span>PYQ next</span>
+                            </div>
+                        </article>
+
+                        <article class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-name">English</span>
+                                <span class="subject-tag">Skills</span>
+                            </div>
+                            <div class="subject-progress-bar">
+                                <div class="subject-progress-fill" style="width: 75%;"></div>
+                            </div>
+                            <div class="subject-meta">
+                                <span>Vocab improving</span>
+                                <span>Keep reading</span>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </section>
+
+            <!-- RIGHT COLUMN -->
+            <section class="right-column">
+                <!-- CALENDAR -->
+                <section class="calendar-card">
+                    <div class="calendar-header">
+                        <div>
+                            <div class="month-label">November 2025</div>
+                            <div class="card-subtitle">Exam countdown & planned study days</div>
+                        </div>
+                        <div class="month-controls">
+                            <button class="circle-btn">‹</button>
+                            <button class="circle-btn">›</button>
+                        </div>
+                    </div>
+
+                    <div class="calendar-grid">
+                        <!-- Day names -->
+                        <div class="calendar-day-name">S</div>
+                        <div class="calendar-day-name">M</div>
+                        <div class="calendar-day-name">T</div>
+                        <div class="calendar-day-name">W</div>
+                        <div class="calendar-day-name">T</div>
+                        <div class="calendar-day-name">F</div>
+                        <div class="calendar-day-name">S</div>
+
+                        <!-- Previous month muted days -->
+                        <div class="calendar-day calendar-day--muted">26</div>
+                        <div class="calendar-day calendar-day--muted">27</div>
+                        <div class="calendar-day calendar-day--muted">28</div>
+                        <div class="calendar-day calendar-day--muted">29</div>
+                        <div class="calendar-day calendar-day--muted">30</div>
+                        <div class="calendar-day">1</div>
+                        <div class="calendar-day">2</div>
+
+                        <!-- Week 2 -->
+                        <div class="calendar-day calendar-day--has-task">3</div>
+                        <div class="calendar-day">4</div>
+                        <div class="calendar-day calendar-day--has-task">5</div>
+                        <div class="calendar-day">6</div>
+                        <div class="calendar-day">7</div>
+                        <div class="calendar-day calendar-day--has-task">8</div>
+                        <div class="calendar-day">9</div>
+
+                        <!-- Week 3 -->
+                        <div class="calendar-day">10</div>
+                        <div class="calendar-day calendar-day--has-task">11</div>
+                        <div class="calendar-day">12</div>
+                        <div class="calendar-day">13</div>
+                        <div class="calendar-day calendar-day--has-task">14</div>
+                        <div class="calendar-day">15</div>
+                        <div class="calendar-day">16</div>
+
+                        <!-- Week 4 -->
+                        <div class="calendar-day">17</div>
+                        <div class="calendar-day calendar-day--has-task">18</div>
+                        <div class="calendar-day">19</div>
+                        <div class="calendar-day">20</div>
+                        <div class="calendar-day calendar-day--active">21</div>
+                        <div class="calendar-day calendar-day--has-task">22</div>
+                        <div class="calendar-day">23</div>
+
+                        <!-- Week 5 -->
+                        <div class="calendar-day">24</div>
+                        <div class="calendar-day">25</div>
+                        <div class="calendar-day calendar-day--has-task">26</div>
+                        <div class="calendar-day">27</div>
+                        <div class="calendar-day">28</div>
+                        <div class="calendar-day calendar-day--has-task">29</div>
+                        <div class="calendar-day">30</div>
+                    </div>
+                </section>
+
+                <!-- STREAK / HABIT -->
+                <section class="streak-card">
+                    <div class="streak-main">
+                        <div class="streak-labels">
+                            <span>Study Streak</span>
+                            <span>Past 7 days performance overview</span>
+                        </div>
+                        <div class="streak-badge">7 days active 🔥</div>
+                    </div>
+
+                    <div class="streak-graph">
+                        <div class="streak-bar">
+                            <div class="streak-bar-fill" style="height: 40%;"></div>
+                        </div>
+                        <div class="streak-bar">
+                            <div class="streak-bar-fill" style="height: 60%;"></div>
+                        </div>
+                        <div class="streak-bar">
+                            <div class="streak-bar-fill"></div>
+                        </div>
+                        <div class="streak-bar">
+                            <div class="streak-bar-fill"></div>
+                        </div>
+                        <div class="streak-bar">
+                            <div class="streak-bar-fill"></div>
+                        </div>
+                        <div class="streak-bar">
+                            <div class="streak-bar-fill"></div>
+                        </div>
+                        <div class="streak-bar">
+                            <div class="streak-bar-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="streak-legend">
+                        <span>Sun</span>
+                        <span>Mon</span>
+                        <span>Tue</span>
+                        <span>Wed</span>
+                        <span>Thu</span>
+                        <span>Fri</span>
+                        <span>Sat</span>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
