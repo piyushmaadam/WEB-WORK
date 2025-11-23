@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer Project</title>
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a73e8, #4a148c);
+            transition: background 0.3s ease, color 0.3s ease;
+            color: #fff;
+        }
+
+        body.dark {
+            background: radial-gradient(circle at top, #111827, #020617);
+            color: #e5e7eb;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px 20px 28px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+        }
+
+        .theme-toggle {
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: inherit;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        input[type="datetime-local"] {
+            flex: 1;
+            min-width: 180px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        button.primary {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background-color: #22c55e;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 100px;
+        }
+
+        button.primary:hover {
+            background-color: #16a34a;
+        }
+
+        .error {
+            color: #fca5a5;
+            font-size: 0.8rem;
+            min-height: 16px;
+            margin-bottom: 12px;
+        }
+
+        .timer-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .time-box {
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 12px;
+            padding: 10px 6px;
+            text-align: center;
+        }
+
+        body.dark .time-box {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .time-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .status {
+            font-size: 0.9rem;
+            margin-top: 6px;
+            min-height: 18px;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            .timer-display {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Countdown Timer</h1>
+            <button class="theme-toggle" id="themeToggle">Dark Mode</button>
+        </div>
+
+        <p class="description">
+            Select a future date and time, then click <strong>Start</strong> to begin the countdown.
+        </p>
+
+        <div class="form-group">
+            <input type="datetime-local" id="datetimeInput">
+            <button class="primary" id="startBtn">Start</button>
+        </div>
+
+        <div class="error" id="errorMsg"></div>
+
+        <div class="timer-display">
+            <div class="time-box">
+                <div class="time-value" id="days">0</div>
+                <div class="time-label">Days</div>
+            </div>
+            <div class="time-box">
+                <div class="time-value" id="hours">0</div>
+                <div class="time-label">Hours</div>
+            </div>
+            <div class="time-box">
+                <div class="time-value" id="minutes">0</div>
+                <div class="time-label">Minutes</div>
+            </div>
+            <div class="time-box">
+                <div class="time-value" id="seconds">0</div>
+                <div class="time-label">Seconds</div>
+            </div>
+        </div>
+
+        <div class="status" id="statusText"></div>
+
+        <p class="footer-text">
+            Made with HTML, CSS &amp; JavaScript ✨
+        </p>
+    </div>
+
+    <script>
+        // ===== GET ELEMENTS =====
+        const datetimeInput = document.getElementById("datetimeInput");
+        const startBtn = document.getElementById("startBtn");
+        const errorMsg = document.getElementById("errorMsg");
+        const statusText = document.getElementById("statusText");
+
+        const daysEl = document.getElementById("days");
+        const hoursEl = document.getElementById("hours");
+        const minutesEl = document.getElementById("minutes");
+        const secondsEl = document.getElementById("seconds");
+
+        const themeToggle = document.getElementById("themeToggle");
+        let countdownInterval = null;
+
+        // ===== THEME TOGGLE =====
+        themeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark");
+
+            if (document.body.classList.contains("dark")) {
+                themeToggle.textContent = "Light Mode";
+            } else {
+                themeToggle.textContent = "Dark Mode";
+            }
+        });
+
+        // ===== START BUTTON CLICK =====
+        startBtn.addEventListener("click", () => {
+            const value = datetimeInput.value;
+
+            // Clear previous messages and interval
+            errorMsg.textContent = "";
+            statusText.textContent = "";
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            if (!value) {
+                errorMsg.textContent = "Please choose a date and time.";
+                return;
+            }
+
+            const targetTime = new Date(value).getTime();
+            const now = Date.now();
+
+            if (isNaN(targetTime)) {
+                errorMsg.textContent = "Invalid date format.";
+                return;
+            }
+
+            if (targetTime <= now) {
+                errorMsg.textContent = "Please select a future date and time.";
+                return;
+            }
+
+            statusText.textContent = "Countdown started...";
+            runCountdown(targetTime);
+        });
+
+        // ===== COUNTDOWN FUNCTION =====
+        function runCountdown(targetTime) {
+            updateDisplay(targetTime);
+
+            countdownInterval = setInterval(() => {
+                const finished = updateDisplay(targetTime);
+                if (finished) {
+                    clearInterval(countdownInterval);
+                    statusText.textContent = "Time's up!";
+                }
+            }, 1000);
+        }
+
+        // Returns true if countdown finished
+        function updateDisplay(targetTime) {
+            const now = Date.now();
+            let diff = targetTime - now;
+
+            if (diff <= 0) {
+                diff = 0;
+            }
+
+            const seconds = Math.floor(diff / 1000) % 60;
+            const minutes = Math.floor(diff / (1000 * 60)) % 60;
+            const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            daysEl.textContent = days;
+            hoursEl.textContent = String(hours).padStart(2, "0");
+            minutesEl.textContent = String(minutes).padStart(2, "0");
+            secondsEl.textContent = String(seconds).padStart(2, "0");
+
+            return diff === 0;
+        }
+    </script>
+</body>
+</html>
