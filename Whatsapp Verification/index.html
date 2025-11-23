@@ -39,12 +39,19 @@
         
         .header h1 {
             font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .header h2 {
+            font-size: 14px;
+            font-weight: normal;
+            opacity: 0.95;
             margin-bottom: 10px;
         }
         
         .header p {
-            font-size: 14px;
-            opacity: 0.9;
+            font-size: 13px;
+            opacity: 0.85;
         }
         
         .logo {
@@ -80,17 +87,29 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             overflow: hidden;
+            background-color: #fff;
         }
-        
-        .country-code {
+
+        .country-select {
+            display: flex;
+            align-items: center;
             background-color: #f5f5f5;
-            padding: 12px 15px;
+            border-right: 1px solid #ddd;
+            padding: 0 8px;
+        }
+
+        .country-select select {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 10px 0;
             font-weight: 600;
             color: #555;
-            border-right: 1px solid #ddd;
+            font-size: 14px;
+            cursor: pointer;
         }
         
-        input {
+        input[type="tel"] {
             flex: 1;
             border: none;
             padding: 12px 15px;
@@ -98,7 +117,7 @@
             outline: none;
         }
         
-        input:focus {
+        input[type="tel"]:focus {
             background-color: #f9f9f9;
         }
         
@@ -112,7 +131,7 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -120,11 +139,13 @@
         
         .btn:hover {
             background-color: #128C7E;
+            transform: translateY(-1px);
         }
         
         .btn:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
+            transform: none;
         }
         
         .btn.loading {
@@ -163,6 +184,7 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
         
         .otp-input:focus {
@@ -195,6 +217,7 @@
         .resend-link a.disabled {
             color: #999;
             pointer-events: none;
+            text-decoration: none;
         }
         
         .success-message {
@@ -202,6 +225,11 @@
             padding: 20px;
             color: #25D366;
             font-weight: 600;
+        }
+        
+        .success-message p {
+            color: #333;
+            font-weight: normal;
         }
         
         .error-message {
@@ -230,6 +258,7 @@
             padding: 10px;
             border-radius: 5px;
             display: none;
+            font-size: 14px;
         }
         
         .api-status.success {
@@ -242,6 +271,12 @@
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #777;
+            margin-top: 8px;
         }
         
         @media (max-width: 480px) {
@@ -265,11 +300,12 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" aria-live="polite">
         <div class="header">
-            <div class="logo">📱</div>
+            <div class="logo" aria-hidden="true">📱</div>
             <h1>WhatsApp OTP Verification</h1>
-            <p>Enter your mobile number to receive a verification code</p>
+            <h2>Secure Login / Signup</h2>
+            <p>Enter your mobile number to receive a 6-digit verification code on WhatsApp</p>
         </div>
         
         <div class="form-container">
@@ -278,10 +314,25 @@
                 <div class="form-group">
                     <label for="mobile">Mobile Number</label>
                     <div class="input-group">
-                        <div class="country-code">+1</div>
-                        <input type="tel" id="mobile" placeholder="Enter your mobile number" maxlength="10">
+                        <div class="country-select">
+                            <select id="country-code" aria-label="Country code">
+                                <option value="+1">🇺🇸 +1</option>
+                                <option value="+91" selected>🇮🇳 +91</option>
+                                <option value="+44">🇬🇧 +44</option>
+                                <option value="+61">🇦🇺 +61</option>
+                            </select>
+                        </div>
+                        <input 
+                            type="tel" 
+                            id="mobile" 
+                            placeholder="Enter your mobile number" 
+                            maxlength="10" 
+                            inputmode="numeric"
+                            autocomplete="tel"
+                        >
                     </div>
-                    <div class="error-message" id="mobile-error">Please enter a valid 10-digit mobile number</div>
+                    <div class="info-text">For demo, basic 10-digit validation is used (you can customize in JS).</div>
+                    <div class="error-message" id="mobile-error">Please enter a valid mobile number</div>
                 </div>
                 <button class="btn" id="send-otp">Send OTP via WhatsApp</button>
                 <div class="api-status" id="step1-status"></div>
@@ -290,14 +341,14 @@
             <!-- Step 2: OTP Verification -->
             <div class="step" id="step2">
                 <div class="form-group">
-                    <label>Enter OTP</label>
+                    <label for="otp-input-0">Enter 6-digit OTP</label>
                     <div class="otp-inputs">
-                        <input type="text" class="otp-input" maxlength="1" data-index="0">
-                        <input type="text" class="otp-input" maxlength="1" data-index="1">
-                        <input type="text" class="otp-input" maxlength="1" data-index="2">
-                        <input type="text" class="otp-input" maxlength="1" data-index="3">
-                        <input type="text" class="otp-input" maxlength="1" data-index="4">
-                        <input type="text" class="otp-input" maxlength="1" data-index="5">
+                        <input type="text" class="otp-input" maxlength="1" data-index="0" id="otp-input-0" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" data-index="1" id="otp-input-1" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" data-index="2" id="otp-input-2" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" data-index="3" id="otp-input-3" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" data-index="4" id="otp-input-4" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" data-index="5" id="otp-input-5" inputmode="numeric">
                     </div>
                     <div class="error-message" id="otp-error">Please enter a valid 6-digit OTP</div>
                 </div>
@@ -313,7 +364,7 @@
             <!-- Step 3: Success Message -->
             <div class="step" id="step3">
                 <div class="success-message">
-                    <div style="font-size: 50px; margin-bottom: 15px;">✅</div>
+                    <div style="font-size: 50px; margin-bottom: 15px;" aria-hidden="true">✅</div>
                     <h2>Verification Successful!</h2>
                     <p style="margin-top: 10px;">Your mobile number has been verified successfully.</p>
                 </div>
@@ -323,15 +374,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements
+            // ===== DOM ELEMENTS =====
             const step1 = document.getElementById('step1');
             const step2 = document.getElementById('step2');
             const step3 = document.getElementById('step3');
+
+            const countryCodeSelect = document.getElementById('country-code');
             const mobileInput = document.getElementById('mobile');
             const sendOtpBtn = document.getElementById('send-otp');
             const verifyOtpBtn = document.getElementById('verify-otp');
             const resendOtpLink = document.getElementById('resend-otp');
             const backToMobileLink = document.getElementById('back-to-mobile');
+
             const mobileError = document.getElementById('mobile-error');
             const otpError = document.getElementById('otp-error');
             const timerElement = document.getElementById('timer');
@@ -339,93 +393,117 @@
             const step1Status = document.getElementById('step1-status');
             const step2Status = document.getElementById('step2-status');
             
-            // Backend API Configuration
-            const API_BASE_URL = 'http://localhost:5000'; // Change this to your Flask server URL
+            // ===== BACKEND API CONFIG (change for real server) =====
+            const API_BASE_URL = 'http://localhost:5000'; // Flask / Node server base URL
             
-            // Variables
+            // ===== STATE VARIABLES =====
             let currentPhoneNumber = '';
-            let countdown;
-            let timeLeft = 120; // 2 minutes in seconds
-            
-            // Event Listeners
+            let countdown = null;
+            let timeLeft = 120; // seconds
+            const INITIAL_TIME = 120;
+
+            // ===== EVENT LISTENERS =====
             sendOtpBtn.addEventListener('click', sendOtp);
             verifyOtpBtn.addEventListener('click', verifyOtp);
             resendOtpLink.addEventListener('click', resendOtp);
             backToMobileLink.addEventListener('click', backToMobile);
+
+            // Allow only digits in mobile input
+            mobileInput.addEventListener('input', () => {
+                mobileInput.value = mobileInput.value.replace(/\D/g, '');
+            });
             
-            // OTP Input handling
+            // OTP input handling (auto move, digits only, backspace behaviour)
             otpInputs.forEach(input => {
                 input.addEventListener('input', function() {
+                    this.value = this.value.replace(/\D/g, ''); // digits only
+
                     const index = parseInt(this.getAttribute('data-index'));
-                    
-                    // Move to next input if current input has value
-                    if (this.value.length === 1 && index < 5) {
+
+                    // If digit entered, move to next
+                    if (this.value.length === 1 && index < otpInputs.length - 1) {
                         otpInputs[index + 1].focus();
                     }
-                    
-                    // Enable verify button if all inputs are filled
-                    const allFilled = Array.from(otpInputs).every(input => input.value.length === 1);
+
+                    // Enable verify button only if all filled
+                    const allFilled = Array.from(otpInputs).every(inp => inp.value.length === 1);
                     verifyOtpBtn.disabled = !allFilled;
                 });
                 
                 input.addEventListener('keydown', function(e) {
                     const index = parseInt(this.getAttribute('data-index'));
                     
-                    // Move to previous input on backspace if current input is empty
-                    if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                    if (e.key === 'Backspace') {
+                        if (this.value === '' && index > 0) {
+                            otpInputs[index - 1].focus();
+                        }
+                    }
+
+                    // Arrow navigation
+                    if (e.key === 'ArrowLeft' && index > 0) {
                         otpInputs[index - 1].focus();
+                    }
+                    if (e.key === 'ArrowRight' && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
                     }
                 });
             });
             
-            // Functions
+            // ===== FUNCTIONS =====
+            function getFullPhoneNumber() {
+                const code = countryCodeSelect.value;
+                return `${code}${currentPhoneNumber}`;
+            }
+
             async function sendOtp() {
                 const mobileNumber = mobileInput.value.trim();
                 
-                // Validate mobile number
                 if (!isValidMobile(mobileNumber)) {
                     showError(mobileError, 'Please enter a valid 10-digit mobile number');
                     return;
                 }
                 
                 hideError(mobileError);
-                currentPhoneNumber = mobileNumber;
-                
-                // Show loading state
-                setButtonLoading(sendOtpBtn, true);
                 hideStatus(step1Status);
-                
+
+                currentPhoneNumber = mobileNumber;
+                const fullPhone = countryCodeSelect.value + mobileNumber;
+
+                setButtonLoading(sendOtpBtn, true);
+
                 try {
-                    // Send request to backend
                     const response = await fetch(`${API_BASE_URL}/send-otp`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            phone_number: `+1${mobileNumber}` // Include country code
-                        })
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone_number: fullPhone })
                     });
                     
-                    const data = await response.json();
+                    const data = await response.json().catch(() => ({}));
                     
                     if (response.ok) {
-                        // Show OTP step
+                        // Switch to OTP step
                         step1.classList.remove('active');
                         step2.classList.add('active');
-                        
-                        // Start countdown timer
+
+                        // Reset OTP inputs
+                        otpInputs.forEach(input => input.value = '');
+                        otpInputs[0].focus();
+
+                        // Start fresh timer
+                        timeLeft = INITIAL_TIME;
                         startTimer();
-                        
-                        showStatus(step1Status, 'OTP sent successfully to your WhatsApp!', 'success');
+
+                        showStatus(step1Status, `OTP sent to WhatsApp number ${fullPhone}`, 'success');
                     } else {
-                        showError(mobileError, data.error || 'Failed to send OTP');
-                        showStatus(step1Status, data.error || 'Failed to send OTP', 'error');
+                        const msg = data.error || 'Failed to send OTP';
+                        showError(mobileError, msg);
+                        showStatus(step1Status, msg, 'error');
                     }
                 } catch (error) {
                     console.error('Error sending OTP:', error);
-                    showError(mobileError, 'Network error. Please try again.');
-                    showStatus(step1Status, 'Network error. Please try again.', 'error');
+                    const msg = 'Network error. Please try again.';
+                    showError(mobileError, msg);
+                    showStatus(step1Status, msg, 'error');
                 } finally {
                     setButtonLoading(sendOtpBtn, false);
                 }
@@ -434,45 +512,43 @@
             async function verifyOtp() {
                 const enteredOtp = Array.from(otpInputs).map(input => input.value).join('');
                 
-                // Validate OTP format
                 if (!isValidOtp(enteredOtp)) {
                     showError(otpError, 'Please enter a valid 6-digit OTP');
                     return;
                 }
                 
                 hideError(otpError);
-                setButtonLoading(verifyOtpBtn, true);
                 hideStatus(step2Status);
+                setButtonLoading(verifyOtpBtn, true);
                 
                 try {
+                    const fullPhone = getFullPhoneNumber();
+
                     const response = await fetch(`${API_BASE_URL}/verify-otp`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            phone_number: `+1${currentPhoneNumber}`,
+                            phone_number: fullPhone,
                             otp: enteredOtp
                         })
                     });
                     
-                    const data = await response.json();
+                    const data = await response.json().catch(() => ({}));
                     
                     if (response.ok) {
-                        // Show success step
                         step2.classList.remove('active');
                         step3.classList.add('active');
-                        
-                        // Clear timer
                         clearInterval(countdown);
                     } else {
-                        showError(otpError, data.error || 'Invalid OTP');
-                        showStatus(step2Status, data.error || 'Invalid OTP', 'error');
+                        const msg = data.error || 'Invalid OTP';
+                        showError(otpError, msg);
+                        showStatus(step2Status, msg, 'error');
                     }
                 } catch (error) {
                     console.error('Error verifying OTP:', error);
-                    showError(otpError, 'Network error. Please try again.');
-                    showStatus(step2Status, 'Network error. Please try again.', 'error');
+                    const msg = 'Network error. Please try again.';
+                    showError(otpError, msg);
+                    showStatus(step2Status, msg, 'error');
                 } finally {
                     setButtonLoading(verifyOtpBtn, false);
                 }
@@ -481,43 +557,32 @@
             async function resendOtp(e) {
                 e.preventDefault();
                 
-                // Only allow resend if timer has expired
-                if (timeLeft > 0) return;
+                // Only allow when timer finished
+                if (timeLeft > 0 || resendOtpLink.classList.contains('disabled')) return;
                 
                 hideError(otpError);
                 hideStatus(step2Status);
+
+                const fullPhone = getFullPhoneNumber();
                 
                 try {
                     const response = await fetch(`${API_BASE_URL}/send-otp`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            phone_number: `+1${currentPhoneNumber}`
-                        })
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone_number: fullPhone })
                     });
                     
-                    const data = await response.json();
+                    const data = await response.json().catch(() => ({}));
                     
                     if (response.ok) {
-                        // Clear OTP inputs
-                        otpInputs.forEach(input => {
-                            input.value = '';
-                        });
+                        // Reset OTP inputs
+                        otpInputs.forEach(input => input.value = '');
+                        otpInputs[0].focus();
                         
                         // Reset and start timer
-                        timeLeft = 120;
+                        timeLeft = INITIAL_TIME;
                         startTimer();
-                        
-                        // Hide error message
-                        hideError(otpError);
-                        
-                        // Disable verify button
                         verifyOtpBtn.disabled = true;
-                        
-                        // Focus first OTP input
-                        otpInputs[0].focus();
                         
                         showStatus(step2Status, 'New OTP sent successfully!', 'success');
                     } else {
@@ -532,47 +597,48 @@
             function backToMobile(e) {
                 e.preventDefault();
                 
-                // Show mobile number step
                 step2.classList.remove('active');
                 step1.classList.add('active');
                 
-                // Clear timer
                 clearInterval(countdown);
-                
-                // Reset timer display
+                timeLeft = INITIAL_TIME;
                 timerElement.textContent = 'Resend OTP in: 02:00';
-                timeLeft = 120;
-                
-                // Enable resend link
                 resendOtpLink.classList.add('disabled');
                 
-                // Hide status messages
                 hideStatus(step1Status);
                 hideStatus(step2Status);
+                hideError(otpError);
+                
+                mobileInput.focus();
             }
             
             function startTimer() {
-                // Disable resend link initially
+                // Clear previous timers before starting new one
+                if (countdown) clearInterval(countdown);
+
                 resendOtpLink.classList.add('disabled');
-                
+
                 countdown = setInterval(() => {
                     timeLeft--;
                     
                     const minutes = Math.floor(timeLeft / 60);
                     const seconds = timeLeft % 60;
                     
-                    timerElement.textContent = `Resend OTP in: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    timerElement.textContent = `Resend OTP in: ${minutes
+                        .toString()
+                        .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                     
                     if (timeLeft <= 0) {
                         clearInterval(countdown);
+                        countdown = null;
                         timerElement.textContent = 'You can now resend OTP';
                         resendOtpLink.classList.remove('disabled');
                     }
                 }, 1000);
             }
             
+            // Basic mobile validation (you can customize per country)
             function isValidMobile(mobile) {
-                // Simple validation for 10-digit US number
                 return /^\d{10}$/.test(mobile);
             }
             
@@ -585,8 +651,13 @@
                     button.disabled = true;
                     button.classList.add('loading');
                 } else {
-                    button.disabled = button.id === 'verify-otp' ? !Array.from(otpInputs).every(input => input.value.length === 1) : false;
                     button.classList.remove('loading');
+                    if (button.id === 'verify-otp') {
+                        const allFilled = Array.from(otpInputs).every(input => input.value.length === 1);
+                        button.disabled = !allFilled;
+                    } else {
+                        button.disabled = false;
+                    }
                 }
             }
             
