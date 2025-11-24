@@ -22,10 +22,11 @@
     h1 {
       text-align: center;
       color: #333;
+      margin-bottom: 15px;
     }
     .input-area {
       display: flex;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
     #new-task {
       flex: 1;
@@ -50,6 +51,31 @@
     }
     button:hover {
       background: #0056b3;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #555;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .secondary-btn {
+      padding: 6px 10px;
+      font-size: 13px;
+      border-radius: 6px;
+      background: #6c757d;
+    }
+    .secondary-btn:hover {
+      background: #5a6268;
+    }
+    .secondary-btn.danger {
+      background: #dc3545;
+    }
+    .secondary-btn.danger:hover {
+      background: #c82333;
     }
     ul {
       list-style: none;
@@ -95,7 +121,15 @@
 
     <div class="input-area">
       <input type="text" id="new-task" placeholder="Add a new task..." />
-      <button id="add-btn">Add</button>
+      <button id="add-btn" type="button">Add</button>
+    </div>
+
+    <div class="toolbar">
+      <span id="task-count">No tasks</span>
+      <div>
+        <button id="clear-completed" type="button" class="secondary-btn">Clear Completed</button>
+        <button id="clear-all" type="button" class="secondary-btn danger">Clear All</button>
+      </div>
     </div>
 
     <ul id="task-list"></ul>
@@ -108,26 +142,45 @@
     const addBtn = document.getElementById("add-btn");
     const taskList = document.getElementById("task-list");
     const emptyMsg = document.getElementById("empty-msg");
+    const taskCountEl = document.getElementById("task-count");
+    const clearCompletedBtn = document.getElementById("clear-completed");
+    const clearAllBtn = document.getElementById("clear-all");
+
+    // Update task counter text
+    function updateTaskCount(tasks) {
+      const total = tasks.length;
+      const remaining = tasks.filter(t => !t.completed).length;
+
+      if (total === 0) {
+        taskCountEl.textContent = "No tasks";
+      } else {
+        taskCountEl.textContent = `${remaining} of ${total} remaining`;
+      }
+    }
 
     // Load tasks from localStorage when page loads
     function loadTasks() {
       const saved = localStorage.getItem("tasks");
-      if (tasks) {
-        const taskArray = JSON.parse(tasks);
+      if (saved) {
+        const taskArray = JSON.parse(saved);
         taskArray.forEach(task => addTaskToDOM(task.text, task.completed));
+        updateTaskCount(taskArray);
+      } else {
+        updateTaskCount([]);
       }
     }
 
     // Save tasks to localStorage
     function saveTasks() {
       const tasks = [];
-      document.querySelectorAll("li").forEach(li => {
+      document.querySelectorAll("#task-list li").forEach(li => {
         tasks.push({
           text: li.querySelector("span").textContent,
           completed: li.classList.contains("completed")
         });
       });
       localStorage.setItem("tasks", JSON.stringify(tasks));
+      updateTaskCount(tasks);
     }
 
     // Add new task
@@ -152,7 +205,7 @@
 
       li.innerHTML = `
         <span>${text}</span>
-        <button class="delete-btn">Delete</button>
+        <button class="delete-btn" type="button">Delete</button>
       `;
 
       // Toggle complete on click on text
@@ -175,6 +228,22 @@
     function checkEmpty() {
       emptyMsg.style.display = taskList.children.length === 0 ? "block" : "none";
     }
+
+    // Clear completed tasks
+    clearCompletedBtn.addEventListener("click", () => {
+      document.querySelectorAll("#task-list li.completed").forEach(li => li.remove());
+      saveTasks();
+      checkEmpty();
+    });
+
+    // Clear all tasks
+    clearAllBtn.addEventListener("click", () => {
+      if (!confirm("Clear all tasks?")) return;
+      taskList.innerHTML = "";
+      localStorage.removeItem("tasks");
+      updateTaskCount([]);
+      checkEmpty();
+    });
 
     // Event Listeners
     addBtn.addEventListener("click", addTask);
