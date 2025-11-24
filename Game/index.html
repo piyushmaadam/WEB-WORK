@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dodge The Blocks Game</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        background: #111;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100vh;
+    }
+    h1 { margin: 15px 0; }
+    #gameContainer {
+        position: relative;
+    }
+    canvas {
+        background: #222;
+        border: 2px solid #555;
+        display: block;
+    }
+    #info {
+        margin-top: 10px;
+        text-align: center;
+    }
+    #restartBtn {
+        margin-top: 10px;
+        padding: 8px 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<h1>Dodge The Blocks</h1>
+<div id="gameContainer">
+    <canvas id="game" width="400" height="500"></canvas>
+</div>
+<div id="info">
+    <div>Score: <span id="score">0</span></div>
+    <div>Use ← and → arrow keys to move</div>
+    <button id="restartBtn">Restart</button>
+</div>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const scoreEl = document.getElementById("score");
+const restartBtn = document.getElementById("restartBtn");
+
+const width = canvas.width;
+const height = canvas.height;
+
+// Player object
+const player = {
+    x: width / 2 - 20,
+    y: height - 40,
+    w: 40,
+    h: 20,
+    speed: 6,
+    dx: 0
+};
+
+// Enemy blocks
+let enemies = [];
+let enemyBaseSpeed = 2;
+
+// Game state
+let score = 0;
+let gameOver = false;
+let lastSpawnTime = 0;
+let spawnInterval = 800; // ms
+let lastTime = 0;
+
+// Key handling
+const keys = {
+    ArrowLeft: false,
+    ArrowRight: false
+};
+
+document.addEventListener("keydown", e => {
+    if (e.code === "ArrowLeft" || e.code === "ArrowRight") {
+        keys[e.code] = true;
+    }
+});
+
+document.addEventListener("keyup", e => {
+    if (e.code === "ArrowLeft" || e.code === "ArrowRight") {
+        keys[e.code] = false;
+    }
+});
+
+// Restart
+restartBtn.addEventListener("click", () => {
+    resetGame();
+});
+
+// Reset game function
+function resetGame() {
+    player.x = width / 2 - 20;
+    enemies = [];
+    score = 0;
+    enemyBaseSpeed = 2;
+    spawnInterval = 800;
+    gameOver = false;
+    lastSpawnTime = 0;
+    lastTime = 0;
+    scoreEl.textContent = score;
+    restartBtn.style.display = "none";
+    requestAnimationFrame(loop);
+}
+
+// Create a new enemy
+function spawnEnemy() {
+    const enemyWidth = 40;
+    const x = Math.random() * (width - enemyWidth);
+    enemies.push({
+        x: x,
+        y: -20,
+        w: enemyWidth,
+        h: 20,
+        speed: enemyBaseSpeed + Math.random() * 2
+    });
+}
+
+// Update player movement
+function updatePlayer() {
+    if (keys.ArrowLeft) {
+        player.dx = -player.speed;
+    } else if (keys.ArrowRight) {
+        player.dx = player.speed;
+    } else {
+        player.dx = 0;
+    }
+
+    player.x += player.dx;
+
+    // Boundaries
+    if (player.x < 0) player.x = 0;
+    if (player.x + player.w > width) player.x = width - player.w;
+}
+
+// Update enemies
+function updateEnemies(delta) {
+    for (let i = enemies.length - 1; i >= 0; i--) {
+        enemies[i].y += enemies[i].speed;
+
+        // Remove if off-screen
+        if (enemies[i].y > height) {
+            enemies.splice(i, 1);
+            score++;
+            scoreEl.textContent = score;
+        }
+    }
+}
+
+// Collision detection (AABB)
+function isColliding(a, b) {
+    return !(
+        a.x + a.w < b.x ||
+        a.x > b.x + b.w ||
+        a.y + a.h < b.y ||
+        a.y > b.y + b.h
+    );
+}
+
+// Check collisions
+function checkCollisions() {
+    for (let enemy of enemies) {
+        if (isColliding(player, enemy)) {
+            gameOver = true;
+            restartBtn.style.display = "inline-block";
+            break;
+        }
+    }
+}
+
+// Draw player
+function drawPlayer() {
+    ctx.fillStyle = "#3498db";
+    ctx.fillRect(player.x, player.y, player.w, player.h);
+}
+
+// Draw enemies
+function drawEnemies() {
+    ctx.fillStyle = "#e74c3c";
+    for (let enemy of enemies) {
+        ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
+    }
+}
+
+// Difficulty scaling
+function updateDifficulty() {
+    // Every 10 points => increase speed & spawn frequency
+    if (score > 0 && score % 10 === 0) {
+        enemyBaseSpeed = 2 + score * 0.1;
+        spawnInterval = Math.max(300, 800 - score * 10);
+    }
+}
+
+// Main loop
+function loop(timestamp) {
+    if (gameOver) {
+        ctx.fillStyle = "rgba(0,0,0,0.5)";
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = "#fff";
+        ctx.font = "24px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Game Over!", width / 2, height / 2 - 10);
+        ctx.font = "18px Arial";
+        ctx.fillText("Final Score: " + score, width / 2, height / 2 + 20);
+        return;
+    }
+
+    if (!lastTime) lastTime = timestamp;
+    const delta = timestamp - lastTime;
+    lastTime = timestamp;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Spawn enemies
+    if (timestamp - lastSpawnTime > spawnInterval) {
+        spawnEnemy();
+        lastSpawnTime = timestamp;
+    }
+
+    updatePlayer();
+    updateEnemies(delta);
+    checkCollisions();
+    updateDifficulty();
+
+    drawPlayer();
+    drawEnemies();
+
+    requestAnimationFrame(loop);
+}
+
+// Start game
+resetGame();
+</script>
+
+</body>
+</html>
