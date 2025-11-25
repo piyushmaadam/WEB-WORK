@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rock Paper Scissors</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .game-box {
+        background: rgba(255,255,255,0.1);
+        padding: 25px 40px;
+        border-radius: 15px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+    h1 {
+        margin-bottom: 15px;
+    }
+    .choices {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px 0;
+    }
+    .choice {
+        width: 90px;
+        height: 90px;
+        background: #fff;
+        color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        font-weight: bold;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.2s;
+        user-select: none;
+    }
+    .choice:hover {
+        transform: scale(1.1);
+        background: #ffd700;
+    }
+    .result {
+        font-size: 22px;
+        margin: 10px 0;
+        font-weight: bold;
+        min-height: 30px;
+    }
+    .score {
+        margin-top: 15px;
+        font-size: 18px;
+    }
+</style>
+</head>
+
+<body>
+<div class="game-box">
+    <h1>Rock Paper Scissors</h1>
+
+    <div class="choices">
+        <div class="choice" data-choice="rock">🪨</div>
+        <div class="choice" data-choice="paper">📄</div>
+        <div class="choice" data-choice="scissors">✂️</div>
+    </div>
+
+    <div class="result" id="result">Make your move!</div>
+
+    <div class="score">
+        Player: <span id="playerScore">0</span> |
+        Computer: <span id="computerScore">0</span>
+    </div>
+</div>
+
+<script>
+const choices = document.querySelectorAll(".choice");
+const resultText = document.getElementById("result");
+const playerScoreEl = document.getElementById("playerScore");
+const computerScoreEl = document.getElementById("computerScore");
+
+let playerScore = 0;
+let computerScore = 0;
+
+// Computer random choice
+function computerPlay() {
+    const items = ["rock", "paper", "scissors"];
+    return items[Math.floor(Math.random() * items.length)];
+}
+
+// Determine winner
+function getWinner(player, comp) {
+    if (player === comp) return "draw";
+    if (
+        (player === "rock" && comp === "scissors") ||
+        (player === "paper" && comp === "rock") ||
+        (player === "scissors" && comp === "paper")
+    ) {
+        return "player";
+    }
+    return "computer";
+}
+
+// Click event
+choices.forEach(choice => {
+    choice.addEventListener("click", () => {
+        const playerChoice = choice.dataset.choice;
+        const compChoice = computerPlay();
+        const winner = getWinner(playerChoice, compChoice);
+
+        if (winner === "player") {
+            playerScore++;
+            resultText.textContent = `You Win! ${playerChoice} beats ${compChoice}!`;
+            resultText.style.color = "#00ff7f";
+        } else if (winner === "computer") {
+            computerScore++;
+            resultText.textContent = `You Lose! ${compChoice} beats ${playerChoice}!`;
+            resultText.style.color = "#ff5555";
+        } else {
+            resultText.textContent = `Draw! You both chose ${playerChoice}.`;
+            resultText.style.color = "#fff";
+        }
+
+        playerScoreEl.textContent = playerScore;
+        computerScoreEl.textContent = computerScore;
+    });
+});
+</script>
+</body>
+</html>
