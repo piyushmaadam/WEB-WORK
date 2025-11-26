@@ -1,251 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Dodge The Blocks Game</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dodge The Blocks — Improved</title>
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-        background: #111;
-        color: #fff;
-        font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        height: 100vh;
-    }
-    h1 { margin: 15px 0; }
-    #gameContainer {
-        position: relative;
-    }
-    canvas {
-        background: #222;
-        border: 2px solid #555;
-        display: block;
-    }
-    #info {
-        margin-top: 10px;
-        text-align: center;
-    }
-    #restartBtn {
-        margin-top: 10px;
-        padding: 8px 16px;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-        display: none;
-    }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    display:flex;flex-direction:column;align-items:center;
+    background:#0b0b0b;color:#fff;font-family:system-ui,Arial;
+    padding:18px;
+  }
+  h1{margin:12px 0 8px}
+  #gameContainer{position:relative;display:flex;flex-direction:column;align-items:center}
+  canvas{background:#111;border:2px solid #333;display:block;border-radius:6px}
+  #hud{margin-top:10px;display:flex;gap:18px;align-items:center;font-size:16px}
+  #info{color:#cbd5e1}
+  #restartBtn, #pauseBtn{
+    margin-left:8px;padding:8px 12px;border-radius:8px;border:0;cursor:pointer;background:#1f2937;color:#fff;
+  }
+  #controls {
+    margin-top:12px; display:flex; gap:8px;
+    align-items:center;
+  }
+  .touch-btn{
+    width:56px;height:56px;border-radius:12px;background:rgba(255,255,255,0.04);display:grid;place-items:center;font-size:20px;border:1px solid rgba(255,255,255,0.02);
+    touch-action: none;
+  }
+
+  /* game-over overlay */
+  .overlay{
+    position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6));backdrop-filter: blur(2px);
+    color:#fff;flex-direction:column;gap:10px;pointer-events:none;opacity:0;transition:opacity .2s;
+  }
+  .overlay.show{pointer-events:auto;opacity:1}
+  .overlay h2{font-size:28px}
+  .overlay p{color:#cbd5e1}
+  .small{font-size:14px;color:#9ca3af}
+  @media (max-width:520px){
+    canvas{width:320px;height:450px}
+    #hud{font-size:15px}
+  }
 </style>
 </head>
 <body>
+  <h1>Dodge The Blocks</h1>
+  <div id="gameContainer">
+    <canvas id="game" width="420" height="550"></canvas>
 
-<h1>Dodge The Blocks</h1>
-<div id="gameContainer">
-    <canvas id="game" width="400" height="500"></canvas>
-</div>
-<div id="info">
-    <div>Score: <span id="score">0</span></div>
-    <div>Use ← and → arrow keys to move</div>
+    <div class="overlay" id="overlay" aria-hidden="true">
+      <h2 id="overlay-title">Game Over</h2>
+      <p id="overlay-score">Score: 0</p>
+      <p class="small" id="overlay-high">High score: 0</p>
+      <button id="overlay-restart" style="padding:10px 14px;border-radius:8px;border:0;cursor:pointer;">Restart</button>
+    </div>
+  </div>
+
+  <div id="hud">
+    <div id="info">Score: <strong id="score">0</strong></div>
+    <div id="info">High: <strong id="high">0</strong></div>
+    <div id="info">Use ← & → or A & D. (P to pause)</div>
+    <button id="pauseBtn">Pause</button>
     <button id="restartBtn">Restart</button>
-</div>
+  </div>
+
+  <!-- Touch controls for mobile -->
+  <div id="controls" aria-hidden="true">
+    <div class="touch-btn" id="leftBtn">◀</div>
+    <div class="touch-btn" id="rightBtn">▶</div>
+  </div>
 
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-const scoreEl = document.getElementById("score");
-const restartBtn = document.getElementById("restartBtn");
+/* =========================
+   Game configuration
+   ========================= */
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
 
-const width = canvas.width;
-const height = canvas.height;
+let W = canvas.width, H = canvas.height;
 
-// Player object
+/* Player */
 const player = {
-    x: width / 2 - 20,
-    y: height - 40,
-    w: 40,
-    h: 20,
-    speed: 6,
-    dx: 0
+  w: 48,
+  h: 18,
+  x: (W - 48) / 2,
+  y: H - 60,
+  speed: 240, // px per second
+  vx: 0
 };
 
-// Enemy blocks
+/* Enemies */
 let enemies = [];
-let enemyBaseSpeed = 2;
+let baseSpawnInterval = 850; // ms
+let minSpawnInterval = 260;
+let baseEnemySpeed = 90; // px per second
+let maxEnemySpeedVariance = 80;
 
-// Game state
 let score = 0;
+let highScore = parseInt(localStorage.getItem('dodgeHigh') || '0', 10);
+let running = true;
+let lastTimestamp = 0;
+let lastSpawn = 0;
+let levelCheckpoint = 0; // used to update difficulty only once per threshold
 let gameOver = false;
-let lastSpawnTime = 0;
-let spawnInterval = 800; // ms
-let lastTime = 0;
 
-// Key handling
-const keys = {
-    ArrowLeft: false,
-    ArrowRight: false
-};
+/* UI */
+const scoreEl = document.getElementById('score');
+const highEl = document.getElementById('high');
+const restartBtn = document.getElementById('restartBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const overlay = document.getElementById('overlay');
+const overlayScore = document.getElementById('overlay-score');
+const overlayHigh = document.getElementById('overlay-high');
+const overlayRestart = document.getElementById('overlay-restart');
+highEl.textContent = highScore;
 
-document.addEventListener("keydown", e => {
-    if (e.code === "ArrowLeft" || e.code === "ArrowRight") {
-        keys[e.code] = true;
-    }
-});
+/* input state */
+const keys = { left:false, right:false };
 
-document.addEventListener("keyup", e => {
-    if (e.code === "ArrowLeft" || e.code === "ArrowRight") {
-        keys[e.code] = false;
-    }
-});
+/* Mobile touch buttons */
+const leftBtn = document.getElementById('leftBtn');
+const rightBtn = document.getElementById('rightBtn');
 
-// Restart
-restartBtn.addEventListener("click", () => {
-    resetGame();
-});
+/* Prevent multiple RAF loops */
+let rafId = null;
 
-// Reset game function
-function resetGame() {
-    player.x = width / 2 - 20;
-    enemies = [];
-    score = 0;
-    enemyBaseSpeed = 2;
-    spawnInterval = 800;
-    gameOver = false;
-    lastSpawnTime = 0;
-    lastTime = 0;
-    scoreEl.textContent = score;
-    restartBtn.style.display = "none";
-    requestAnimationFrame(loop);
+/* =========================
+   Helpers
+   ========================= */
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+function rand(min,max){ return Math.random()*(max-min)+min; }
+
+/* Resize canvas for devicePixelRatio to keep crispness */
+function adjustCanvas() {
+  const ratio = window.devicePixelRatio || 1;
+  canvas.width = W * ratio;
+  canvas.height = H * ratio;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(ratio,0,0,ratio,0,0);
 }
 
-// Create a new enemy
+/* =========================
+   Game logic
+   ========================= */
 function spawnEnemy() {
-    const enemyWidth = 40;
-    const x = Math.random() * (width - enemyWidth);
-    enemies.push({
-        x: x,
-        y: -20,
-        w: enemyWidth,
-        h: 20,
-        speed: enemyBaseSpeed + Math.random() * 2
-    });
+  // variable width and height
+  const width = Math.floor(rand(28, 70));
+  const height = Math.floor(rand(14, 26));
+  const x = rand(0, W - width);
+  const speed = baseEnemySpeed + rand(0, maxEnemySpeedVariance) + (score * 2.2); // scale with score
+  enemies.push({ x, y: -height - 6, w: width, h: height, speed });
 }
 
-// Update player movement
-function updatePlayer() {
-    if (keys.ArrowLeft) {
-        player.dx = -player.speed;
-    } else if (keys.ArrowRight) {
-        player.dx = player.speed;
-    } else {
-        player.dx = 0;
-    }
-
-    player.x += player.dx;
-
-    // Boundaries
-    if (player.x < 0) player.x = 0;
-    if (player.x + player.w > width) player.x = width - player.w;
-}
-
-// Update enemies
-function updateEnemies(delta) {
-    for (let i = enemies.length - 1; i >= 0; i--) {
-        enemies[i].y += enemies[i].speed;
-
-        // Remove if off-screen
-        if (enemies[i].y > height) {
-            enemies.splice(i, 1);
-            score++;
-            scoreEl.textContent = score;
-        }
-    }
-}
-
-// Collision detection (AABB)
-function isColliding(a, b) {
-    return !(
-        a.x + a.w < b.x ||
-        a.x > b.x + b.w ||
-        a.y + a.h < b.y ||
-        a.y > b.y + b.h
-    );
-}
-
-// Check collisions
-function checkCollisions() {
-    for (let enemy of enemies) {
-        if (isColliding(player, enemy)) {
-            gameOver = true;
-            restartBtn.style.display = "inline-block";
-            break;
-        }
-    }
-}
-
-// Draw player
-function drawPlayer() {
-    ctx.fillStyle = "#3498db";
-    ctx.fillRect(player.x, player.y, player.w, player.h);
-}
-
-// Draw enemies
-function drawEnemies() {
-    ctx.fillStyle = "#e74c3c";
-    for (let enemy of enemies) {
-        ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
-    }
-}
-
-// Difficulty scaling
 function updateDifficulty() {
-    // Every 10 points => increase speed & spawn frequency
-    if (score > 0 && score % 10 === 0) {
-        enemyBaseSpeed = 2 + score * 0.1;
-        spawnInterval = Math.max(300, 800 - score * 10);
-    }
+  // Use level per 10 points. Update only once per threshold
+  const level = Math.floor(score / 10);
+  if (level !== levelCheckpoint) {
+    levelCheckpoint = level;
+    // tighten spawn interval and increase base speed a bit
+    baseSpawnInterval = Math.max(minSpawnInterval, baseSpawnInterval - 40);
+    baseEnemySpeed += 10;
+    maxEnemySpeedVariance += 6;
+  }
 }
 
-// Main loop
-function loop(timestamp) {
-    if (gameOver) {
-        ctx.fillStyle = "rgba(0,0,0,0.5)";
-        ctx.fillRect(0, 0, width, height);
-        ctx.fillStyle = "#fff";
-        ctx.font = "24px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText("Game Over!", width / 2, height / 2 - 10);
-        ctx.font = "18px Arial";
-        ctx.fillText("Final Score: " + score, width / 2, height / 2 + 20);
-        return;
-    }
-
-    if (!lastTime) lastTime = timestamp;
-    const delta = timestamp - lastTime;
-    lastTime = timestamp;
-
-    ctx.clearRect(0, 0, width, height);
-
-    // Spawn enemies
-    if (timestamp - lastSpawnTime > spawnInterval) {
-        spawnEnemy();
-        lastSpawnTime = timestamp;
-    }
-
-    updatePlayer();
-    updateEnemies(delta);
-    checkCollisions();
-    updateDifficulty();
-
-    drawPlayer();
-    drawEnemies();
-
-    requestAnimationFrame(loop);
+/* AABB collision */
+function isColliding(a,b){
+  return !(a.x + a.w < b.x || a.x > b.x + b.w || a.y + a.h < b.y || a.y > b.y + b.h);
 }
 
-// Start game
-resetGame();
+function reset() {
+  enemies = [];
+  score = 0;
+  baseSpawnInterval = 850;
+  baseEnemySpeed = 90;
+  maxEnemySpeedVariance = 80;
+  levelCheckpoint = 0;
+  gameOver = false;
+  running = true;
+  lastTimestamp = 0;
+  lastSpawn = 0;
+  player.x = (W - player.w)/2;
+  player.vx = 0;
+  scoreEl.textContent = score;
+  overlay.classList.remove('show');
+  if (!rafId) rafId = requestAnimationFrame(loop);
+}
+
+/* End game */
+function endGame() {
+  gameOver = true;
+  running = false;
+  overlayScore.textContent = 'Score: ' + score;
+  if (score > highScore) {
+    highScore = score;
+    localStorage.setItem('dodgeHigh', String(highScore));
+  }
+  overlayHigh.textContent = 'High score: ' + highScore;
+  highEl.textContent = highScore;
+  overlay.classList.add('show');
+}
+
+/* =========================
+   Main loop (framerate independent)
+   ========================= */
+function loop(ts) {
+  if (!lastTimestamp) lastTimestamp = ts;
+  const delta = (ts - lastTimestamp) / 1000; // seconds
+  lastTimestamp = ts;
+
+  if (!running) {
+    rafId = requestAnimationFrame(loop);
+    return;
+  }
+
+  // spawn management
+  if (ts - lastSpawn > baseSpawnInterval) {
+    spawnEnemy();
+    lastSpawn = ts;
+  }
+
+  // update player velocity from input (vx is px/sec)
+  const dir = (keys.left ? -1 : 0) + (keys.right ? 1 : 0);
+  player.vx = dir * player.speed;
+  player.x += player.vx * delta;
+  player.x = clamp(player.x, 0, W - player.w);
+
+  // update enemies
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    const e = enemies[i];
+    e.y += e.speed * delta;
+    // off screen -> remove and score
+    if (e.y > H) {
+      enemies.splice(i,1);
+      score += 1;
+      scoreEl.textContent = score;
+      updateDifficulty();
+    } else {
+      // collision check
+      if (isColliding(player, e)) {
+        endGame();
+      }
+    }
+  }
+
+  // Draw
+  draw();
+
+  rafId = requestAnimationFrame(loop);
+}
+
+/* =========================
+   Drawing
+   ========================= */
+function draw() {
+  // background
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#111';
+  ctx.fillRect(0,0,W,H);
+
+  // player
+  ctx.fillStyle = '#3498db';
+  roundRect(ctx, Math.round(player.x), Math.round(player.y), player.w, player.h, 6);
+  ctx.fill();
+
+  // enemies
+  ctx.fillStyle = '#e74c3c';
+  enemies.forEach(e=>{
+    roundRect(ctx, Math.round(e.x), Math.round(e.y), e.w, e.h, 4);
+    ctx.fill();
+  });
+
+  // subtle HUD on canvas (optional)
+  // (we already have DOM HUD)
+}
+
+/* small helper to draw rounded rect path */
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+/* =========================
+   Input handling
+   ========================= */
+window.addEventListener('keydown', (e)=>{
+  if (e.code === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = true;
+  if (e.code === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = true;
+  if (e.key === 'p' || e.key === 'P') {
+    running = !running;
+    pauseBtn.textContent = running ? 'Pause' : 'Resume';
+  }
+  if (e.code === 'Space' && gameOver) {
+    reset();
+  }
+});
+
+window.addEventListener('keyup', (e)=>{
+  if (e.code === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+  if (e.code === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
+});
+
+/* Mouse/touch: hold buttons to move */
+let leftHeld=false, rightHeld=false;
+function updateTouchState(){
+  keys.left = leftHeld;
+  keys.right = rightHeld;
+}
+leftBtn.addEventListener('pointerdown', ()=>{ leftHeld=true; updateTouchState(); });
+leftBtn.addEventListener('pointerup', ()=>{ leftHeld=false; updateTouchState(); });
+leftBtn.addEventListener('pointerout', ()=>{ leftHeld=false; updateTouchState(); });
+rightBtn.addEventListener('pointerdown', ()=>{ rightHeld=true; updateTouchState(); });
+rightBtn.addEventListener('pointerup', ()=>{ rightHeld=false; updateTouchState(); });
+rightBtn.addEventListener('pointerout', ()=>{ rightHeld=false; updateTouchState(); });
+
+/* Buttons */
+restartBtn.addEventListener('click', ()=>reset());
+pauseBtn.addEventListener('click', ()=>{
+  running = !running;
+  pauseBtn.textContent = running ? 'Pause' : 'Resume';
+});
+overlayRestart.addEventListener('click', ()=>{
+  overlay.classList.remove('show'); reset();
+});
+
+/* Resize handler */
+window.addEventListener('resize', ()=> {
+  // keep logical size fixed but can adapt if you want responsive canvas
+  // Optionally you may change W,H here based on container width
+  adjustCanvas();
+});
+
+/* init */
+adjustCanvas();
+reset();
+rafId = requestAnimationFrame(loop);
+
+/* Expose for debugging (optional) */
+window.__game = { reset, spawnEnemy, enemies, player };
 </script>
-
 </body>
 </html>
