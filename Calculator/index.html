@@ -1,197 +1,552 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Modern Calculator</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
+    :root{
+      --bg1: #667eea;
+      --bg2: #764ba2;
+      --card: #1e1e2f;
+      --display: #0f0f1e;
+      --muted: #a6adc8;
+      --accent: #00d26a;
+      --danger: #ff4757;
+      --op: #ff9500;
+      --glass: rgba(255,255,255,0.04);
+      --radius: 20px;
+      font-family: 'Segoe UI', system-ui, -apple-system, "Helvetica Neue", Arial;
     }
 
-    body {
-      height: 100vh;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      background: linear-gradient(135deg,var(--bg1),var(--bg2));
+      padding:20px;
     }
 
-    .calculator {
-      background: #1e1e2f;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      width: 320px;
+    .calculator{
+      width: 360px;
+      max-width: 100%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
     }
 
-    .display {
-      width: 100%;
-      height: 100px;
-      background: #0f0f1e;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      padding: 15px;
-      text-align: right;
-      color: white;
-      font-size: 2.2rem;
-      overflow: hidden;
-      border: none;
-      box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+    .top-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+      align-items:center;
     }
 
-    .buttons {
-      display: grid;
+    .title{
+      color: #eef2ff;
+      font-weight:700;
+      font-size:16px;
+      letter-spacing: -0.2px;
+    }
+
+    .history-toggle{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      color:var(--muted);
+      padding:8px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:13px;
+    }
+
+    .display{
+      width:100%;
+      background: var(--display);
+      color: #fff;
+      border-radius:12px;
+      padding:14px 16px;
+      min-height:86px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:flex-end;
+      overflow:hidden;
+      box-shadow: inset 0 6px 18px rgba(0,0,0,0.6);
+      margin-bottom:12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .expression{
+      width:100%;
+      color:var(--muted);
+      font-size:13px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .result{
+      width:100%;
+      font-size:28px;
+      font-weight:700;
+      line-height:1;
+      margin-top:6px;
+      word-break:break-all;
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
+    .small-btn{
+      padding:10px;
+      border-radius:10px;
+      border:none;
+      background:var(--glass);
+      color:var(--muted);
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .small-btn:focus{outline:2px solid rgba(255,255,255,0.06)}
+
+    .buttons{
+      display:grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      gap:12px;
     }
 
-    button {
-      height: 70px;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.4rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    button.btn{
+      height:64px;
+      border-radius:12px;
+      font-size:18px;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+      transition: transform .12s ease, box-shadow .12s ease;
+      background:#2b2b40;
+      color:#fff;
     }
 
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    button.btn:active{transform:translateY(1px)}
+    button.btn:focus{outline:3px solid rgba(0,0,0,0.25)}
+
+    .number{ background:#3a3a5c; color:#fff; }
+    .operator{ background:var(--op); color:#fff; }
+    .equals{ background:var(--accent); color:#042012; grid-column: span 2; }
+    .clear, .delete { background: var(--danger); color:#fff; }
+    .zero{ grid-column: span 2; }
+
+    .history{
+      max-height:160px;
+      overflow:auto;
+      margin-top:8px;
+      padding:8px;
+      border-radius:10px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.03);
+      display:none;
     }
 
-    
+    .history.visible{ display:block; }
 
-    button:active {
-      transform: translateY(1px);
+    .history-item{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      padding:6px 8px;
+      border-radius:8px;
+      cursor:pointer;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .history-item:hover{ background: rgba(255,255,255,0.02); color:#f8fafc }
+
+    .aria-live{
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
     }
 
-    .number, .decimal {
-      background: #3a3a5c;
-      color: white;
-    }
-
-    .operator {
-      background: #ff9500;
-      color: white;
-    }
-
-    .equals {
-      background: #00d26a;
-      color: white;
-      grid-column: span 2;
-    }
-
-    .clear, .delete {
-      background: #ff4757;
-      color: white;
-    }
-
-    .zero {
-      grid-column: span 2;
+    /* Responsive - smaller button sizes */
+    @media (max-width:380px){
+      .buttons button.btn{ height:56px; font-size:16px }
+      .result{ font-size:22px }
     }
   </style>
 </head>
 <body>
-
-  <div class="calculator">
-    <input type="text" class="display" id="display" readonly />
-
-    <div class="buttons">
-      <button class="clear" onclick="clearDisplay()">C</button>
-      <button class="delete" onclick="deleteLast()">DEL</button>
-      <button class="operator" onclick="appendToDisplay('%')">%</button>
-      <button class="operator" onclick="appendToDisplay('/')">÷</button>
-
-      <button class="number" onclick="appendToDisplay('7')">7</button>
-      <button class="number" onclick="appendToDisplay('8')">8</button>
-      <button class="number" onclick="appendToDisplay('9')">9</button>
-      <button class="operator" onclick="appendToDisplay('*')">×</button>
-
-      <button class="number" onclick="appendToDisplay('4')">4</button>
-      <button class="number" onclick="appendToDisplay('5')">5</button>
-      <button class="number" onclick="appendToDisplay('6')">6</button>
-      <button class="operator" onclick="appendToDisplay('-')">−</button>
-
-      <button class="number" onclick="appendToDisplay('1')">1</button>
-      <button class="number" onclick="appendToDisplay('2')">2</button>
-      <button class="number" onclick="appendToDisplay('3')">3</button>
-      <button class="operator" onclick="appendToDisplay('+')">+</button>
-
-      <button class="zero number" onclick="appendToDisplay('0')">0</button>
-      <button class="decimal number" onclick="appendToDisplay('.')">.</button>
-      <button class="equals" onclick="calculate()">=</button>
+  <main class="calculator" aria-labelledby="calcTitle">
+    <div class="top-row">
+      <div>
+        <div id="calcTitle" class="title">Modern Calculator</div>
+        <div style="font-size:12px;color:var(--muted)">Supports parentheses, percent (%) and keyboard</div>
+      </div>
+      <button id="toggleHistory" class="history-toggle" aria-expanded="false">Show history</button>
     </div>
-  </div>
+
+    <div class="display" role="region" aria-label="Calculator display">
+      <div id="expression" class="expression" aria-hidden="true"></div>
+      <div id="result" class="result" aria-live="polite">0</div>
+    </div>
+
+    <div class="controls">
+      <button class="small-btn" id="btnClear" title="Clear (Esc)">C</button>
+      <button class="small-btn" id="btnDel" title="Delete (Backspace)">DEL</button>
+      <button class="small-btn" id="btnParen" title="Parentheses">( )</button>
+      <button class="small-btn" id="btnPercent" title="Percent (%)">%</button>
+    </div>
+
+    <div class="buttons" role="group" aria-label="Calculator buttons">
+      <button class="btn clear" data-action="clear">C</button>
+      <button class="btn delete" data-action="delete">DEL</button>
+      <button class="btn operator" data-value="%">%</button>
+      <button class="btn operator" data-value="/">÷</button>
+
+      <button class="btn number" data-value="7">7</button>
+      <button class="btn number" data-value="8">8</button>
+      <button class="btn number" data-value="9">9</button>
+      <button class="btn operator" data-value="*">×</button>
+
+      <button class="btn number" data-value="4">4</button>
+      <button class="btn number" data-value="5">5</button>
+      <button class="btn number" data-value="6">6</button>
+      <button class="btn operator" data-value="-">−</button>
+
+      <button class="btn number" data-value="1">1</button>
+      <button class="btn number" data-value="2">2</button>
+      <button class="btn number" data-value="3">3</button>
+      <button class="btn operator" data-value="+">+</button>
+
+      <button class="btn zero number" data-value="0">0</button>
+      <button class="btn number" data-value=".">.</button>
+      <button class="btn equals" data-action="equals">=</button>
+    </div>
+
+    <div id="history" class="history" aria-live="polite" aria-label="Calculation history"></div>
+
+    <div class="aria-live" id="srLive" aria-live="polite" aria-atomic="true"></div>
+  </main>
 
   <script>
-    const display = document.getElementById('display');
+    (function(){
+      const expressionEl = document.getElementById('expression');
+      const resultEl = document.getElementById('result');
+      const srLive = document.getElementById('srLive');
+      const historyEl = document.getElementById('history');
+      const toggleHistoryBtn = document.getElementById('toggleHistory');
 
-    function appendToDisplay(value) {
-      // Prevent multiple operators in a row (except after '(' or at start)
-      const lastChar = display.value.slice(-1);
-      const operators = ['+', '-', '*', '/', '%', '/'];
+      // internal model
+      let tokens = []; // array of token strings (numbers/operators/paren)
+      let history = [];
 
-      if (operators.includes(value) && operators.includes(lastChar) && display.value !== '') {
-        // Replace the last operator instead of adding a new one
-        display.value = display.value.slice(0, -1) + value;
-      } else {
-        display.value += value;
+      // helper regex
+      const numberRe = /^\d+(\.\d+)?$/;
+      const operatorSet = new Set(['+','-','*','/','%']);
+      const maxDigits = 18; // visual limit
+
+      // Render UI
+      function render(){
+        expressionEl.textContent = tokens.join(' ') || '';
+        const displayStr = tokens.length ? tokens.join('') : '0';
+        // Try to compute a preview result if expression ends with a number or ')'
+        try {
+          const preview = computePreview(tokens);
+          resultEl.textContent = formatNumber(preview);
+        } catch (e) {
+          resultEl.textContent = tokens.length ? 'Error' : '0';
+        }
       }
-    }
 
-    function clearDisplay() {
-      display.value = '';
-    }
+      // Format number but keep precision
+      function formatNumber(num){
+        if (num === null || num === undefined || isNaN(num)) return 'Error';
+        // if integer and small, show integer; else limit to 8 decimals and trim trailing zeros
+        if (Math.abs(num) > 1e15) return num.toExponential(6);
+        const rounded = Math.round((num + Number.EPSILON) * 1e8) / 1e8;
+        const s = String(rounded);
+        // add thousands separators for large integers
+        if (s.indexOf('.') === -1 && s.length > 6) return Number(s).toLocaleString();
+        return s;
+      }
 
-    function deleteLast() {
-      display.value = display.value.slice(0, -1);
-    }
-
-    function calculate() {
-      try {
-        // Replace display symbols with JS equivalents
-        let expression = display.value
-          .replace(/×/g, '*')
-          .replace(/÷/g, '/')
-          .replace(/−/g, '-');
-
-        // Prevent division by zero
-        if (expression.includes('/0') && !expression.includes('/0.')) {
-          display.value = "Error";
+      // Append token (number or operator)
+      function pushToken(val){
+        if (typeof val !== 'string') return;
+        if (val === '(' || val === ')') {
+          // simple parenthesis logic: allow '(' after operator or at start, ')' if unmatched
+          if (val === '(') {
+            const last = tokens[tokens.length - 1];
+            if (last && (numberRe.test(last) || last === ')')) {
+              // implicit multiplication: e.g. "2(" => "2*("
+              tokens.push('*');
+            }
+            tokens.push('(');
+          } else {
+            // add ')' only if there's an unmatched '('
+            const open = tokens.filter(t => t === '(').length;
+            const close = tokens.filter(t => t === ')').length;
+            if (open > close && (tokens.length && !operatorSet.has(tokens[tokens.length - 1]))) {
+              tokens.push(')');
+            }
+          }
           return;
         }
 
-        // Use eval safely (only for simple calculator operations)
-        const result = eval(expression);
-
-        // Format result
-        if (isNaN(result) || !isFinite(result)) {
-          display.value = "Error";
-        } else {
-          display.value = parseFloat(result.toFixed(8)); // Limit decimal places
+        if (operatorSet.has(val)) {
+          // percent key (%) token is treated specially in evaluate stage. Prevent consecutive operators.
+          const last = tokens[tokens.length - 1];
+          if (!tokens.length && val !== '-') {
+            // don't allow starting with operator except minus for negative numbers
+            return;
+          }
+          if (last === '(' && val !== '-') return; // don't put operator after '(' except minus
+          if (operatorSet.has(last)) {
+            // replace last operator with new operator
+            tokens[tokens.length - 1] = val;
+            return;
+          }
+          tokens.push(val);
+          return;
         }
-      } catch (error) {
-        display.value = "Error";
-      }
-    }
 
-    // Keyboard support
-    document.addEventListener('keydown', (e) => {
-      if (e.key >= '0' && e.key <= '9') appendToDisplay(e.key);
-      if (e.key === '.') appendToDisplay('.');
-      if (e.key === '+' || e.key === '-') appendToDisplay(e.key);
-      if (e.key === '*') appendToDisplay('*');
-      if (e.key === '/') appendToDisplay('/');
-      if (e.key === 'Enter' || e.key === '=') calculate();
-      if (e.key === 'Backspace') deleteLast();
-      if (e.key === 'Escape') clearDisplay();
-    });
+        // number or decimal
+        const last = tokens[tokens.length - 1];
+        if (numberRe.test(last)) {
+          // extend existing number (prevent too many digits or multiple decimals)
+          if (last.includes('.') && val === '.') return;
+          if (last.replace('.','').length >= maxDigits) return;
+          tokens[tokens.length - 1] = last + val;
+        } else if (last === ')') {
+          // if last token is ')' and user types a number, insert '*' then number (implicit multiplication)
+          tokens.push('*', val);
+        } else {
+          // start a new number token; handle leading '.' -> '0.'
+          tokens.push(val === '.' ? '0.' : val);
+        }
+      }
+
+      // Delete last char/token
+      function deleteLast(){
+        if (!tokens.length) return;
+        let last = tokens[tokens.length - 1];
+        if (numberRe.test(last) && last.length > 1) {
+          // drop last character of number
+          tokens[tokens.length - 1] = last.slice(0, -1);
+        } else {
+          tokens.pop();
+        }
+      }
+
+      // Clear all
+      function clearAll(){
+        tokens = [];
+      }
+
+      // Toggle parentheses smartly: if more opens than closes, add ')', else add '('
+      function toggleParen(){
+        const opens = tokens.filter(t => t === '(').length;
+        const closes = tokens.filter(t => t === ')').length;
+        if (opens > closes) {
+          pushToken(')');
+        } else {
+          pushToken('(');
+        }
+      }
+
+      // Handle percent: convert last numeric token into its percent value (divide by 100)
+      function applyPercent(){
+        if (!tokens.length) return;
+        const last = tokens[tokens.length - 1];
+        if (numberRe.test(last)) {
+          const num = parseFloat(last);
+          tokens[tokens.length - 1] = String(num / 100);
+        } else if (last === ')') {
+          // apply percent to the parenthetical expression result by wrapping *(0.01)
+          tokens.push('*', '0.01');
+        }
+      }
+
+      // Compute preview using validated tokens:
+      function computePreview(arr){
+        if (!arr.length) return 0;
+        // Build expression string but validate tokens (only permitted chars)
+        const validated = [];
+        for (let t of arr) {
+          if (numberRe.test(t)) {
+            validated.push(t);
+          } else if (operatorSet.has(t) || t === '(' || t === ')') {
+            validated.push(t);
+          } else {
+            throw new Error('Invalid token');
+          }
+        }
+        // convert to a JS-evaluable expression (replace % already handled)
+        const expr = validated.join('');
+        // Basic safety check: allowed characters only
+        if (!/^[0-9+\-*/().\s]+$/.test(expr)) throw new Error('Unsafe expression');
+        // Use Function to evaluate (still validated above)
+        // Limit runtime by not allowing huge input — tokens length bounded
+        const fn = new Function('return ' + expr);
+        const res = fn();
+        if (typeof res !== 'number' || !isFinite(res)) throw new Error('Math error');
+        return res;
+      }
+
+      // Perform full calculation and store in history
+      function calculate(){
+        try {
+          const value = computePreview(tokens);
+          const formatted = formatNumber(value);
+          const exprStr = tokens.join(' ');
+          // push to history
+          history.unshift({ expr: exprStr, result: formatted });
+          if (history.length > 20) history.pop();
+          renderHistory();
+          // Set tokens to the result (ready for further operations)
+          tokens = [String(value)];
+          srLive.textContent = 'Result: ' + formatted;
+          render();
+        } catch (e) {
+          resultEl.textContent = 'Error';
+          srLive.textContent = 'Calculation error';
+        }
+      }
+
+      function renderHistory(){
+        historyEl.innerHTML = '';
+        history.forEach((h, idx) => {
+          const div = document.createElement('div');
+          div.className = 'history-item';
+          div.innerHTML = `<span style="opacity:.9">${h.expr}</span><strong style="color:#fff">${h.result}</strong>`;
+          div.addEventListener('click', () => {
+            // when clicked, apply this result as new tokens
+            tokens = [String(h.result.replace(/,/g,''))];
+            render();
+            srLive.textContent = 'Loaded from history';
+          });
+          historyEl.appendChild(div);
+        });
+      }
+
+      // Format the visible result but keep internal numeric precision
+      function formatNumber(n){ // duplicate of top-level helper for closure safety
+        if (n === null || n === undefined || isNaN(n)) return 'Error';
+        if (Math.abs(n) > 1e15) return n.toExponential(6);
+        const rounded = Math.round((n + Number.EPSILON) * 1e8) / 1e8;
+        const s = String(rounded);
+        if (s.indexOf('.') === -1 && s.length > 6) return Number(s).toLocaleString();
+        return s;
+      }
+
+      // Button handling
+      document.querySelectorAll('button.btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const val = btn.dataset.value;
+          const action = btn.dataset.action;
+          if (action === 'clear') { clearAll(); render(); srLive.textContent = 'Cleared'; return; }
+          if (action === 'delete') { deleteLast(); render(); return; }
+          if (action === 'equals') { calculate(); return; }
+          if (val) {
+            if ('+-*/%'.includes(val)) {
+              if (val === '%') applyPercent();
+              else pushToken(val);
+            } else if (val === '(' || val === ')') {
+              pushToken(val);
+            } else {
+              // number or decimal
+              pushToken(val);
+            }
+            render();
+          }
+        });
+      });
+
+      // small controls
+      document.getElementById('btnClear').addEventListener('click', () => { clearAll(); render(); srLive.textContent = 'Cleared'; });
+      document.getElementById('btnDel').addEventListener('click', () => { deleteLast(); render(); });
+      document.getElementById('btnParen').addEventListener('click', () => { toggleParen(); render(); });
+      document.getElementById('btnPercent').addEventListener('click', () => { applyPercent(); render(); });
+
+      // toggle history
+      toggleHistoryBtn.addEventListener('click', () => {
+        const hist = document.getElementById('history');
+        const visible = hist.classList.toggle('visible');
+        toggleHistoryBtn.textContent = visible ? 'Hide history' : 'Show history';
+        toggleHistoryBtn.setAttribute('aria-expanded', String(visible));
+      });
+
+      // Keyboard support
+      window.addEventListener('keydown', (e) => {
+        // ignore if focused on an input (none in this UI) but safe guard
+        const key = e.key;
+        if ((key >= '0' && key <= '9') || key === '.') {
+          pushToken(key);
+          render();
+          e.preventDefault();
+          return;
+        }
+        if (key === '+' || key === '-' || key === '*' || key === '/') {
+          pushToken(key);
+          render();
+          e.preventDefault();
+          return;
+        }
+        if (key === 'Enter' || key === '=') {
+          calculate();
+          e.preventDefault();
+          return;
+        }
+        if (key === 'Backspace') {
+          deleteLast();
+          render();
+          e.preventDefault();
+          return;
+        }
+        if (key === 'Escape') {
+          clearAll();
+          render();
+          e.preventDefault();
+          return;
+        }
+        if (key === '%') {
+          applyPercent();
+          render();
+          e.preventDefault();
+          return;
+        }
+        if (key === '(' || key === ')') {
+          pushToken(key);
+          render();
+          e.preventDefault();
+          return;
+        }
+      });
+
+      // init
+      render();
+      renderHistory();
+
+      // Expose a small API for debugging (optional)
+      window._calc = {
+        push: (v) => { pushToken(String(v)); render(); },
+        tokens: () => tokens.slice(),
+        clear: () => { clearAll(); render(); }
+      };
+    })();
   </script>
 </body>
 </html>
