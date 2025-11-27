@@ -1,129 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Page</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — My App</title>
+
+  <!-- Clean Google Fonts import -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manufacturing+Consent&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+    :root{
+      --bg-1: #4facfe;
+      --bg-2: #00f2fe;
+      --card-bg: #ffffff;
+      --muted: #6b7280;
+      --accent: #0ea5e9;
+      --radius: 12px;
+      --shadow: 0 6px 20px rgba(2,6,23,0.12);
+      --max-width: 380px;
+      --gap: 12px;
+      font-family: "Inter", "Work Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-    * {
+    * { box-sizing: border-box; }
+
+    html,body { height: 100%; }
+
+    body{
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Work Sans', sans-serif;
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg,var(--bg-1),var(--bg-2));
+      padding: 24px;
+      color: #0f172a;
     }
 
-    body {
+    /* Container */
+    .login-box{
+      width: 100%;
+      max-width: var(--max-width);
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      flex-direction: column;
+      gap: 6px;
+      transition: transform .18s ease, box-shadow .18s ease;
     }
 
-    .login-box {
+    .login-box:focus-within,
+    .login-box:hover { transform: translateY(-4px); }
+
+    header.logo {
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      margin-bottom: 8px;
+    }
+
+    .logo .brand {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 6px 0 12px;
+      color: #0b1220;
+      font-weight: 700;
+    }
+
+    .lead {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Form */
+    form {
+      display: grid;
+      gap: var(--gap);
+    }
+
+    label {
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #111827;
+      display:block;
+    }
+
+    .field {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .input-row {
+      position: relative;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"]{
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 10px;
+      border: 1px solid #e6e9ef;
       background: #fff;
-      padding: 30px;
-      width: 320px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      text-align: center;
-    }
-
-    .login-box h2 {
-      margin-bottom: 20px;
-      color: #222;
-    }
-
-    .login-box input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      font-size: 14px;
       outline: none;
-      font-size: 14px;
+      transition: box-shadow .12s, border-color .12s;
     }
 
-    .login-box input:focus {
-      border-color: #4facfe;
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="email"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 6px 18px rgba(14,165,233,0.08);
     }
 
-    .login-box button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 15px;
+    /* show/hide toggle */
+    .toggle-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
       border: none;
-      border-radius: 8px;
-      background: #4facfe;
-      color: white;
-      font-size: 16px;
+      padding: 6px;
+      display: inline-flex;
+      align-items:center;
+      justify-content:center;
       cursor: pointer;
-      transition: 0.3s;
+      color: var(--muted);
+      font-size: 13px;
     }
 
-    .login-box button:hover {
-      background: #00c6fb;
+    .row {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 8px;
     }
 
-    .login-box p {
-      margin-top: 15px;
-      font-size: 14px;
+    .remember {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:var(--muted);
     }
 
-    .login-box a {
-      color: #4facfe;
-      text-decoration: none;
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      width:100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(90deg,var(--bg-1),var(--accent));
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      cursor:pointer;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.08);
+      transition: transform .12s ease, opacity .12s;
     }
 
-    .login-box a:hover {
-      text-decoration: underline;
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    .or {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:var(--muted);
+      font-size:13px;
+      margin: 6px 0 6px;
+    }
+    .or::before, .or::after{
+      content:"";
+      height:1px; flex:1; background:#f1f5f9;
+      border-radius:1px;
     }
 
-    /* Social buttons */
-    .social-login {
-      margin-top: 20px;
+    .socials {
+      display:grid;
+      gap:10px;
+      margin-top:6px;
     }
 
     .social-btn {
-      display: block;
-      width: 100%;
-      margin: 8px 0;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      color: white;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px;
+      border-radius:10px;
+      border: 1px solid #e6e9ef;
+      background: #fff;
+      cursor:pointer;
+      font-size:14px;
     }
 
-    .facebook { background: #3b5998; }
-    .google { background: #db4437; }
-    .apple { background: #000000; }
+    .social-btn svg { width:18px; height:18px; }
 
-    .social-btn:hover {
-      opacity: 0.9;
+    p.footer {
+      margin-top:12px;
+      font-size:13px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    a.link { color:var(--accent); text-decoration:none; font-weight:600; }
+    a.link:hover { text-decoration:underline; }
+
+    /* validation message */
+    .msg {
+      font-size: 13px;
+      color: #dc2626;
+      min-height: 18px;
+    }
+
+    /* Small screens */
+    @media (max-width:420px){
+      .login-box { padding: 20px; }
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .login-box, .btn { transition: none; transform: none; }
     }
   </style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>Login</h2>
-    <form>
-      <input type="text" placeholder="Username" required>
-      <input type="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
-    <p>Don’t have an account? <a href="#">Sign Up</a></p>
+  <main class="login-box" aria-labelledby="login-heading">
+    <header class="logo" aria-hidden="true">
+      <!-- small inline svg brand mark -->
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+        <rect width="24" height="24" rx="6" fill="#0ea5e9"/>
+        <path d="M6 12h12" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M6 8h12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+      <div class="brand">
+        MyApp
+        <div style="font-size:12px;color:var(--muted);font-weight:500">Secure login</div>
+      </div>
+    </header>
 
-    <!-- Social login buttons -->
-    <div class="social-login">
-      <p>Or login with</p>
-      <button class="social-btn facebook">Login with Facebook</button>
-      <button class="social-btn google">Login with Google</button>
-      <button class="social-btn apple">Login with Apple</button>
+    <h1 id="login-heading">Welcome back</h1>
+    <p class="lead">Sign in to continue to your account</p>
+
+    <form id="loginForm" novalidate>
+      <!-- Username / Email -->
+      <div class="field">
+        <label for="username">Email or username</label>
+        <input id="username" name="username" type="text" inputmode="email" autocomplete="username" placeholder="you@example.com" required aria-required="true" />
+      </div>
+
+      <!-- Password with toggle -->
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="input-row">
+          <input id="password" name="password" type="password" autocomplete="current-password" required aria-required="true" placeholder="Enter your password" minlength="6" />
+          <button type="button" class="toggle-btn" aria-label="Show password" id="pwToggle">Show</button>
+        </div>
+      </div>
+
+      <!-- Row: remember and forgot -->
+      <div class="row" style="align-items:center;">
+        <label class="remember">
+          <input id="remember" name="remember" type="checkbox" style="width:16px;height:16px;border-radius:4px;"/>
+          <span>Remember me</span>
+        </label>
+
+        <div style="font-size:13px">
+          <a href="#" class="link">Forgot?</a>
+        </div>
+      </div>
+
+      <div class="msg" id="formMsg" role="status" aria-live="polite"></div>
+
+      <button type="submit" class="btn" id="loginBtn">Login</button>
+    </form>
+
+    <div class="or" aria-hidden="true"><span>Or continue with</span></div>
+
+    <div class="socials" role="group" aria-label="Social sign in">
+      <button class="social-btn" id="googleBtn" title="Sign in with Google" aria-label="Sign in with Google">
+        <!-- google svg -->
+        <svg viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path fill="#4285f4" d="M533.5 278.4c0-17.6-1.5-34.5-4.4-50.9H272v96.4h147.1c-6.4 34.6-25.5 63.9-54.5 83.6v69.3h88.1c51.6-47.5 81.8-117.7 81.8-198.4z"/><path fill="#34a853" d="M272 544.3c73.8 0 135.8-24.5 181.1-66.9l-88.1-69.3c-24.5 16.4-55.9 26.1-93 26.1-71.4 0-132-48.1-153.5-112.7H28.9v70.6C74 483 165.7 544.3 272 544.3z"/><path fill="#fbbc04" d="M118.5 323.4c-9.8-28.9-9.8-59.9 0-88.8V163.9H28.9c-39.8 79.2-39.8 173.1 0 252.3l89.6-92.8z"/><path fill="#ea4335" d="M272 107.9c38.8-.6 74.3 13.6 102 40.6l76.4-76.4C409.1 24.2 347.1 0 272 0 165.7 0 74 61.3 28.9 163.9l89.6 70.6C140 156 200.6 107.9 272 107.9z"/></svg>
+        <span>Google</span>
+      </button>
+
+      <button class="social-btn" id="facebookBtn" title="Sign in with Facebook" aria-label="Sign in with Facebook">
+        <!-- facebook svg -->
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#1877f2" d="M22 12a10 10 0 10-11.5 9.9v-7h-2.2V12h2.2V9.6c0-2.2 1.3-3.4 3.3-3.4.9 0 1.8.16 1.8.16v2h-1c-1 0-1.3.62-1.3 1.3V12h2.3l-.37 2.9H14v7A10 10 0 0022 12z"/></svg>
+        <span>Facebook</span>
+      </button>
+
+      <button class="social-btn" id="appleBtn" title="Sign in with Apple" aria-label="Sign in with Apple">
+        <!-- apple svg -->
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#000" d="M16.365 1.43c.04 1.2-.44 2.25-1.28 3.06-.86.84-2.06 1.36-3.3 1.26-.07-1.16.44-2.31 1.24-3.13.84-.86 2.04-1.38 3.34-1.19zM12.92 6.98c-.8 0-1.8.5-2.46.5-.67 0-1.7-.5-2.79-.5-1.02 0-2.84.6-3.6 2.63-1.82 4.4-.46 10.93 1.3 14.6.88 1.73 1.94 3.67 3.33 3.65 1.3-.02 1.8-.9 3.38-.92 1.58-.02 2.02.92 3.4.9 1.5-.03 2.57-1.74 3.45-3.48.93-1.83 1.32-3.6 1.34-3.69-.03-.01-2.56-1-2.56-4.02 0-3.44 2.8-5.03 2.94-5.12-1.6-2.33-4.06-2.64-4.92-2.67-1.98-.18-3.54 1.03-4.46 1.03z"/></svg>
+        <span>Apple</span>
+      </button>
     </div>
-  </div>
+
+    <p class="footer">Don't have an account? <a class="link" href="#">Sign up</a></p>
+  </main>
+
+  <script>
+    // Basic client-side handling (no backend)
+    (function(){
+      const form = document.getElementById('loginForm');
+      const msg = document.getElementById('formMsg');
+      const btn = document.getElementById('loginBtn');
+      const pw = document.getElementById('password');
+      const toggle = document.getElementById('pwToggle');
+
+      // Show/hide password
+      toggle.addEventListener('click', () => {
+        const isPwd = pw.type === 'password';
+        pw.type = isPwd ? 'text' : 'password';
+        toggle.textContent = isPwd ? 'Hide' : 'Show';
+        toggle.setAttribute('aria-pressed', String(isPwd));
+        toggle.setAttribute('aria-label', isPwd ? 'Hide password' : 'Show password');
+      });
+
+      // Form submit
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        msg.textContent = ''; // reset
+
+        const username = form.username.value.trim();
+        const password = form.password.value;
+
+        // Simple validation
+        if (!username) {
+          msg.textContent = 'Please enter your email or username.';
+          form.username.focus();
+          return;
+        }
+        if (!password || password.length < 6) {
+          msg.textContent = 'Password must be at least 6 characters.';
+          form.password.focus();
+          return;
+        }
+
+        // Disable button to prevent double submit
+        btn.disabled = true;
+        btn.textContent = 'Signing in…';
+
+        // Simulate async login (replace with real API call)
+        setTimeout(() => {
+          // Fake success for demo
+          msg.style.color = 'green';
+          msg.textContent = 'Signed in successfully (demo). Redirecting…';
+
+          // re-enable button (in real flow you'd navigate)
+          btn.disabled = false;
+          btn.textContent = 'Login';
+          // window.location.href = '/dashboard';
+        }, 900);
+      });
+
+      // Social button handlers (demo)
+      document.getElementById('googleBtn').addEventListener('click', () => alert('Google sign-in flow (demo)'));
+      document.getElementById('facebookBtn').addEventListener('click', () => alert('Facebook sign-in flow (demo)'));
+      document.getElementById('appleBtn').addEventListener('click', () => alert('Apple sign-in flow (demo)'));
+    })();
+  </script>
 </body>
 </html>
