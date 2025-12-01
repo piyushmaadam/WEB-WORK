@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1830f4">
+  <title>Agastya — Farmer Help Portal</title>
+  <link rel="shortcut icon" href="Final Logo_R.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--brand:#1830f4;--muted:#556;--bg:#f7fbff;--card:#fff;--radius:12px}
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;margin:0;background:var(--bg);color:#0b1220}
+    .container{max-width:1180px;margin:0 auto;padding:1.25rem}
+    header{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .brand{display:flex;align-items:center;gap:0.75rem;text-decoration:none;color:inherit}
+    .brand img{height:56px;border-radius:8px}
+    .brand .title{font-weight:700;color:var(--brand)}
+    .lang-switch{display:flex;gap:0.5rem;align-items:center}
+
+    /* Layout grid */
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:1rem;margin-top:1rem}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+
+    /* Cards */
+    .card{background:var(--card);border-radius:12px;padding:1rem;box-shadow:0 8px 24px rgba(15,23,36,0.06)}
+    h2{margin:0 0 0.5rem 0}
+
+    /* Search / quick filter */
+    .controls{display:flex;gap:0.5rem;align-items:center}
+    input[type=search]{flex:1;padding:0.6rem;border-radius:8px;border:1px solid #e6eefc}
+    select{padding:0.55rem;border-radius:8px}
+
+    /* Scheme cards */
+    .schemes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem}
+    .scheme{padding:0.65rem;border-radius:10px;background:linear-gradient(180deg,rgba(24,48,244,0.04),transparent)}
+    .scheme h3{margin:0 0 0.3rem 0;font-size:1rem}
+    .scheme p{margin:0;font-size:0.9rem;color:var(--muted)}
+
+    /* Market table */
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:0.6rem;text-align:left;border-bottom:1px solid #f1f5ff}
+    th{font-weight:600;font-size:0.95rem}
+
+    /* Right column widgets */
+    .widget{margin-bottom:1rem}
+    .small{font-size:0.9rem;color:var(--muted)}
+
+    /* CTA */
+    .cta{display:inline-block;padding:0.55rem 0.9rem;background:var(--brand);color:#fff;border-radius:10px;text-decoration:none;font-weight:700}
+
+    /* Alerts */
+    .alert{padding:0.6rem;border-radius:8px;background:#fffbf0;border:1px solid #ffe7b5}
+
+    /* Footer */
+    footer{margin-top:1.5rem;text-align:center;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="brand" href="#">
+        <img src="Final Logo_R.png" alt="Agastya logo" loading="lazy">
+        <div>
+          <div class="title">Agastya Farmer Help Portal</div>
+          <div class="small">Info on govt. schemes • market rates • local support</div>
+        </div>
+      </a>
+
+      <div class="lang-switch">
+        <label for="lang" class="small">Language</label>
+        <select id="lang" aria-label="Choose language">
+          <option value="en">English</option>
+          <option value="gu">ગુજરાતી</option>
+        </select>
+        <a class="cta" href="#contact">Get Help</a>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main>
+        <!-- Top controls -->
+        <div class="card controls" style="align-items:center">
+          <input id="search" type="search" placeholder="Search crop, scheme or market...">
+          <select id="cropFilter" aria-label="Filter by crop">
+            <option value="all">All Crops</option>
+            <option value="wheat">Wheat</option>
+            <option value="rice">Rice</option>
+            <option value="maize">Maize</option>
+            <option value="cotton">Cotton</option>
+          </select>
+          <button class="cta" id="refreshBtn">Refresh Rates</button>
+        </div>
+
+        <!-- Government schemes -->
+        <section class="card" id="schemesSection">
+          <h2>Government Schemes</h2>
+          <p class="small">Latest schemes and benefits you can apply for. Tap a card to read details or get contact help.</p>
+          <div class="schemes" id="schemesList">
+            <!-- scheme cards inserted by JS -->
+          </div>
+        </section>
+
+        <!-- Market rates -->
+        <section class="card" id="ratesSection" style="margin-top:1rem">
+          <h2>Market Rates</h2>
+          <p class="small">Live/estimated local mandi rates for crops and seeds. Rates update from trusted sources — refresh to get latest.</p>
+
+          <div style="overflow:auto;margin-top:0.75rem">
+            <table aria-live="polite">
+              <thead>
+                <tr><th>Crop</th><th>Variety</th><th>Rate (₹/quintal)</th><th>Change</th></tr>
+              </thead>
+              <tbody id="ratesTable">
+                <!-- rows inserted by JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Tips & Advisory -->
+        <section class="card" style="margin-top:1rem">
+          <h2>Tips & Advisory</h2>
+          <p class="small" id="advisoryText">Select your crop and language to see tailored advisories — sowing time, pest alerts, storage tips.</p>
+        </section>
+      </main>
+
+      <aside>
+        <div class="card widget">
+          <h3>Quick Alerts</h3>
+          <div class="alert" id="alerts">No new alerts</div>
+        </div>
+
+        <div class="card widget">
+          <h3>Nearby Mandis</h3>
+          <p class="small">Select your district to see mandi list and contact numbers.</p>
+          <select id="districtSelect"><option>-- Select District --</option><option>Ahmedabad</option><option>Surat</option><option>Vadodara</option></select>
+        </div>
+
+        <div class="card widget">
+          <h3>Seed Price Lookup</h3>
+          <p class="small">Check common seed pack rates.</p>
+          <button id="seedLookup" class="cta">Lookup Seeds</button>
+        </div>
+
+        <div class="card widget" id="supportCard">
+          <h3>Get Expert Help</h3>
+          <p class="small">Call or message local agriculture extension officers.</p>
+          <a class="cta" href="#contact">Contact</a>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      © <span id="year"></span> Agastya — Farmer Help Portal
+    </footer>
+  </div>
+
+  <script>
+    // Sample data (replace with API calls to real endpoints)
+    const sampleSchemes = [
+      {id:1,title:'PM-Kisan Samman Nidhi',desc:'Income support of ₹6000/year. Check eligibility and status.'},
+      {id:2,title:'Pradhan Mantri Fasal Bima Yojana',desc:'Crop insurance for notified crops against natural calamities.'},
+      {id:3,title:'Soil Health Card',desc:'Get soil testing and tailored fertilizer recommendations.'}
+    ];
+
+    const sampleRates = [
+      {crop:'Wheat',variety:'Common',rate:2200,change:'+10'},
+      {crop:'Rice',variety:'Basmati',rate:4800,change:'-20'},
+      {crop:'Maize',variety:'Hybrid',rate:1900,change:'+5'},
+      {crop:'Cotton',variety:'Medium Staple',rate:5400,change:'+0'}
+    ];
+
+    // render schemes
+    const schemesList = document.getElementById('schemesList');
+    sampleSchemes.forEach(s=>{
+      const el = document.createElement('div'); el.className='scheme';
+      el.innerHTML = `<h3>${s.title}</h3><p>${s.desc}</p><div style="margin-top:0.5rem"><a href='#' onclick=showScheme(${s.id}) class='small'>Read more</a></div>`;
+      schemesList.appendChild(el);
+    });
+
+    function showScheme(id){
+      const s = sampleSchemes.find(x=>x.id===id);
+      alert(s.title + '\n\n' + s.desc + '\n\nFor application help, contact your local office.');
+    }
+
+    // render rates
+    const ratesTable = document.getElementById('ratesTable');
+    function renderRates(data){
+      ratesTable.innerHTML = '';
+      data.forEach(r=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${r.crop}</td><td>${r.variety}</td><td>₹ ${r.rate}</td><td>${r.change}</td>`;
+        ratesTable.appendChild(tr);
+      })
+    }
+    renderRates(sampleRates);
+
+    // language toggle (basic static swap)
+    const lang = document.getElementById('lang');
+    const advisoryText = document.getElementById('advisoryText');
+    lang.addEventListener('change', ()=>{
+      if(lang.value==='gu'){
+        document.querySelector('.title').textContent = 'અગાસ્ત્ય ફાર્મર હેલ્પ પોર્ટલ';
+        advisoryText.textContent = 'તમારા પાક અને ભાષા પસંદ કરો જેથી કસ્ટમ સલાહ મળી શકે.';
+      } else {
+        document.querySelector('.title').textContent = 'Agastya Farmer Help Portal';
+        advisoryText.textContent = 'Select your crop and language to see tailored advisories — sowing time, pest alerts, storage tips.';
+      }
+    });
+
+    // Refresh rates (placeholder to show process)
+    document.getElementById('refreshBtn').addEventListener('click', ()=>{
+      // In production: fetch('/api/market-rates?district=...') etc.
+      document.getElementById('refreshBtn').textContent = 'Refreshing...';
+      setTimeout(()=>{ renderRates(sampleRates); document.getElementById('refreshBtn').textContent='Refresh Rates'; alert('Rates updated (sample data). In real app this will call government/market APIs).'); },900);
+    });
+
+    // Seed lookup (sample)
+    document.getElementById('seedLookup').addEventListener('click', ()=>{
+      alert('Seed prices (sample): Wheat seed - ₹450/kg, Rice seed - ₹120/kg. Replace with real supplier data.');
+    });
+
+    // small helpers
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('search').addEventListener('input', (e)=>{
+      const v = e.target.value.toLowerCase();
+      // simple search across schemes and rates
+      const filteredRates = sampleRates.filter(r=> r.crop.toLowerCase().includes(v) || r.variety.toLowerCase().includes(v));
+      renderRates(filteredRates.length?filteredRates:sampleRates);
+      const filteredSchemes = sampleSchemes.filter(s=> s.title.toLowerCase().includes(v) || s.desc.toLowerCase().includes(v));
+      schemesList.innerHTML=''; filteredSchemes.forEach(s=>{ const el=document.createElement('div');el.className='scheme'; el.innerHTML=`<h3>${s.title}</h3><p>${s.desc}</p><div style="margin-top:0.5rem"><a href='#' onclick=showScheme(${s.id}) class='small'>Read more</a></div>`; schemesList.appendChild(el)});
+    });
+  </script>
+</body>
+</html>
