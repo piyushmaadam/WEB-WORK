@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FunBox — Your Instant Laugh Machine</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1020; --card:#fff; --accent:#ffcc00; --muted:#9aa3b2;
+    --glass: rgba(255,255,255,0.06);
+  }
+  *{box-sizing:border-box}
+  body{font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;margin:0;background:
+    radial-gradient(1000px 600px at 10% 10%, rgba(255,204,0,0.06), transparent 10%),
+    linear-gradient(180deg,#071029 0%, #061226 100%); color:var(--card); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+  .wrap{width:100%;max-width:980px}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logo{width:72px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px;background:linear-gradient(180deg,#fff1b8,#ffd24d);color:#0b1020;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+  h1{font-size:1.4rem;margin:0}
+  .sub{color:var(--muted);font-size:0.95rem;margin-top:2px}
+
+  .grid{display:grid;grid-template-columns:1fr 320px;gap:14px}
+  @media (max-width:880px){ .grid{grid-template-columns:1fr} }
+
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border-radius:14px;padding:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  button,select{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--card);padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:700}
+  button.primary{background:var(--accent);color:#081022;border:none;box-shadow:0 6px 20px rgba(255,204,0,0.15)}
+  .big{font-size:1.05rem;padding:10px 12px}
+  .mascot{width:120px;height:120px;border-radius:14px;background:linear-gradient(180deg,#fff,#fff6c2);color:#081022;display:flex;align-items:center;justify-content:center;font-size:58px;margin:auto;transition:transform .28s ease}
+  .mascot.dance{transform:translateY(-6px) rotate(-8deg) scale(1.06)}
+  .output{margin-top:12px;font-size:1.05rem;min-height:64px;display:flex;align-items:center}
+  .muted{color:var(--muted);font-size:0.9rem}
+  .tiny{font-size:0.82rem;color:var(--muted)}
+  .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+
+  footer{margin-top:14px;color:var(--muted);font-size:0.85rem;text-align:center}
+
+  /* little confetti */
+  .confetti{position:fixed;left:0;right:0;top:0;bottom:0;pointer-events:none;display:none}
+  .confetti .piece{position:absolute;width:10px;height:14px;opacity:0;transform:translateY(-20px) rotate(0);animation:fall 1200ms linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:1}}
+  /* utility */
+  .col{display:flex;flex-direction:column}
+  .row{display:flex;gap:8px;align-items:center}
+  .card h2{margin:0 0 8px 0}
+  .textarea-like{background:transparent;border:1px dashed rgba(255,255,255,0.04);padding:10px;border-radius:8px;min-height:56px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo" aria-hidden="true">🤣</div>
+      <div>
+        <h1>FunBox — Your Instant Laugh Machine</h1>
+        <div class="sub">Press the buttons. The mascot will try its best to impress you.</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- left big panel -->
+      <section class="card">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div id="mascot" class="mascot" role="img" aria-label="dancing mascot">🐄</div>
+          <div style="flex:1">
+            <div class="row" style="justify-content:space-between">
+              <div>
+                <select id="mode" aria-label="Choose humor mode" title="Choose humor mode">
+                  <option value="joke">Random Joke</option>
+                  <option value="guj">Gujarati Joke</option>
+                  <option value="roast">Soft Roast</option>
+                  <option value="fortune">Absurd Fortune</option>
+                  <option value="fact">Stupid Fact</option>
+                </select>
+                <button id="goBtn" class="primary big">Make me laugh</button>
+              </div>
+              <div class="tiny muted">Tip: Press <kbd>Space</kbd> to get a new fun thing</div>
+            </div>
+
+            <div id="output" class="output textarea-like" tabindex="0" aria-live="polite">Press “Make me laugh” — I dare you.</div>
+
+            <div class="actions">
+              <button id="speakBtn">🔊 Speak</button>
+              <button id="copyBtn">📋 Copy</button>
+              <button id="shareBtn">🔗 Share</button>
+              <button id="confettiBtn">🎉 Confetti</button>
+            </div>
+
+            <div class="controls">
+              <label class="tiny muted">Voice:</label>
+              <select id="voiceSelect" class="tiny"></select>
+              <button id="longBtn" class="tiny">Long Version</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" class="col">
+          <h3 style="margin:0">Past laughs</h3>
+          <div id="history" class="tiny muted">— none yet —</div>
+        </div>
+      </section>
+
+      <!-- sidebar -->
+      <aside>
+        <div class="card" style="margin-bottom:12px">
+          <h2>Quick favorites</h2>
+          <div class="row" style="margin-top:8px">
+            <button data-mode="joke">😂 Joke</button>
+            <button data-mode="guj">🪔 ગુજરાતી</button>
+            <button data-mode="roast">🔥 Roast</button>
+          </div>
+          <div style="margin-top:8px" class="tiny muted">Use these to quickly pick a style.</div>
+        </div>
+
+        <div class="card" style="margin-bottom:12px">
+          <h2>Customize</h2>
+          <div style="margin-top:8px" class="tiny muted">Mascot emoji</div>
+          <input id="mascotInput" placeholder="e.g. 🐮 or 👨‍🌾" style="margin-top:6px;padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--card)">
+          <div style="margin-top:8px" class="tiny muted">Speed (for silly animation)</div>
+          <input id="speed" type="range" min="0.5" max="2.5" step="0.1" value="1">
+        </div>
+
+        <div class="card">
+          <h2>Extra</h2>
+          <div class="tiny muted">Save favorite jokes or export as text for memes.</div>
+          <div style="margin-top:8px" class="row">
+            <button id="saveBtn">💾 Save</button>
+            <button id="exportBtn">⬇️ Export</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>Made for you — zero judgement, 100% silliness.</footer>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+<script>
+/* Data */
+const jokes = [
+  "Why did the scarecrow become a successful politician? Because he was outstanding in his field.",
+  "I told my tractor a secret. Now it spills the beans — literally.",
+  "My cow started a podcast. It's udderly addictive.",
+  "If farming had Wi-Fi, crops would still say 'low battery'.",
+  "Farmer to friend: ‘I talk to my plants at night.’ Friend: ‘Why?’ Farmer: ‘They won't listen any other time.’"
+];
+const guj = [
+  "એક ખેડૂત દિવસ આખો મુશ્કેલ કામ કરી ને પાછો આવ્યો. પત્નીએ પૂછ્યું, શેં કર્યું? કહ્યું: 'મારુ બધુ વેચાયું, હવે હું ફક્ત હવામાનનું બલ્બ બદલીશ.'",
+  "ઘરમાં બધાએ બચત કરી, હવે ઘરમાં માત્ર પાણી જ બચ્યું.",
+  "કિસાન: 'મારી ગાય સારી વાત સાંભળે છે.' મિત્ર: 'સાચે?' કિસાન: 'હા, માત્ર જ્યારે ઘાસમાં મસાલો હોય.'"
+];
+const roasts = [
+  "You code like you plant — random, hopeful, and mostly weeds.",
+  "Your brain has more tabs open than Chrome after an update.",
+  "You bring a calculator to a cookie-eating contest.",
+  "You're like a software license — nobody reads you but everyone accepts you."
+];
+const fortunes = [
+  "A mysterious pigeon will misplace your socks tomorrow.",
+  "Your next big idea will be slightly tastier than yesterday's lunch.",
+  "An old friend will borrow sugar and never return the compliment."
+];
+const facts = [
+  "Stupid fact: If you whisper to a potato it will not tell your secrets, but it will get jealous.",
+  "If cows used smartphones they'd still prefer grass photography.",
+  "Studies show the funniest person in a village is often the one who remembered to water the plants."
+];
+
+const out = document.getElementById('output');
+const mascot = document.getElementById('mascot');
+const mode = document.getElementById('mode');
+const goBtn = document.getElementById('goBtn');
+const historyEl = document.getElementById('history');
+const speakBtn = document.getElementById('speakBtn');
+const copyBtn = document.getElementById('copyBtn');
+const shareBtn = document.getElementById('shareBtn');
+const confettiBtn = document.getElementById('confettiBtn');
+const confettiWrap = document.getElementById('confetti');
+const voiceSelect = document.getElementById('voiceSelect');
+const saveBtn = document.getElementById('saveBtn');
+const exportBtn = document.getElementById('exportBtn');
+const longBtn = document.getElementById('longBtn');
+const mascotInput = document.getElementById('mascotInput');
+const speedRange = document.getElementById('speed');
+
+let historyArr = [];
+let favorites = [];
+let voices = [];
+let animateSpeed = 1;
+
+/* helpers */
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function pushHistory(text){
+  historyArr.unshift(text);
+  if(historyArr.length>8) historyArr.pop();
+  historyEl.textContent = historyArr.join(' • ');
+}
+function animateMascot(){
+  mascot.classList.add('dance');
+  setTimeout(()=>mascot.classList.remove('dance'), 700/animateSpeed);
+}
+function setOutput(txt){
+  out.textContent = txt;
+  pushHistory(txt.slice(0,120));
+}
+
+/* generate */
+function generate(modeVal, long=false){
+  let res = "I tried to be funny but I'm on low battery.";
+  switch(modeVal){
+    case 'joke': res = long ? rand(jokes) + " 😂😂 (extended edition: once a chicken asked for a passport.)" : rand(jokes); break;
+    case 'guj': res = rand(guj); break;
+    case 'roast': res = long ? rand(roasts) + " P.S. this is a soft roast, stay hydrated." : rand(roasts); break;
+    case 'fortune': res = rand(fortunes); break;
+    case 'fact': res = rand(facts); break;
+  }
+  setOutput(res);
+  animateMascot();
+}
+
+/* speech */
+function populateVoices(){
+  voices = speechSynthesis.getVoices() || [];
+  voiceSelect.innerHTML = voices.map((v,i)=>`<option value="${i}">${v.name} ${v.lang}</option>`).join('');
+}
+populateVoices();
+if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = populateVoices;
+
+function speakText(){
+  const txt = out.textContent;
+  if(!txt) return alert('Nothing to say yet — press Make me laugh first.');
+  const u = new SpeechSynthesisUtterance(txt);
+  const idx = +voiceSelect.value || 0;
+  if(voices[idx]) u.voice = voices[idx];
+  u.rate = 1;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+/* copy/share */
+async function copyText(){
+  try{
+    await navigator.clipboard.writeText(out.textContent || '');
+    copyBtn.textContent = 'Copied ✓';
+    setTimeout(()=>copyBtn.textContent = '📋 Copy',900);
+  }catch(e){ alert('Copy failed.'); }
+}
+
+function shareText(){
+  const txt = out.textContent;
+  if(navigator.share){
+    navigator.share({title:'FunBox laugh', text:txt}).catch(()=>alert('Share cancelled'));
+  }else{
+    prompt('Copy and share this:', txt);
+  }
+}
+
+/* confetti */
+function throwConfetti(){
+  confettiWrap.innerHTML = '';
+  const colors = ['#ffcc00','#ff7b7b','#7bd389','#78d0ff','#c08cff'];
+  for(let i=0;i<28;i++){
+    const p = document.createElement('div');
+    p.className='piece';
+    p.style.left = Math.random()*100 + '%';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration = (800 + Math.random()*1000) + 'ms';
+    p.style.transform = `translateY(-20px) rotate(${Math.random()*360}deg)`;
+    confettiWrap.appendChild(p);
+  }
+  confettiWrap.style.display='block';
+  setTimeout(()=>{ confettiWrap.style.display='none'; confettiWrap.innerHTML=''; },1400);
+}
+
+/* favorites & export */
+function saveFavorite(){
+  if(!out.textContent) return alert('Nothing to save yet!');
+  favorites.push(out.textContent);
+  saveBtn.textContent = 'Saved ✓';
+  setTimeout(()=>saveBtn.textContent='💾 Save',900);
+}
+function exportText(){
+  const all = favorites.concat(historyArr).join('\n\n---\n\n');
+  const blob = new Blob([all || out.textContent || ''], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'funbox_export.txt'; document.body.appendChild(a); a.click();
+  a.remove(); URL.revokeObjectURL(url);
+}
+
+/* events */
+goBtn.addEventListener('click', ()=>generate(mode.value, false));
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click', e=>{ mode.value = e.target.dataset.mode; generate(mode.value); }));
+speakBtn.addEventListener('click', speakText);
+copyBtn.addEventListener('click', copyText);
+shareBtn.addEventListener('click', shareText);
+confettiBtn.addEventListener('click', ()=>{ throwConfetti(); animateMascot(); });
+saveBtn.addEventListener('click', saveFavorite);
+exportBtn.addEventListener('click', exportText);
+longBtn.addEventListener('click', ()=>generate(mode.value, true));
+mascotInput.addEventListener('input', ()=>{ if(mascotInput.value.trim()) mascot.textContent = mascotInput.value.trim().slice(0,3); });
+speedRange.addEventListener('input', ()=>{ animateSpeed = Number(speedRange.value); mascot.style.transitionDuration = (0.28/animateSpeed)+'s'; });
+
+/* keyboard */
+document.addEventListener('keydown', (e)=>{
+  if(e.code==='Space'){ e.preventDefault(); generate(mode.value); }
+  if(e.code==='KeyS' && (e.ctrlKey||e.metaKey)){ e.preventDefault(); saveFavorite(); }
+});
+
+/* initial */
+generate('joke');
+setTimeout(()=>generate('fortune'), 900);
+
+/* small UX: update voice select default */
+setTimeout(()=>{ if(voiceSelect.options.length) voiceSelect.value = 0; }, 500);
+</script>
+</body>
+</html>
