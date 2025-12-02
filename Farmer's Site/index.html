@@ -8,80 +8,103 @@
   <link rel="shortcut icon" href="Final Logo_R.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root{--brand:#1830f4;--muted:#556;--bg:#f7fbff;--card:#fff;--radius:12px}
+    :root{
+      --brand:#1830f4; --muted:#556; --bg:#f7fbff; --card:#fff; --radius:12px;
+      --glass: rgba(255,255,255,0.6);
+      --max-width:1180px;
+    }
     *{box-sizing:border-box}
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;margin:0;background:var(--bg);color:#0b1220}
-    .container{max-width:1180px;margin:0 auto;padding:1.25rem}
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;margin:0;background:linear-gradient(180deg,#f7fbff 0%, #f2f6ff 100%);color:#0b1220;line-height:1.4}
+    .container{max-width:var(--max-width);margin:0 auto;padding:1.25rem}
+
+    /* Header */
     header{display:flex;align-items:center;justify-content:space-between;gap:1rem}
     .brand{display:flex;align-items:center;gap:0.75rem;text-decoration:none;color:inherit}
-    .brand img{height:56px;border-radius:8px}
-    .brand .title{font-weight:700;color:var(--brand)}
-    .lang-switch{display:flex;gap:0.5rem;align-items:center}
+    .brand img{height:56px;width:56px;object-fit:cover;border-radius:8px}
+    .brand .title{font-weight:700;color:var(--brand);font-size:1.05rem}
+    .brand .subtitle{font-size:0.85rem;color:var(--muted)}
+
+    /* Lang + actions */
+    .controls-row{display:flex;gap:0.5rem;align-items:center}
+    .small{font-size:0.9rem;color:var(--muted)}
+    select,input,button{font:inherit}
+    .cta{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem .9rem;background:var(--brand);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;border:none;cursor:pointer}
 
     /* Layout grid */
     .grid{display:grid;grid-template-columns:1fr 360px;gap:1rem;margin-top:1rem}
     @media (max-width:980px){.grid{grid-template-columns:1fr}}
+    @media (max-width:540px){.grid{grid-template-columns:1fr} header{flex-direction:column;align-items:flex-start} .brand .title{font-size:1rem}}
 
     /* Cards */
-    .card{background:var(--card);border-radius:12px;padding:1rem;box-shadow:0 8px 24px rgba(15,23,36,0.06)}
-    h2{margin:0 0 0.5rem 0}
+    .card{background:var(--card);border-radius:var(--radius);padding:1rem;box-shadow:0 8px 24px rgba(15,23,36,0.06)}
+    h2{margin:0 0 .5rem 0}
 
     /* Search / quick filter */
     .controls{display:flex;gap:0.5rem;align-items:center}
-    input[type=search]{flex:1;padding:0.6rem;border-radius:8px;border:1px solid #e6eefc}
-    select{padding:0.55rem;border-radius:8px}
+    input[type=search]{flex:1;padding:0.6rem;border-radius:8px;border:1px solid #e6eefc;background:transparent}
+    select{padding:0.55rem;border-radius:8px;border:1px solid #e6eefc}
 
     /* Scheme cards */
     .schemes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem}
-    .scheme{padding:0.65rem;border-radius:10px;background:linear-gradient(180deg,rgba(24,48,244,0.04),transparent)}
+    .scheme{padding:0.65rem;border-radius:10px;background:linear-gradient(180deg,rgba(24,48,244,0.04),transparent);border:1px solid rgba(24,48,244,0.06)}
     .scheme h3{margin:0 0 0.3rem 0;font-size:1rem}
     .scheme p{margin:0;font-size:0.9rem;color:var(--muted)}
 
     /* Market table */
+    .table-wrap{overflow:auto}
     table{width:100%;border-collapse:collapse}
     th,td{padding:0.6rem;text-align:left;border-bottom:1px solid #f1f5ff}
     th{font-weight:600;font-size:0.95rem}
 
-    /* Right column widgets */
+    /* Widgets */
     .widget{margin-bottom:1rem}
-    .small{font-size:0.9rem;color:var(--muted)}
-
-    /* CTA */
-    .cta{display:inline-block;padding:0.55rem 0.9rem;background:var(--brand);color:#fff;border-radius:10px;text-decoration:none;font-weight:700}
 
     /* Alerts */
     .alert{padding:0.6rem;border-radius:8px;background:#fffbf0;border:1px solid #ffe7b5}
 
     /* Footer */
     footer{margin-top:1.5rem;text-align:center;color:var(--muted)}
+
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(3,10,35,0.45);display:none;align-items:center;justify-content:center;padding:1rem}
+    .modal{background:var(--card);max-width:720px;width:100%;border-radius:12px;padding:1rem;box-shadow:0 20px 50px rgba(2,6,23,0.45)}
+    .modal header{display:flex;justify-content:space-between;align-items:center}
+
+    /* tiny helpers */
+    .muted{color:var(--muted)}
+    .pill{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:#f1f6ff;border:1px solid rgba(24,48,244,0.06);font-size:.85rem}
+
+    /* loading */
+    .loading{opacity:.7;pointer-events:none}
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <a class="brand" href="#">
+      <a class="brand" href="#" aria-label="Agastya home">
         <img src="Final Logo_R.png" alt="Agastya logo" loading="lazy">
         <div>
-          <div class="title">Agastya Farmer Help Portal</div>
-          <div class="small">Info on govt. schemes • market rates • local support</div>
+          <div class="title" id="brandTitle">Agastya Farmer Help Portal</div>
+          <div class="subtitle small">Info on govt. schemes • market rates • local support</div>
         </div>
       </a>
 
-      <div class="lang-switch">
-        <label for="lang" class="small">Language</label>
+      <div class="controls-row" role="region" aria-label="Top controls">
+        <label for="lang" class="small" style="margin-right:.25rem">Language</label>
         <select id="lang" aria-label="Choose language">
           <option value="en">English</option>
           <option value="gu">ગુજરાતી</option>
         </select>
-        <a class="cta" href="#contact">Get Help</a>
+        <a class="cta" id="helpBtn" href="#contact"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM11 17h2v2h-2v-2zM11 7h2v7h-2V7z" fill="#fff"/></svg>Get Help</a>
       </div>
     </header>
 
     <div class="grid">
       <main>
         <!-- Top controls -->
-        <div class="card controls" style="align-items:center">
-          <input id="search" type="search" placeholder="Search crop, scheme or market...">
+        <div class="card controls" style="align-items:center" aria-hidden="false">
+          <input id="search" type="search" placeholder="Search crop, scheme or market..." aria-label="Search">
           <select id="cropFilter" aria-label="Filter by crop">
             <option value="all">All Crops</option>
             <option value="wheat">Wheat</option>
@@ -89,24 +112,24 @@
             <option value="maize">Maize</option>
             <option value="cotton">Cotton</option>
           </select>
-          <button class="cta" id="refreshBtn">Refresh Rates</button>
+          <button class="cta" id="refreshBtn" aria-live="polite">Refresh Rates</button>
         </div>
 
         <!-- Government schemes -->
         <section class="card" id="schemesSection">
           <h2>Government Schemes</h2>
           <p class="small">Latest schemes and benefits you can apply for. Tap a card to read details or get contact help.</p>
-          <div class="schemes" id="schemesList">
+          <div class="schemes" id="schemesList" aria-live="polite" aria-atomic="true">
             <!-- scheme cards inserted by JS -->
           </div>
         </section>
 
         <!-- Market rates -->
         <section class="card" id="ratesSection" style="margin-top:1rem">
-          <h2>Market Rates</h2>
-          <p class="small">Live/estimated local mandi rates for crops and seeds. Rates update from trusted sources — refresh to get latest.</p>
+          <h2>Market Rates <span class="pill small" id="ratesStamp">Updated just now</span></h2>
+          <p class="small">Live/estimated local mandi rates for crops and seeds. Rates may vary by mandi — select district to narrow results.</p>
 
-          <div style="overflow:auto;margin-top:0.75rem">
+          <div class="table-wrap" style="margin-top:0.75rem">
             <table aria-live="polite">
               <thead>
                 <tr><th>Crop</th><th>Variety</th><th>Rate (₹/quintal)</th><th>Change</th></tr>
@@ -134,7 +157,7 @@
         <div class="card widget">
           <h3>Nearby Mandis</h3>
           <p class="small">Select your district to see mandi list and contact numbers.</p>
-          <select id="districtSelect"><option>-- Select District --</option><option>Ahmedabad</option><option>Surat</option><option>Vadodara</option></select>
+          <select id="districtSelect" aria-label="Select district"><option value="">-- Select District --</option><option>Ahmedabad</option><option>Surat</option><option>Vadodara</option></select>
         </div>
 
         <div class="card widget">
@@ -156,80 +179,154 @@
     </footer>
   </div>
 
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" id="modalContent">
+      <header>
+        <h3 id="modalTitle">Scheme details</h3>
+        <button id="closeModal" aria-label="Close modal">Close</button>
+      </header>
+      <div id="modalBody" style="margin-top:.5rem"></div>
+    </div>
+  </div>
+
   <script>
-    // Sample data (replace with API calls to real endpoints)
+    // ---- Sample data (replace with real APIs) ----
     const sampleSchemes = [
-      {id:1,title:'PM-Kisan Samman Nidhi',desc:'Income support of ₹6000/year. Check eligibility and status.'},
-      {id:2,title:'Pradhan Mantri Fasal Bima Yojana',desc:'Crop insurance for notified crops against natural calamities.'},
-      {id:3,title:'Soil Health Card',desc:'Get soil testing and tailored fertilizer recommendations.'}
+      {id:1,title:'PM-Kisan Samman Nidhi',desc:'Income support of \u20B96000/year. Check eligibility and status.',link:'#'},
+      {id:2,title:'Pradhan Mantri Fasal Bima Yojana',desc:'Crop insurance for notified crops against natural calamities.',link:'#'},
+      {id:3,title:'Soil Health Card',desc:'Get soil testing and tailored fertilizer recommendations.',link:'#'}
     ];
 
-    const sampleRates = [
+    const baseRates = [
       {crop:'Wheat',variety:'Common',rate:2200,change:'+10'},
       {crop:'Rice',variety:'Basmati',rate:4800,change:'-20'},
       {crop:'Maize',variety:'Hybrid',rate:1900,change:'+5'},
       {crop:'Cotton',variety:'Medium Staple',rate:5400,change:'+0'}
     ];
 
-    // render schemes
-    const schemesList = document.getElementById('schemesList');
-    sampleSchemes.forEach(s=>{
-      const el = document.createElement('div'); el.className='scheme';
-      el.innerHTML = `<h3>${s.title}</h3><p>${s.desc}</p><div style="margin-top:0.5rem"><a href='#' onclick=showScheme(${s.id}) class='small'>Read more</a></div>`;
-      schemesList.appendChild(el);
-    });
+    // ---- Utilities ----
+    const $ = id => document.getElementById(id);
+    function formatINR(n){ return '₹ ' + n.toLocaleString('en-IN'); }
+    function debounce(fn,wait=300){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); } }
 
-    function showScheme(id){
-      const s = sampleSchemes.find(x=>x.id===id);
-      alert(s.title + '\n\n' + s.desc + '\n\nFor application help, contact your local office.');
+    // ---- Render functions ----
+    function renderSchemes(list){
+      const container = $('schemesList'); container.innerHTML='';
+      list.forEach(s=>{
+        const el = document.createElement('div'); el.className='scheme';
+        el.innerHTML = `<h3>${s.title}</h3><p>${s.desc}</p><div style="margin-top:0.5rem"><a href='${s.link}' data-id='${s.id}' class='small readMore'>Read more</a></div>`;
+        container.appendChild(el);
+      });
+      // attach handlers
+      container.querySelectorAll('.readMore').forEach(a=>a.addEventListener('click', e=>{ e.preventDefault(); openSchemeModal(a.dataset.id); }));
     }
 
-    // render rates
-    const ratesTable = document.getElementById('ratesTable');
     function renderRates(data){
-      ratesTable.innerHTML = '';
+      const tbody = $('ratesTable'); tbody.innerHTML='';
       data.forEach(r=>{
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${r.crop}</td><td>${r.variety}</td><td>₹ ${r.rate}</td><td>${r.change}</td>`;
-        ratesTable.appendChild(tr);
-      })
+        tr.innerHTML = `<td>${r.crop}</td><td>${r.variety}</td><td>${formatINR(r.rate)}</td><td>${r.change}</td>`;
+        tbody.appendChild(tr);
+      });
+      $('ratesStamp').textContent = 'Updated: ' + new Date().toLocaleTimeString();
     }
-    renderRates(sampleRates);
 
-    // language toggle (basic static swap)
-    const lang = document.getElementById('lang');
-    const advisoryText = document.getElementById('advisoryText');
-    lang.addEventListener('change', ()=>{
-      if(lang.value==='gu'){
-        document.querySelector('.title').textContent = 'અગાસ્ત્ય ફાર્મર હેલ્પ પોર્ટલ';
-        advisoryText.textContent = 'તમારા પાક અને ભાષા પસંદ કરો જેથી કસ્ટમ સલાહ મળી શકે.';
-      } else {
-        document.querySelector('.title').textContent = 'Agastya Farmer Help Portal';
-        advisoryText.textContent = 'Select your crop and language to see tailored advisories — sowing time, pest alerts, storage tips.';
-      }
-    });
+    // ---- Modal ----
+    function openSchemeModal(id){
+      const s = sampleSchemes.find(x=>x.id==id) || sampleSchemes[0];
+      $('modalTitle').textContent = s.title;
+      $('modalBody').innerHTML = `<p>${s.desc}</p><p class="small">For application help, contact your local office or visit the official portal.</p>`;
+      $('modal').style.display = 'flex'; $('modal').setAttribute('aria-hidden','false');
+      $('closeModal').focus();
+    }
+    function closeModal(){ $('modal').style.display='none'; $('modal').setAttribute('aria-hidden','true'); }
 
-    // Refresh rates (placeholder to show process)
-    document.getElementById('refreshBtn').addEventListener('click', ()=>{
-      // In production: fetch('/api/market-rates?district=...') etc.
-      document.getElementById('refreshBtn').textContent = 'Refreshing...';
-      setTimeout(()=>{ renderRates(sampleRates); document.getElementById('refreshBtn').textContent='Refresh Rates'; alert('Rates updated (sample data). In real app this will call government/market APIs).'); },900);
-    });
+    // ---- Simulated API calls ----
+    async function fetchRates(district=''){
+      // placeholder for real fetch: return fetch(`/api/rates?district=${district}`).then(r=>r.json())
+      // Simulate slight random changes
+      await new Promise(r=>setTimeout(r, 600));
+      const data = baseRates.map(r=>({ ...r, rate: Math.round(r.rate * (1 + (Math.random()-0.48)/50)), change: (Math.random()>0.5?'+':'-') + Math.round(Math.random()*25) }));
+      return data;
+    }
 
-    // Seed lookup (sample)
-    document.getElementById('seedLookup').addEventListener('click', ()=>{
-      alert('Seed prices (sample): Wheat seed - ₹450/kg, Rice seed - ₹120/kg. Replace with real supplier data.');
-    });
+    // ---- App state and interactions ----
+    async function refreshData(){
+      const btn = $('refreshBtn'); btn.classList.add('loading'); btn.textContent='Refreshing...';
+      try{
+        const district = $('districtSelect').value;
+        const rates = await fetchRates(district);
+        renderRates(rates);
+      }catch(e){ console.error(e); alert('Could not refresh rates.'); }
+      btn.classList.remove('loading'); btn.textContent='Refresh Rates';
+    }
 
-    // small helpers
-    document.getElementById('year').textContent = new Date().getFullYear();
-    document.getElementById('search').addEventListener('input', (e)=>{
-      const v = e.target.value.toLowerCase();
-      // simple search across schemes and rates
-      const filteredRates = sampleRates.filter(r=> r.crop.toLowerCase().includes(v) || r.variety.toLowerCase().includes(v));
-      renderRates(filteredRates.length?filteredRates:sampleRates);
-      const filteredSchemes = sampleSchemes.filter(s=> s.title.toLowerCase().includes(v) || s.desc.toLowerCase().includes(v));
-      schemesList.innerHTML=''; filteredSchemes.forEach(s=>{ const el=document.createElement('div');el.className='scheme'; el.innerHTML=`<h3>${s.title}</h3><p>${s.desc}</p><div style="margin-top:0.5rem"><a href='#' onclick=showScheme(${s.id}) class='small'>Read more</a></div>`; schemesList.appendChild(el)});
+    function openSeedLookup(){
+      // In production call seed supplier API
+      alert('Seed prices (sample): Wheat seed - \u20B9450/kg, Rice seed - \u20B9120/kg. Replace with real supplier data.');
+    }
+
+    // ---- Search & filtering ----
+    function applyFilters(){
+      const q = $('search').value.trim().toLowerCase();
+      const crop = $('cropFilter').value;
+      const filteredRates = baseRates.filter(r=>{
+        const matchesQ = !q || r.crop.toLowerCase().includes(q) || r.variety.toLowerCase().includes(q);
+        const matchesCrop = crop==='all' || r.crop.toLowerCase()===crop;
+        return matchesQ && matchesCrop;
+      });
+      renderRates(filteredRates.length?filteredRates:baseRates);
+
+      const filteredSchemes = sampleSchemes.filter(s=> !q || s.title.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q));
+      renderSchemes(filteredSchemes.length?filteredSchemes:sampleSchemes);
+    }
+
+    // ---- Language (simple) ----
+    const translations = {
+      gu: {
+        title: 'અગાસ્ત્ય ફાર્મર હેલ્પ પોર્ટલ',
+        advisory: 'તમારા પાક અને ભાષા પસંદ કરો જેથી કસ્ટમ સલાહ મળી શકે.'
+      },
+      en: { title: 'Agastya Farmer Help Portal', advisory: 'Select your crop and language to see tailored advisories — sowing time, pest alerts, storage tips.' }
+    };
+
+    function setLanguage(lang){
+      localStorage.setItem('agastya_lang', lang);
+      $('lang').value = lang;
+      const t = translations[lang] || translations.en;
+      $('brandTitle').textContent = t.title;
+      $('advisoryText').textContent = t.advisory;
+    }
+
+    // ---- Init ----
+    document.addEventListener('DOMContentLoaded', async ()=>{
+      // initial rendering
+      renderSchemes(sampleSchemes);
+      renderRates(baseRates);
+      $('year').textContent = new Date().getFullYear();
+
+      // language from storage
+      setLanguage(localStorage.getItem('agastya_lang') || 'en');
+
+      // events
+      $('lang').addEventListener('change', e=>setLanguage(e.target.value));
+      $('refreshBtn').addEventListener('click', refreshData);
+      $('seedLookup').addEventListener('click', openSeedLookup);
+      $('districtSelect').addEventListener('change', refreshData);
+      $('closeModal').addEventListener('click', closeModal);
+      $('modal').addEventListener('click', e=>{ if(e.target=== $('modal')) closeModal(); });
+
+      // search & filters (debounced)
+      const debounced = debounce(applyFilters, 300);
+      $('search').addEventListener('input', debounced);
+      $('cropFilter').addEventListener('change', applyFilters);
+
+      // keyboard accessibility for modal close
+      document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+
+      // small UX: open first scheme on mobile to highlight content
+      if(window.innerWidth < 600) setTimeout(()=>openSchemeModal(1), 700);
     });
   </script>
 </body>
