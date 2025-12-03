@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -6,327 +6,401 @@
   <meta name="theme-color" content="#1830f4">
   <title>Agastya — Farmer Help Portal</title>
   <link rel="shortcut icon" href="Final Logo_R.png" type="image/png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
-    :root{
-      --brand:#1830f4; --muted:#556; --bg:#f7fbff; --card:#fff; --radius:12px;
-      --glass: rgba(255,255,255,0.6);
-      --max-width:1180px;
+    :root {
+      --brand: #1830f4;
+      --brand-light: #e6eafc;
+      --text: #0b1220;
+      --muted: #555a66;
+      --bg: #f7fbff;
+      --card: #ffffff;
+      --border: #e6eefc;
+      --radius: 14px;
+      --shadow: 0 8px 28px rgba(15,23,36,0.08);
+      --transition: all 0.2s ease;
+      --max-width: 1240px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;margin:0;background:linear-gradient(180deg,#f7fbff 0%, #f2f6ff 100%);color:#0b1220;line-height:1.4}
-    .container{max-width:var(--max-width);margin:0 auto;padding:1.25rem}
 
-    /* Header */
-    header{display:flex;align-items:center;justify-content:space-between;gap:1rem}
-    .brand{display:flex;align-items:center;gap:0.75rem;text-decoration:none;color:inherit}
-    .brand img{height:56px;width:56px;object-fit:cover;border-radius:8px}
-    .brand .title{font-weight:700;color:var(--brand);font-size:1.05rem}
-    .brand .subtitle{font-size:0.85rem;color:var(--muted)}
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(180deg, #f7fbff 0%, #f0f5ff 100%);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    [lang="gu"] { font-family: 'Noto Sans Gujarati', 'Inter', sans-serif; }
 
-    /* Lang + actions */
-    .controls-row{display:flex;gap:0.5rem;align-items:center}
-    .small{font-size:0.9rem;color:var(--muted)}
-    select,input,button{font:inherit}
-    .cta{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem .9rem;background:var(--brand);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;border:none;cursor:pointer}
+    .container { max-width: var(--max-width); margin: 0 auto; padding: 1.5rem; }
 
-    /* Layout grid */
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:1rem;margin-top:1rem}
-    @media (max-width:980px){.grid{grid-template-columns:1fr}}
-    @media (max-width:540px){.grid{grid-template-columns:1fr} header{flex-direction:column;align-items:flex-start} .brand .title{font-size:1rem}}
+    header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .brand { display: flex; align-items: center; gap: 0.9rem; text-decoration: none; color: inherit; }
+    .brand img { height: 60px; width: 60px; border-radius: 12px; object-fit: cover; }
+    .brand .title { font-weight: 800; font-size: 1.35rem; color: var(--brand); margin: 0; }
+    .brand .subtitle { font-size: 0.9rem; color: var(--muted); margin: 0; }
 
-    /* Cards */
-    .card{background:var(--card);border-radius:var(--radius);padding:1rem;box-shadow:0 8px 24px rgba(15,23,36,0.06)}
-    h2{margin:0 0 .5rem 0}
+    .controls-row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+    select, input, button { font: inherit; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 1rem; border: none; border-radius: 12px;
+      font-weight: 600; cursor: pointer; transition: var(--transition);
+    }
+    .btn-primary { background: var(--brand); color: white; }
+    .btn-primary:hover { background: #0f26d1; transform: translateY(-1px); }
+    .btn-loading { opacity: 0.7; pointer-events: none; }
 
-    /* Search / quick filter */
-    .controls{display:flex;gap:0.5rem;align-items:center}
-    input[type=search]{flex:1;padding:0.6rem;border-radius:8px;border:1px solid #e6eefc;background:transparent}
-    select{padding:0.55rem;border-radius:8px;border:1px solid #e6eefc}
+    .grid { display: grid; grid-template-columns: 1fr 380px; gap: 1.5rem; margin-top: 1.5rem; }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 540px) { header { flex-direction: column; align-items: stretch; } .controls-row { justify-content: stretch; } }
 
-    /* Scheme cards */
-    .schemes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem}
-    .scheme{padding:0.65rem;border-radius:10px;background:linear-gradient(180deg,rgba(24,48,244,0.04),transparent);border:1px solid rgba(24,48,244,0.06)}
-    .scheme h3{margin:0 0 0.3rem 0;font-size:1rem}
-    .scheme p{margin:0;font-size:0.9rem;color:var(--muted)}
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    h2 { margin: 0 0 0.5rem; font-size: 1.4rem; color: var(--text); }
+    .small { font-size: 0.9rem; color: var(--muted); }
 
-    /* Market table */
-    .table-wrap{overflow:auto}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:0.6rem;text-align:left;border-bottom:1px solid #f1f5ff}
-    th{font-weight:600;font-size:0.95rem}
+    /* Search & Filters */
+    .search-group {
+      display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
+      padding: 1rem; background: var(--brand-light); border-radius: var(--radius); margin-bottom: 1rem;
+    }
+    input[type="search"] {
+      flex: 1; min-width: 200px; padding: 0.75rem 1rem;
+      border: 1px solid var(--border); border-radius: 10px;
+      font-size: 1rem;
+    }
+    select { padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border); }
 
-    /* Widgets */
-    .widget{margin-bottom:1rem}
+    /* Schemes Grid */
+    .schemes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .scheme {
+      padding: 1.25rem; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(24,48,244,0.05), transparent);
+      border: 1px solid rgba(24,48,244,0.1);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .scheme:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(24,48,244,0.12); }
+    .scheme h3 { margin: 0 0 0.5rem; font-size: 1.1rem; color: var(--brand); }
 
-    /* Alerts */
-    .alert{padding:0.6rem;border-radius:8px;background:#fffbf0;border:1px solid #ffe7b5}
+    /* Table */
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 0.85rem 0.5rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: var(--brand-light); font-weight: 600; }
+    .change-up { color: #059669; }
+    .change-down { color: #dc2626; }
 
-    /* Footer */
-    footer{margin-top:1.5rem;text-align:center;color:var(--muted)}
+    .pill {
+      display: inline-block; padding: 0.35rem 0.75rem;
+      background: #eff6ff; color: var(--brand); font-weight: 600;
+      border-radius: 999px; font-size: 0.8rem;
+    }
+
+    .alert {
+      padding: 1rem; background: #fffbeb; border: 1px solid #fde68a;
+      border-radius: 10px; color: #92400e;
+    }
+
+    footer { margin-top: 3rem; text-align: center; color: var(--muted); padding: 2rem 0; }
 
     /* Modal */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(3,10,35,0.45);display:none;align-items:center;justify-content:center;padding:1rem}
-    .modal{background:var(--card);max-width:720px;width:100%;border-radius:12px;padding:1rem;box-shadow:0 20px 50px rgba(2,6,23,0.45)}
-    .modal header{display:flex;justify-content:space-between;align-items:center}
-
-    /* tiny helpers */
-    .muted{color:var(--muted)}
-    .pill{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:#f1f6ff;border:1px solid rgba(24,48,244,0.06);font-size:.85rem}
-
-    /* loading */
-    .loading{opacity:.7;pointer-events:none}
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      display: none; align-items: center; justify-content: center;
+      padding: 1rem; z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+    .modal-backdrop[open] { display: flex; }
+    .modal {
+      background: white; max-width: 640px; width: 100%;
+      border-radius: var(--radius); padding: 1.5rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; }
+    .close-btn {
+      background: none; border: none; font-size: 1.8rem; cursor: pointer;
+      color: var(--muted); padding: 0.25rem;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <a class="brand" href="#" aria-label="Agastya home">
-        <img src="Final Logo_R.png" alt="Agastya logo" loading="lazy">
+      <a href="#" class="brand" aria-label="Agastya Home">
+        <img src="Final Logo_R.png" alt="Agastya Logo" loading="lazy">
         <div>
-          <div class="title" id="brandTitle">Agastya Farmer Help Portal</div>
-          <div class="subtitle small">Info on govt. schemes • market rates • local support</div>
+          <h1 class="title" id="brandTitle">Agastya Farmer Help Portal</h1>
+          <p class="subtitle small">સરકારી યોજનાઓ • બજાર ભાવ • સ્થાનિક મદદ</p>
         </div>
       </a>
 
-      <div class="controls-row" role="region" aria-label="Top controls">
-        <label for="lang" class="small" style="margin-right:.25rem">Language</label>
+      <div class="controls-row">
+        <label for="lang" class="small sr-only">Language</label>
         <select id="lang" aria-label="Choose language">
           <option value="en">English</option>
           <option value="gu">ગુજરાતી</option>
+          <option value="hi">हिन्दी</option>
         </select>
-        <a class="cta" id="helpBtn" href="#contact"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM11 17h2v2h-2v-2zM11 7h2v7h-2V7z" fill="#fff"/></svg>Get Help</a>
+        <a href="#contact" class="btn btn-primary" id="helpBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 17h-2v-2h2v2zm1.2-5.5l-.9.4a3.2 3.2 0 01-1.3.6 2.5 2.5 0 01-2.2-.4 2 2 0 01-.8-1.7c0-1 .5-1.8 1.4-2.4.7-.5 1.6-.9 2.6-1.3.5-.2.9-.5 1.1-.9.3-.5.4-1 .4-1.6 0-.9-.4-1.7-1.1-2.2-.7-.5-1.6-.8-2.6-.8-1.1 0-2 .3-2.7.9-.7.6-1.1 1.5-1.1 2.5h-2c0-1.4.6-2.6 1.7-3.5C8.6 4 9.9 3.5 11.3 3.5c1.7 0 3.1.5 4.2 1.5 1 1 1.5 2.3 1.5 3.9 0 1-.3 1.9-1 2.7-.6.8-1.5 1.5-2.8 2z"/></svg>
+          Get Help
+        </a>
       </div>
     </header>
 
     <div class="grid">
       <main>
-        <!-- Top controls -->
-        <div class="card controls" style="align-items:center" aria-hidden="false">
-          <input id="search" type="search" placeholder="Search crop, scheme or market..." aria-label="Search">
-          <select id="cropFilter" aria-label="Filter by crop">
-            <option value="all">All Crops</option>
-            <option value="wheat">Wheat</option>
-            <option value="rice">Rice</option>
-            <option value="maize">Maize</option>
-            <option value="cotton">Cotton</option>
-          </select>
-          <button class="cta" id="refreshBtn" aria-live="polite">Refresh Rates</button>
+        <div class="card">
+          <div class="search-group">
+            <input type="search" id="search" placeholder="પાક, યોજના કે બજાર શોધો..." aria-label="Search everything">
+            <select id="cropFilter" aria-label="Filter by crop">
+              <option value="">All Crops</option>
+              <option value="wheat">ઘઉં Wheat</option>
+              <option value="paddy">ડાંગર Paddy</option>
+              <option value="cotton">કપાસ Cotton</option>
+              <option value="groundnut">મગફળી Groundnut</option>
+              <option value="maize">મકાઈ Maize</option>
+            </select>
+            <button class="btn btn-primary" id="refreshBtn">Refresh Rates</button>
+          </div>
         </div>
 
-        <!-- Government schemes -->
-        <section class="card" id="schemesSection">
-          <h2>Government Schemes</h2>
-          <p class="small">Latest schemes and benefits you can apply for. Tap a card to read details or get contact help.</p>
-          <div class="schemes" id="schemesList" aria-live="polite" aria-atomic="true">
-            <!-- scheme cards inserted by JS -->
-          </div>
+        <!-- Schemes -->
+        <section class="card" id="schemesSection" aria-labelledby="schemesHeading">
+          <h2 id="schemesHeading">Government Schemes</h2>
+          <p class="small">ટેપ કરો વધુ માહિતી અને અરજી માટે.</p>
+          <div class="schemes" id="schemesList" role="list"></div>
         </section>
 
-        <!-- Market rates -->
-        <section class="card" id="ratesSection" style="margin-top:1rem">
-          <h2>Market Rates <span class="pill small" id="ratesStamp">Updated just now</span></h2>
-          <p class="small">Live/estimated local mandi rates for crops and seeds. Rates may vary by mandi — select district to narrow results.</p>
+        <!-- Market Rates -->
+        <section class="card" id="ratesSection" style="margin-top:1.5rem">
+          <h2>Live Market Rates <span class="pill" id="ratesStamp" aria-live="polite">Just now</span></h2>
+          <p class="small">આજના મંડી ભાવ (₹/ક્વિન્ટલ) — જિલ્લો પસંદ કરો.</p>
 
-          <div class="table-wrap" style="margin-top:0.75rem">
+          <div style="overflow-x:auto; margin-top:1rem;">
             <table aria-live="polite">
               <thead>
-                <tr><th>Crop</th><th>Variety</th><th>Rate (₹/quintal)</th><th>Change</th></tr>
+                <tr><th>પાક</th><th>જાત</th><th>ભાવ (₹/ક્વિન્ટલ)</th><th>ફેરફાર</th></tr>
               </thead>
-              <tbody id="ratesTable">
-                <!-- rows inserted by JS -->
-              </tbody>
+              <tbody id="ratesTable"></tbody>
             </table>
           </div>
-        </section>
-
-        <!-- Tips & Advisory -->
-        <section class="card" style="margin-top:1rem">
-          <h2>Tips & Advisory</h2>
-          <p class="small" id="advisoryText">Select your crop and language to see tailored advisories — sowing time, pest alerts, storage tips.</p>
         </section>
       </main>
 
       <aside>
-        <div class="card widget">
+        <div class="card">
           <h3>Quick Alerts</h3>
-          <div class="alert" id="alerts">No new alerts</div>
+          <div class="alert" id="alerts">No active alerts for your region.</div>
         </div>
 
-        <div class="card widget">
-          <h3>Nearby Mandis</h3>
-          <p class="small">Select your district to see mandi list and contact numbers.</p>
-          <select id="districtSelect" aria-label="Select district"><option value="">-- Select District --</option><option>Ahmedabad</option><option>Surat</option><option>Vadodara</option></select>
+        <div class="card">
+          <h3>Select District</h3>
+          <select id="districtSelect" style="width:100%; padding:0.75rem; margin-top:0.5rem;">
+            <option value="">-- Choose District --</option>
+            <option value="ahmedabad">Ahmedabad</option>
+            <option value="surat">Surat</option>
+            <option value="rajkot">Rajkot</option>
+            <option value="vadodara">Vadodara</option>
+            <option value="gandhinagar">Gandhinagar</option>
+            <option value="bhavnagar">Bhavnagar</option>
+            <option value="jamnagar">Jamnagar</option>
+          </select>
         </div>
 
-        <div class="card widget">
-          <h3>Seed Price Lookup</h3>
-          <p class="small">Check common seed pack rates.</p>
-          <button id="seedLookup" class="cta">Lookup Seeds</button>
+        <div class="card">
+          <h3>Seed Prices</h3>
+          <button class="btn btn-primary" id="seedLookup" style="width:100%; margin-top:0.5rem;">Check Seed Rates</button>
         </div>
 
-        <div class="card widget" id="supportCard">
-          <h3>Get Expert Help</h3>
-          <p class="small">Call or message local agriculture extension officers.</p>
-          <a class="cta" href="#contact">Contact</a>
+        <div class="card">
+          <h3>Call Expert</h3>
+          <p class="small">Local KVK / Agriculture Officer</p>
+          <a href="tel:18001801551" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:0.5rem;">
+            Call Helpline
+          </a>
         </div>
       </aside>
     </div>
 
     <footer>
-      © <span id="year"></span> Agastya — Farmer Help Portal
+      © <span id="year"></span> Agastya — Made with ❤️ for Indian Farmers
     </footer>
   </div>
 
   <!-- Modal -->
-  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal" id="modalContent">
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
       <header>
-        <h3 id="modalTitle">Scheme details</h3>
-        <button id="closeModal" aria-label="Close modal">Close</button>
+        <h3 id="modalTitle">Scheme Details</h3>
+        <button class="close-btn" id="closeModal" aria-label="Close">×</button>
       </header>
-      <div id="modalBody" style="margin-top:.5rem"></div>
+      <div id="modalBody"></div>
     </div>
   </div>
 
   <script>
-    // ---- Sample data (replace with real APIs) ----
-    const sampleSchemes = [
-      {id:1,title:'PM-Kisan Samman Nidhi',desc:'Income support of \u20B96000/year. Check eligibility and status.',link:'#'},
-      {id:2,title:'Pradhan Mantri Fasal Bima Yojana',desc:'Crop insurance for notified crops against natural calamities.',link:'#'},
-      {id:3,title:'Soil Health Card',desc:'Get soil testing and tailored fertilizer recommendations.',link:'#'}
-    ];
-
-    const baseRates = [
-      {crop:'Wheat',variety:'Common',rate:2200,change:'+10'},
-      {crop:'Rice',variety:'Basmati',rate:4800,change:'-20'},
-      {crop:'Maize',variety:'Hybrid',rate:1900,change:'+5'},
-      {crop:'Cotton',variety:'Medium Staple',rate:5400,change:'+0'}
-    ];
-
-    // ---- Utilities ----
-    const $ = id => document.getElementById(id);
-    function formatINR(n){ return '₹ ' + n.toLocaleString('en-IN'); }
-    function debounce(fn,wait=300){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); } }
-
-    // ---- Render functions ----
-    function renderSchemes(list){
-      const container = $('schemesList'); container.innerHTML='';
-      list.forEach(s=>{
-        const el = document.createElement('div'); el.className='scheme';
-        el.innerHTML = `<h3>${s.title}</h3><p>${s.desc}</p><div style="margin-top:0.5rem"><a href='${s.link}' data-id='${s.id}' class='small readMore'>Read more</a></div>`;
-        container.appendChild(el);
-      });
-      // attach handlers
-      container.querySelectorAll('.readMore').forEach(a=>a.addEventListener('click', e=>{ e.preventDefault(); openSchemeModal(a.dataset.id); }));
-    }
-
-    function renderRates(data){
-      const tbody = $('ratesTable'); tbody.innerHTML='';
-      data.forEach(r=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${r.crop}</td><td>${r.variety}</td><td>${formatINR(r.rate)}</td><td>${r.change}</td>`;
-        tbody.appendChild(tr);
-      });
-      $('ratesStamp').textContent = 'Updated: ' + new Date().toLocaleTimeString();
-    }
-
-    // ---- Modal ----
-    function openSchemeModal(id){
-      const s = sampleSchemes.find(x=>x.id==id) || sampleSchemes[0];
-      $('modalTitle').textContent = s.title;
-      $('modalBody').innerHTML = `<p>${s.desc}</p><p class="small">For application help, contact your local office or visit the official portal.</p>`;
-      $('modal').style.display = 'flex'; $('modal').setAttribute('aria-hidden','false');
-      $('closeModal').focus();
-    }
-    function closeModal(){ $('modal').style.display='none'; $('modal').setAttribute('aria-hidden','true'); }
-
-    // ---- Simulated API calls ----
-    async function fetchRates(district=''){
-      // placeholder for real fetch: return fetch(`/api/rates?district=${district}`).then(r=>r.json())
-      // Simulate slight random changes
-      await new Promise(r=>setTimeout(r, 600));
-      const data = baseRates.map(r=>({ ...r, rate: Math.round(r.rate * (1 + (Math.random()-0.48)/50)), change: (Math.random()>0.5?'+':'-') + Math.round(Math.random()*25) }));
-      return data;
-    }
-
-    // ---- App state and interactions ----
-    async function refreshData(){
-      const btn = $('refreshBtn'); btn.classList.add('loading'); btn.textContent='Refreshing...';
-      try{
-        const district = $('districtSelect').value;
-        const rates = await fetchRates(district);
-        renderRates(rates);
-      }catch(e){ console.error(e); alert('Could not refresh rates.'); }
-      btn.classList.remove('loading'); btn.textContent='Refresh Rates';
-    }
-
-    function openSeedLookup(){
-      // In production call seed supplier API
-      alert('Seed prices (sample): Wheat seed - \u20B9450/kg, Rice seed - \u20B9120/kg. Replace with real supplier data.');
-    }
-
-    // ---- Search & filtering ----
-    function applyFilters(){
-      const q = $('search').value.trim().toLowerCase();
-      const crop = $('cropFilter').value;
-      const filteredRates = baseRates.filter(r=>{
-        const matchesQ = !q || r.crop.toLowerCase().includes(q) || r.variety.toLowerCase().includes(q);
-        const matchesCrop = crop==='all' || r.crop.toLowerCase()===crop;
-        return matchesQ && matchesCrop;
-      });
-      renderRates(filteredRates.length?filteredRates:baseRates);
-
-      const filteredSchemes = sampleSchemes.filter(s=> !q || s.title.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q));
-      renderSchemes(filteredSchemes.length?filteredSchemes:sampleSchemes);
-    }
-
-    // ---- Language (simple) ----
+    // Real Gujarati + English translations
     const translations = {
-      gu: {
-        title: 'અગાસ્ત્ય ફાર્મર હેલ્પ પોર્ટલ',
-        advisory: 'તમારા પાક અને ભાષા પસંદ કરો જેથી કસ્ટમ સલાહ મળી શકે.'
+      en: {
+        title: "Agastya Farmer Help Portal",
+        subtitle: "Govt schemes • Market rates • Local help",
+        searchPlaceholder: "Search crop, scheme or market...",
+        schemesHeading: "Government Schemes",
+        schemesDesc: "Tap any card for details and application help.",
+        noResults: "No schemes found.",
+        ratesHeading: "Today’s Mandi Rates",
+        loading: "Loading...",
+        refresh: "Refresh Rates",
+        refreshing: "Refreshing...",
+        updated: "Updated"
       },
-      en: { title: 'Agastya Farmer Help Portal', advisory: 'Select your crop and language to see tailored advisories — sowing time, pest alerts, storage tips.' }
+      gu: {
+        title: "અગાસ્ત્ય ખેડૂત મદદ પોર્ટલ",
+        subtitle: "સરકારી યોજનાઓ • બજાર ભાવ • સ્થાનિક મદદ",
+        searchPlaceholder: "પાક, યોજના કે બજાર શોધો...",
+        schemesHeading: "સરકારી યોજનાઓ",
+        schemesDesc: "વધુ માહિતી અને અરજી માટે કાર્ડ પર ટેપ કરો.",
+        noResults: "કોઈ યોજના મળી નહીં.",
+        ratesHeading: "આજના મંડી ભાવ",
+        loading: "લોડ થઈ રહ્યું છે...",
+        refresh: "ભાવ રિફ્રેશ કરો",
+        refreshing: "રિફ્રેશ થઈ રહ્યું છે...",
+        updated: "અપડેટેડ"
+      }
     };
 
-    function setLanguage(lang){
-      localStorage.setItem('agastya_lang', lang);
-      $('lang').value = lang;
-      const t = translations[lang] || translations.en;
-      $('brandTitle').textContent = t.title;
-      $('advisoryText').textContent = t.advisory;
+    // Realistic sample data
+    const schemes = [
+      {id:1, title:{en:"PM-KISAN Samman Nidhi", gu:"પીએમ-કિસાન સન્માન નિધિ"}, desc:{en:"₹6,000 per year direct to bank", gu:"વાર્ષિક ₹૬,૦૦૦ સીધા બેંકમાં"}},
+      {id:2, title:{en:"PM Fasal Bima Yojana", gu:"પીએમ ફસલ બીમા યોજના"}, desc:{en:"Low premium crop insurance", gu:"ઓછા પ્રીમિયમે પાક વીમો"}},
+      {id:3, title:{en:"Soil Health Card", gu:"માટી આરોગ્ય કાર્ડ"}, desc:{en:"Free soil testing & advice", gu:"મફત માટી પરીક્ષણ અને સલાહ"}},
+      {id:4, title:{en:"Kisan Credit Card", gu:"ખેડૂત ક્રેડિટ કાર્ડ"}, desc:{en:"Easy farm loans @4% interest", gu:"૪% વ્યાજે સરળ લોન"}}
+    ];
+
+    let currentRates = [];
+
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+
+    function t(key) {
+      const lang = document.documentElement.lang || 'en';
+      return translations[lang]?.[key] || translations.en[key];
     }
 
-    // ---- Init ----
-    document.addEventListener('DOMContentLoaded', async ()=>{
-      // initial rendering
-      renderSchemes(sampleSchemes);
-      renderRates(baseRates);
-      $('year').textContent = new Date().getFullYear();
+    function renderSchemes() {
+      const container = $('#schemesList');
+      const lang = document.documentElement.lang;
+      container.innerHTML = schemes.map(s => `
+        <article class="scheme" role="listitem" tabindex="0" data-id="${s.id}">
+          <h3>${s.title[lang] || s.title.en}</h3>
+          <p>${s.desc[lang] || s.desc.en}</p>
+        </article>
+      `).join('');
 
-      // language from storage
-      setLanguage(localStorage.getItem('agastya_lang') || 'en');
+      container.querySelectorAll('.scheme').forEach(el => {
+        el.addEventListener('click', () => openModal(el.dataset.id));
+        el.addEventListener('keydown', e => e.key === 'Enter' && openModal(el.dataset.id));
+      });
+    }
 
-      // events
-      $('lang').addEventListener('change', e=>setLanguage(e.target.value));
-      $('refreshBtn').addEventListener('click', refreshData);
-      $('seedLookup').addEventListener('click', openSeedLookup);
-      $('districtSelect').addEventListener('change', refreshData);
-      $('closeModal').addEventListener('click', closeModal);
-      $('modal').addEventListener('click', e=>{ if(e.target=== $('modal')) closeModal(); });
+    function renderRates(data) {
+      const tbody = $('#ratesTable');
+      tbody.innerHTML = data.map(r => `
+        <tr>
+          <td><strong>${r.crop}</strong></td>
+          <td>${r.variety}</td>
+          <td>₹${r.rate.toLocaleString('en-IN')}</td>
+          <td class="${r.change > 0 ? 'change-up' : r.change < 0 ? 'change-down' : ''}">
+            ${r.change > 0 ? '↑' : r.change < 0 ? '↓' : '→'} ${Math.abs(r.change)}
+          </td>
+        </tr>
+      `).join('');
+      $('#ratesStamp').textContent = `${t('updated')}: ${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+    }
 
-      // search & filters (debounced)
-      const debounced = debounce(applyFilters, 300);
-      $('search').addEventListener('input', debounced);
-      $('cropFilter').addEventListener('change', applyFilters);
+    function openModal(id) {
+      const scheme = schemes.find(s => s.id == id);
+      const lang = document.documentElement.lang;
+      $('#modalTitle').textContent = scheme.title[lang] || scheme.title.en;
+      $('#modalBody').innerHTML = `
+        <p><strong>${scheme.desc[lang] || scheme.desc.en}</strong></p>
+        <p style="margin-top:1rem;">For application, visit your Gram Panchayat, CSC center or call 1800-180-1551</p>
+      `;
+      $('#modal').setAttribute('open', '');
+      document.body.style.overflow = 'hidden';
+      $('#closeModal').focus();
+    }
 
-      // keyboard accessibility for modal close
-      document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+    function closeModal() {
+      $('#modal').removeAttribute('open');
+      document.body.style.overflow = '';
+    }
 
-      // small UX: open first scheme on mobile to highlight content
-      if(window.innerWidth < 600) setTimeout(()=>openSchemeModal(1), 700);
+    async function refreshRates() {
+      const btn = $('#refreshBtn');
+      btn.classList.add('btn-loading');
+      btn.textContent = t('refreshing');
+
+      await new Promise(r => setTimeout(r, 800));
+
+      currentRates = [
+        {crop:"ઘઉં Wheat", variety:"Lok-1", rate:2275, change:15},
+        {crop:"ચોખા Paddy", variety:"GR-11", rate:1920, change:-10},
+        {crop:"કપાસ Cotton", variety:"V-797", rate:7450, change:50},
+        {crop:"મગફળી Groundnut", variety:"GG-20", rate:6120, change:30}
+      ];
+
+      renderRates(currentRates);
+      btn.classList.remove('btn-loading');
+      btn.textContent = t('refresh');
+    }
+
+    function setLanguage(lang) {
+      document.documentElement.lang = lang;
+      localStorage.setItem('agastya_lang', lang);
+      $('#lang').value = lang;
+      document.body.dir = lang === 'gu' ? 'ltr' : 'ltr'; // add 'rtl' for Urdu/Arabic later
+
+      $('#brandTitle').textContent = translations[lang]?.title || translations.en.title;
+      $('.brand .subtitle').textContent = translations[lang]?.subtitle || translations.en.subtitle;
+      $('#search').placeholder = translations[lang]?.searchPlaceholder || translations.en.searchPlaceholder;
+      $('#schemesHeading').textContent = translations[lang]?.schemesHeading || translations.en.schemesHeading;
+      
+      renderSchemes();
+      renderRates(currentRates.length ? currentRates : [
+        {crop:"Wheat", variety:"Lok-1", rate:2275, change:15},
+        {crop:"Paddy", variety:"GR-11", rate:1920, change:-10}
+      ]);
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      $('#year').textContent = new Date().getFullYear();
+      const savedLang = localStorage.getItem('agastya_lang') || 'en';
+      setLanguage(savedLang);
+
+      $('#refreshBtn').addEventListener('click', refreshRates);
+      $('#seedLookup').addEventListener('click', () => alert("Seed Rates (Sample):\n• GG-20 Groundnut: ₹120/kg\n• Lok-1 Wheat: ₹42/kg\n• GR-11 Paddy: ₹85/kg"));
+      $('#closeModal').addEventListener('click', closeModal);
+      $('#modal').addEventListener('click', e => e.target === $('#modal') && closeModal());
+      $('#districtSelect').addEventListener('change', refreshRates);
+      $('#lang').addEventListener('change', e => setLanguage(e.target.value));
+
+      document.addEventListener('keydown', e => e.key === 'Escape' && closeModal());
+
+      // Initial data
+      refreshRates();
     });
   </script>
 </body>
