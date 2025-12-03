@@ -1,320 +1,473 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>FunBox — Your Instant Laugh Machine</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0b1020; --card:#fff; --accent:#ffcc00; --muted:#9aa3b2;
-    --glass: rgba(255,255,255,0.06);
-  }
-  *{box-sizing:border-box}
-  body{font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;margin:0;background:
-    radial-gradient(1000px 600px at 10% 10%, rgba(255,204,0,0.06), transparent 10%),
-    linear-gradient(180deg,#071029 0%, #061226 100%); color:var(--card); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
-  .wrap{width:100%;max-width:980px}
-  header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-  .logo{width:72px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px;background:linear-gradient(180deg,#fff1b8,#ffd24d);color:#0b1020;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
-  h1{font-size:1.4rem;margin:0}
-  .sub{color:var(--muted);font-size:0.95rem;margin-top:2px}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FunBox — Instant Laughs Guaranteed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: rgba(255,255,255,0.05);
+      --text: #ffffff;
+      --muted: #9aa3b2;
+      --accent: #ffcc00;
+      --accent-dark: #e6b800;
+      --glass: rgba(255,255,255,0.06);
+      --shadow: rgba(0,0,0,0.6);
+      --border: rgba(255,255,255,0.08);
+    }
+    [data-theme="light"] {
+      --bg: #f8f9fc;
+      --card: rgba(255,255,255,0.9);
+      --text: #1a1a1a;
+      --muted: #666;
+      --accent: #ffaa00;
+      --shadow: rgba(0,0,0,0.15);
+      --border: rgba(0,0,0,0.1);
+      --glass: rgba(255,255,255,0.7);
+    }
 
-  .grid{display:grid;grid-template-columns:1fr 320px;gap:14px}
-  @media (max-width:880px){ .grid{grid-template-columns:1fr} }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255,204,0,0.08), transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(100,200,255,0.06), transparent 20%);
+      transition: background 0.5s ease;
+    }
 
-  .card{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border-radius:14px;padding:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
-  .controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-  button,select{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--card);padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:700}
-  button.primary{background:var(--accent);color:#081022;border:none;box-shadow:0 6px 20px rgba(255,204,0,0.15)}
-  .big{font-size:1.05rem;padding:10px 12px}
-  .mascot{width:120px;height:120px;border-radius:14px;background:linear-gradient(180deg,#fff,#fff6c2);color:#081022;display:flex;align-items:center;justify-content:center;font-size:58px;margin:auto;transition:transform .28s ease}
-  .mascot.dance{transform:translateY(-6px) rotate(-8deg) scale(1.06)}
-  .output{margin-top:12px;font-size:1.05rem;min-height:64px;display:flex;align-items:center}
-  .muted{color:var(--muted);font-size:0.9rem}
-  .tiny{font-size:0.82rem;color:var(--muted)}
-  .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .wrap { width: 100%; max-width: 1000px; }
 
-  footer{margin-top:14px;color:var(--muted);font-size:0.85rem;text-align:center}
+    header {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+    }
+    .logo {
+      width: 76px; height: 76px; border-radius: 18px;
+      background: linear-gradient(135deg, #fffbe6, #ffd700);
+      display: grid; place-items: center; font-size: 42px;
+      box-shadow: 0 12px 32px var(--shadow);
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
 
-  /* little confetti */
-  .confetti{position:fixed;left:0;right:0;top:0;bottom:0;pointer-events:none;display:none}
-  .confetti .piece{position:absolute;width:10px;height:14px;opacity:0;transform:translateY(-20px) rotate(0);animation:fall 1200ms linear forwards}
-  @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:1}}
-  /* utility */
-  .col{display:flex;flex-direction:column}
-  .row{display:flex;gap:8px;align-items:center}
-  .card h2{margin:0 0 8px 0}
-  .textarea-like{background:transparent;border:1px dashed rgba(255,255,255,0.04);padding:10px;border-radius:8px;min-height:56px}
-</style>
+    h1 { font-size: 1.5rem; font-weight: 700; }
+    .sub { font-size: 0.95rem; color: var(--muted); margin-top: 4px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 16px;
+    }
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 40px var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .main-card {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 600px) {
+      .main-card { grid-template-columns: 1fr; text-align: center; }
+    }
+
+    .mascot {
+      width: 130px; height: 130px; border-radius: 20px;
+      background: linear-gradient(135deg, #ffffff, #fff6c2);
+      font-size: 68px;
+      display: grid; place-items: center;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      user-select: none;
+    }
+    .mascot.dance {
+      transform: translateY(-12px) rotate(-12deg) scale(1.1) !important;
+    }
+
+    .output {
+      min-height: 80px;
+      padding: 16px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      font-size: 1.15rem;
+      line-height: 1.5;
+      border: 1px dashed var(--border);
+      margin: 16px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .controls, .actions {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;
+    }
+    button, select {
+      padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06); color: var(--text);
+      font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+    }
+    button:hover { background: rgba(255,255,255,0.12); }
+    button.primary {
+      background: var(--accent); color: #000; border: none;
+      box-shadow: 0 8px 25px rgba(255,204,0,0.3);
+    }
+    button.primary:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+    .confetti .p {
+      position: absolute; width: 12px; height: 16px;
+      background: #ffcc00; border-radius: 2px;
+      animation: confetti-fall linear forwards;
+    }
+    @keyframes confetti-fall {
+      to { transform: translateY(120vh) rotate(720deg); opacity: 0; }
+    }
+
+    footer { margin-top: 24px; text-align: center; color: var(--muted); font-size: 0.9rem; }
+
+    .theme-toggle {
+      position: fixed; top: 16px; right: 16px; z-index: 100;
+      background: var(--card); padding: 10px; border-radius: 50%;
+      font-size: 1.4rem; cursor: pointer; border: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+  </style>
 </head>
 <body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">🌙</button>
+
   <div class="wrap">
     <header>
-      <div class="logo" aria-hidden="true">🤣</div>
+      <div class="logo" aria-hidden="true">Laughing Cow Emoji</div>
       <div>
-        <h1>FunBox — Your Instant Laugh Machine</h1>
-        <div class="sub">Press the buttons. The mascot will try its best to impress you.</div>
+        <h1>FunBox</h1>
+        <div class="sub">Your Instant Laugh Machine — Now with 200% more cowbell</div>
       </div>
     </header>
 
     <div class="grid">
-      <!-- left big panel -->
-      <section class="card">
-        <div style="display:flex;gap:12px;align-items:center">
-          <div id="mascot" class="mascot" role="img" aria-label="dancing mascot">🐄</div>
-          <div style="flex:1">
-            <div class="row" style="justify-content:space-between">
-              <div>
-                <select id="mode" aria-label="Choose humor mode" title="Choose humor mode">
-                  <option value="joke">Random Joke</option>
-                  <option value="guj">Gujarati Joke</option>
-                  <option value="roast">Soft Roast</option>
-                  <option value="fortune">Absurd Fortune</option>
-                  <option value="fact">Stupid Fact</option>
-                </select>
-                <button id="goBtn" class="primary big">Make me laugh</button>
-              </div>
-              <div class="tiny muted">Tip: Press <kbd>Space</kbd> to get a new fun thing</div>
-            </div>
+      <section class="card main-card" aria-labelledby="main-heading">
+        <div class="mascot" id="mascot" role="img" aria-label="FunBox mascot">Cow Emoji</div>
 
-            <div id="output" class="output textarea-like" tabindex="0" aria-live="polite">Press “Make me laugh” — I dare you.</div>
-
-            <div class="actions">
-              <button id="speakBtn">🔊 Speak</button>
-              <button id="copyBtn">📋 Copy</button>
-              <button id="shareBtn">🔗 Share</button>
-              <button id="confettiBtn">🎉 Confetti</button>
-            </div>
-
-            <div class="controls">
-              <label class="tiny muted">Voice:</label>
-              <select id="voiceSelect" class="tiny"></select>
-              <button id="longBtn" class="tiny">Long Version</button>
-            </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <select id="mode" aria-label="Select humor mode">
+              <option value="joke">Random Joke</option>
+              <option value="guj">Gujarati Joke</option>
+              <option value="roast">Soft Roast</option>
+              <option value="fortune">Absurd Fortune</option>
+              <option value="fact">Stupid Fact</option>
+            </select>
+            <button id="goBtn" class="primary">Make Me Laugh!</button>
           </div>
-        </div>
 
-        <div style="margin-top:12px" class="col">
-          <h3 style="margin:0">Past laughs</h3>
-          <div id="history" class="tiny muted">— none yet —</div>
+          <div id="output" class="output" tabindex="0" aria-live="polite">
+            Ready to laugh? Hit the button or press <kbd>Space</kbd>!
+          </div>
+
+          <div class="actions">
+            <button id="speakBtn">Speak</button>
+            <button id="copyBtn">Copy</button>
+            <button id="shareBtn">Share</button>
+            <button id="confettiBtn">Confetti</button>
+          </div>
+
+          <div class="controls">
+            <select id="voiceSelect"></select>
+            <button id="longBtn">Long Version</button>
+          </div>
+
+          <details style="margin-top:16px">
+            <summary style="cursor:pointer; color:var(--muted); font-size:0.9rem">Past laughs (click to expand)</summary>
+            <div id="history" style="margin-top:8px; font-size:0.9rem; color:var(--muted); line-height:1.6"></div>
+          </details>
         </div>
       </section>
 
-      <!-- sidebar -->
       <aside>
-        <div class="card" style="margin-bottom:12px">
-          <h2>Quick favorites</h2>
-          <div class="row" style="margin-top:8px">
-            <button data-mode="joke">😂 Joke</button>
-            <button data-mode="guj">🪔 ગુજરાતી</button>
-            <button data-mode="roast">🔥 Roast</button>
+        <div class="card">
+          <h2>Quick Modes</h2>
+          <div class="actions" style="margin-top:12px">
+            <button data-mode="joke">Joke</button>
+            <button data-mode="guj">Gujarati</button>
+            <button data-mode="roast">Roast</button>
+            <button data-mode="fortune">Fortune</button>
           </div>
-          <div style="margin-top:8px" class="tiny muted">Use these to quickly pick a style.</div>
-        </div>
-
-        <div class="card" style="margin-bottom:12px">
-          <h2>Customize</h2>
-          <div style="margin-top:8px" class="tiny muted">Mascot emoji</div>
-          <input id="mascotInput" placeholder="e.g. 🐮 or 👨‍🌾" style="margin-top:6px;padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--card)">
-          <div style="margin-top:8px" class="tiny muted">Speed (for silly animation)</div>
-          <input id="speed" type="range" min="0.5" max="2.5" step="0.1" value="1">
         </div>
 
         <div class="card">
-          <h2>Extra</h2>
-          <div class="tiny muted">Save favorite jokes or export as text for memes.</div>
-          <div style="margin-top:8px" class="row">
-            <button id="saveBtn">💾 Save</button>
-            <button id="exportBtn">⬇️ Export</button>
+          <h2>Customize</h2>
+          <label class="muted" style="font-size:0.85rem; display:block; margin:12px 0 6px">Mascot Emoji</label>
+          <input id="mascotInput" placeholder="e.g. Cat, Alien, Pizza" style="width:100%; padding:10px; border-radius:10px; border:1px solid var(--border); background:transparent; color:var(--text)" />
+          
+          <label class="muted" style="font-size:0.85rem; display:block; margin:12px 0 6px">Dance Speed</label>
+          <input type="range" id="speed" min="0.3" max="3" step="0.1" value="1" style="width:100%">
+        </div>
+
+        <div class="card">
+          <h2>Favorites</h2>
+          <div class="actions">
+            <button id="saveBtn">Save Current</button>
+            <button id="exportBtn">Export All</button>
           </div>
+          <div id="favCount" style="margin-top:8px; font-size:0.85rem; color:var(--muted)">0 saved</div>
         </div>
       </aside>
     </div>
 
-    <footer>Made for you — zero judgement, 100% silliness.</footer>
+    <footer>Made with love, zero ads, maximum silliness</footer>
   </div>
 
-  <div class="confetti" id="confetti"></div>
+  <div class="confetti" id="confettiContainer"></div>
 
-<script>
-/* Data */
-const jokes = [
-  "Why did the scarecrow become a successful politician? Because he was outstanding in his field.",
-  "I told my tractor a secret. Now it spills the beans — literally.",
-  "My cow started a podcast. It's udderly addictive.",
-  "If farming had Wi-Fi, crops would still say 'low battery'.",
-  "Farmer to friend: ‘I talk to my plants at night.’ Friend: ‘Why?’ Farmer: ‘They won't listen any other time.’"
-];
-const guj = [
-  "એક ખેડૂત દિવસ આખો મુશ્કેલ કામ કરી ને પાછો આવ્યો. પત્નીએ પૂછ્યું, શેં કર્યું? કહ્યું: 'મારુ બધુ વેચાયું, હવે હું ફક્ત હવામાનનું બલ્બ બદલીશ.'",
-  "ઘરમાં બધાએ બચત કરી, હવે ઘરમાં માત્ર પાણી જ બચ્યું.",
-  "કિસાન: 'મારી ગાય સારી વાત સાંભળે છે.' મિત્ર: 'સાચે?' કિસાન: 'હા, માત્ર જ્યારે ઘાસમાં મસાલો હોય.'"
-];
-const roasts = [
-  "You code like you plant — random, hopeful, and mostly weeds.",
-  "Your brain has more tabs open than Chrome after an update.",
-  "You bring a calculator to a cookie-eating contest.",
-  "You're like a software license — nobody reads you but everyone accepts you."
-];
-const fortunes = [
-  "A mysterious pigeon will misplace your socks tomorrow.",
-  "Your next big idea will be slightly tastier than yesterday's lunch.",
-  "An old friend will borrow sugar and never return the compliment."
-];
-const facts = [
-  "Stupid fact: If you whisper to a potato it will not tell your secrets, but it will get jealous.",
-  "If cows used smartphones they'd still prefer grass photography.",
-  "Studies show the funniest person in a village is often the one who remembered to water the plants."
-];
+  <script type="module">
+    // === DATA ===
+    const content = {
+      joke: [
+        "Why did the scarecrow win an award? He was outstanding in his field.",
+        "I told my tractor a joke. It didn't laugh — too much exhaust.",
+        "My cow started a band called 'Moo Tang Clan'. It's fire.",
+        "Why don't farmers ever get lost? Because they always follow the plow."
+      ],
+      guj: [
+        "એક વખત ખેડૂતે કહ્યું: 'હું ગાય સાથે બોલું છું.' મિત્ર: 'શું કહે?' ખેડૂત: 'બસ, દુધ વધારે આપવા કહું છું!'",
+        "પત્ની: 'આજે શું લાવ્યા?' ખેડૂત: 'બે કિલો ખુશી અને એક કિલો ચિંતા.'",
+        "ગુજરાતી જોક: 'બધું વેચાઈ ગયું, હવે માત્ર મારી પાસે આશા બચી છે — એ પણ EMI પર.'"
+      ],
+      roast: [
+        "You code like a farmer plants — full of hope and zero planning.",
+        "Your brain runs on Windows Vista.",
+        "You're the reason we have loading screens.",
+        "Even your shadow leaves when things get serious."
+      ],
+      fortune: [
+        "Tomorrow, a pigeon will judge your outfit.",
+        "Your plants are gossiping about you.",
+        "Good news: You will find a sock. Bad news: Only one."
+      ],
+      fact: [
+        "Octopuses have three hearts — two for swimming, one for breaking up with squid.",
+        "A group of flamingos is called a 'flamboyance'. Iconic.",
+        "Cows have best friends and get stressed when separated."
+      ]
+    };
 
-const out = document.getElementById('output');
-const mascot = document.getElementById('mascot');
-const mode = document.getElementById('mode');
-const goBtn = document.getElementById('goBtn');
-const historyEl = document.getElementById('history');
-const speakBtn = document.getElementById('speakBtn');
-const copyBtn = document.getElementById('copyBtn');
-const shareBtn = document.getElementById('shareBtn');
-const confettiBtn = document.getElementById('confettiBtn');
-const confettiWrap = document.getElementById('confetti');
-const voiceSelect = document.getElementById('voiceSelect');
-const saveBtn = document.getElementById('saveBtn');
-const exportBtn = document.getElementById('exportBtn');
-const longBtn = document.getElementById('longBtn');
-const mascotInput = document.getElementById('mascotInput');
-const speedRange = document.getElementById('speed');
+    // === DOM Elements ===
+    const els = {
+      output: document.getElementById('output'),
+      mascot: document.getElementById('mascot'),
+      mode: document.getElementById('mode'),
+      goBtn: document.getElementById('goBtn'),
+      history: document.getElementById('history'),
+      voiceSelect: document.getElementById('voiceSelect'),
+      speakBtn: document.getElementById('speakBtn'),
+      copyBtn: document.getElementById('copyBtn'),
+      shareBtn: document.getElementById('shareBtn'),
+      confettiBtn: document.getElementById('confettiBtn'),
+      confettiContainer: document.getElementById('confettiContainer'),
+      longBtn: document.getElementById('longBtn'),
+      saveBtn: document.getElementById('saveBtn'),
+      exportBtn: document.getElementById('exportBtn'),
+      mascotInput: document.getElementById('mascotInput'),
+      speed: document.getElementById('speed'),
+      themeToggle: document.getElementById('themeToggle'),
+      favCount: document.getElementById('favCount')
+    };
 
-let historyArr = [];
-let favorites = [];
-let voices = [];
-let animateSpeed = 1;
+    // === State ===
+    let state = {
+      history: JSON.parse(localStorage.getItem('funbox_history') || '[]').slice(0, 15),
+      favorites: JSON.parse(localStorage.getItem('funbox_favorites') || '[]'),
+      mascot: localStorage.getItem('funbox_mascot') || 'Cow Emoji',
+      speed: parseFloat(localStorage.getItem('funbox_speed') || '1'),
+      theme: localStorage.getItem('funbox_theme') || 'dark'
+    };
 
-/* helpers */
-function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-function pushHistory(text){
-  historyArr.unshift(text);
-  if(historyArr.length>8) historyArr.pop();
-  historyEl.textContent = historyArr.join(' • ');
-}
-function animateMascot(){
-  mascot.classList.add('dance');
-  setTimeout(()=>mascot.classList.remove('dance'), 700/animateSpeed);
-}
-function setOutput(txt){
-  out.textContent = txt;
-  pushHistory(txt.slice(0,120));
-}
+    // Apply saved theme
+    document.documentElement.dataset.theme = state.theme;
+    els.themeToggle.textContent = state.theme === 'dark' ? 'Sun' : 'Moon';
 
-/* generate */
-function generate(modeVal, long=false){
-  let res = "I tried to be funny but I'm on low battery.";
-  switch(modeVal){
-    case 'joke': res = long ? rand(jokes) + " 😂😂 (extended edition: once a chicken asked for a passport.)" : rand(jokes); break;
-    case 'guj': res = rand(guj); break;
-    case 'roast': res = long ? rand(roasts) + " P.S. this is a soft roast, stay hydrated." : rand(roasts); break;
-    case 'fortune': res = rand(fortunes); break;
-    case 'fact': res = rand(facts); break;
-  }
-  setOutput(res);
-  animateMascot();
-}
+    // === Core Functions ===
+    const rand = arr => arr[Math.floor(Math.random() * arr.length)];
 
-/* speech */
-function populateVoices(){
-  voices = speechSynthesis.getVoices() || [];
-  voiceSelect.innerHTML = voices.map((v,i)=>`<option value="${i}">${v.name} ${v.lang}</option>`).join('');
-}
-populateVoices();
-if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = populateVoices;
+    function generate(long = false) {
+      const mode = els.mode.value;
+      let text = rand(content[mode] || content.joke);
 
-function speakText(){
-  const txt = out.textContent;
-  if(!txt) return alert('Nothing to say yet — press Make me laugh first.');
-  const u = new SpeechSynthesisUtterance(txt);
-  const idx = +voiceSelect.value || 0;
-  if(voices[idx]) u.voice = voices[idx];
-  u.rate = 1;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(u);
-}
+      if (long && mode !== 'guj') {
+        text += " " + rand(["(Extended cut: the cow laughed so hard it started a union.)", "Bonus: the chicken was in on it.", "P.S. this joke has layers."]);
+      }
 
-/* copy/share */
-async function copyText(){
-  try{
-    await navigator.clipboard.writeText(out.textContent || '');
-    copyBtn.textContent = 'Copied ✓';
-    setTimeout(()=>copyBtn.textContent = '📋 Copy',900);
-  }catch(e){ alert('Copy failed.'); }
-}
+      els.output.textContent = text;
+      pushHistory(text);
+      dance();
+    }
 
-function shareText(){
-  const txt = out.textContent;
-  if(navigator.share){
-    navigator.share({title:'FunBox laugh', text:txt}).catch(()=>alert('Share cancelled'));
-  }else{
-    prompt('Copy and share this:', txt);
-  }
-}
+    function pushHistory(text) {
+      state.history.unshift(text.slice(0, 100) + (text.length > 100 ? '...' : ''));
+      state.history = state.history.slice(0, 15);
+      els.history.textContent = state.history.join(' • ') || '— no laughs yet —';
+      localStorage.setItem('funbox_history', JSON.stringify(state.history));
+    }
 
-/* confetti */
-function throwConfetti(){
-  confettiWrap.innerHTML = '';
-  const colors = ['#ffcc00','#ff7b7b','#7bd389','#78d0ff','#c08cff'];
-  for(let i=0;i<28;i++){
-    const p = document.createElement('div');
-    p.className='piece';
-    p.style.left = Math.random()*100 + '%';
-    p.style.background = colors[Math.floor(Math.random()*colors.length)];
-    p.style.animationDuration = (800 + Math.random()*1000) + 'ms';
-    p.style.transform = `translateY(-20px) rotate(${Math.random()*360}deg)`;
-    confettiWrap.appendChild(p);
-  }
-  confettiWrap.style.display='block';
-  setTimeout(()=>{ confettiWrap.style.display='none'; confettiWrap.innerHTML=''; },1400);
-}
+    function dance() {
+      els.mascot.classList.add('dance');
+      setTimeout(() => els.mascot.classList.remove('dance'), 600 / state.speed);
+    }
 
-/* favorites & export */
-function saveFavorite(){
-  if(!out.textContent) return alert('Nothing to save yet!');
-  favorites.push(out.textContent);
-  saveBtn.textContent = 'Saved ✓';
-  setTimeout(()=>saveBtn.textContent='💾 Save',900);
-}
-function exportText(){
-  const all = favorites.concat(historyArr).join('\n\n---\n\n');
-  const blob = new Blob([all || out.textContent || ''], {type:'text/plain'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'funbox_export.txt'; document.body.appendChild(a); a.click();
-  a.remove(); URL.revokeObjectURL(url);
-}
+    function throwConfetti() {
+      const colors = ['#ffcc00', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'];
+      for (let i = 0; i < 40; i++) {
+        const p = document.createElement('div');
+        p.className = 'p';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.background = rand(colors);
+        p.style.animationDuration = 1 + Math.random() * 2 + 's';
+        p.style.animationDelay = Math.random() * 0.5 + 's';
+        p.style.transform = `rotate(${Math.random() * 360}deg)`;
+        els.confettiContainer.appendChild(p);
+      }
+      setTimeout(() => els.confettiContainer.innerHTML = '', 3000);
+      dance();
+    }
 
-/* events */
-goBtn.addEventListener('click', ()=>generate(mode.value, false));
-document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click', e=>{ mode.value = e.target.dataset.mode; generate(mode.value); }));
-speakBtn.addEventListener('click', speakText);
-copyBtn.addEventListener('click', copyText);
-shareBtn.addEventListener('click', shareText);
-confettiBtn.addEventListener('click', ()=>{ throwConfetti(); animateMascot(); });
-saveBtn.addEventListener('click', saveFavorite);
-exportBtn.addEventListener('click', exportText);
-longBtn.addEventListener('click', ()=>generate(mode.value, true));
-mascotInput.addEventListener('input', ()=>{ if(mascotInput.value.trim()) mascot.textContent = mascotInput.value.trim().slice(0,3); });
-speedRange.addEventListener('input', ()=>{ animateSpeed = Number(speedRange.value); mascot.style.transitionDuration = (0.28/animateSpeed)+'s'; });
+    function speak() {
+      if (!els.output.textContent || els.output.textContent.includes('Ready to laugh')) return;
+      const utter = new SpeechSynthesisUtterance(els.output.textContent);
+      const voiceIdx = els.voiceSelect.value;
+      if (voiceIdx && voices[voiceIdx]) utter.voice = voices[voiceIdx];
+      utter.rate = 0.9;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utter);
+    }
 
-/* keyboard */
-document.addEventListener('keydown', (e)=>{
-  if(e.code==='Space'){ e.preventDefault(); generate(mode.value); }
-  if(e.code==='KeyS' && (e.ctrlKey||e.metaKey)){ e.preventDefault(); saveFavorite(); }
-});
+    // === Voice Setup ===
+    let voices = [];
+    function loadVoices() {
+      voices = speechSynthesis.getVoices()
+        .filter(v => v.lang.includes('en') || v.lang.includes('gu') || v.lang.includes('hi'));
+      els.voiceSelect.innerHTML = '<option value="">Default Voice</option>' +
+        voices.map((v, i) => `<option value="${i}">${v.name} (${v.lang})</option>`).join('');
+    }
+    speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
 
-/* initial */
-generate('joke');
-setTimeout(()=>generate('fortune'), 900);
+    // === Persistence & UI Updates ===
+    function updateMascot() {
+      const emoji = state.mascot.trim() || 'Cow Emoji';
+      els.mascot.textContent = emoji.length > 4 ? emoji.slice(0, 4) : emoji;
+      els.mascotInput.value = state.mascot;
+      localStorage.setItem('funbox_mascot', state.mascot);
+    }
 
-/* small UX: update voice select default */
-setTimeout(()=>{ if(voiceSelect.options.length) voiceSelect.value = 0; }, 500);
-</script>
+    els.mascotInput.addEventListener('input', (e) => {
+      state.mascot = e.target.value;
+      updateMascot();
+    });
+
+    els.speed.addEventListener('input', (e) => {
+      state.speed = parseFloat(e.target.value);
+      localStorage.setItem('funbox_speed', state.speed);
+    });
+    els.speed.value = state.speed;
+
+    function updateFavoritesCount() {
+      els.favCount.textContent = `${state.favorites.length} saved`;
+    }
+
+    function saveFavorite() {
+      const text = els.output.textContent;
+      if (!text || text.includes('Ready to laugh')) return;
+      if (!state.favorites.includes(text)) {
+        state.favorites.push(text);
+        localStorage.setItem('funbox_favorites', JSON.stringify(state.favorites));
+        updateFavoritesCount();
+        els.saveBtn.textContent = 'Saved!';
+        setTimeout(() => els.saveBtn.textContent = 'Save Current', 1000);
+      }
+    }
+
+    function exportFavorites() {
+      const text = state.favorites.length ? state.favorites.join('\n\n══════════════════\n\n') : els.output.textContent;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `funbox-laughs-${new Date().toISOString().slice(0,10)}.txt`;
+      a.click();
+    }
+
+    // === Event Listeners ===
+    els.goBtn.addEventListener('click', () => generate());
+    document.querySelectorAll('[data-mode]').forEach(b => {
+      b.addEventListener('click', () => {
+        els.mode.value = b.dataset.mode;
+        generate();
+      });
+    });
+
+    els.speakBtn.addEventListener('click', speak);
+    els.copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(els.output.textContent);
+        els.copyBtn.textContent = 'Copied!';
+        setTimeout(() => els.copyBtn.textContent = 'Copy', 1200);
+      } catch { alert('Copy failed'); }
+    });
+
+    els.shareBtn.addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({ title: 'FunBox Laugh', text: els.output.textContent });
+      } else {
+        prompt('Share this laugh:', els.output.textContent);
+      }
+    });
+
+    els.confettiBtn.addEventListener('click', throwConfetti);
+    els.longBtn.addEventListener('click', () => generate(true));
+    els.saveBtn.addEventListener('click', saveFavorite);
+    els.exportBtn.addEventListener('click', exportFavorites);
+
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space' && e.target === document.body) {
+        e.preventDefault();
+        generate();
+      }
+    });
+
+    els.themeToggle.addEventListener('click', () => {
+      const newTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = newTheme;
+      localStorage.setItem('funbox_theme', newTheme);
+      els.themeToggle.textContent = newTheme === 'dark' ? 'Sun' : 'Moon';
+    });
+
+    // === Init ===
+    updateMascot();
+    pushHistory("App loaded — ready for laughs!");
+    updateFavoritesCount();
+    setTimeout(() => generate(), 800);
+  </script>
 </body>
 </html>
