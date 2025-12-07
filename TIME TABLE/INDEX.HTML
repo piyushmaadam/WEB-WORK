@@ -1,123 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Student Timetable Generator</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    margin: 0;
-    padding: 20px;
-    color: #333;
-  }
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    overflow: hidden;
-  }
-  header {
-    background: #4a00e0;
-    color: white;
-    padding: 20px;
-    text-align: center;
-  }
-  h1 { margin: 0; font-size: 2.2em; }
-  .controls {
-    padding: 20px;
-    background: #f8f9fa;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-    align-items: center;
-  }
-  label, input, select, button {
-    font-size: 1em;
-  }
-  button {
-    padding: 10px 20px;
-    background: #8e2de2;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  button:hover { background: #7900c2; }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
-    position: relative;
-  }
-  th {
-    background: #4a00e0;
-    color: white;
-    font-weight: 600;
-  }
-  td:hover {
-    background: #f0eafb;
-  }
-  .subject-input {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: transparent;
-    text-align: center;
-    font-size: 1em;
-  }
-  .subject-input:focus {
-    outline: 2px solid #8e2de2;
-    background: #fff;
-  }
-  .color-picker {
-    width: 40px;
-    height: 40px;
-    border: none;
-    cursor: pointer;
-  }
-  footer {
-    text-align: center;
-    padding: 15px;
-    background: #333;
-    color: #ddd;
-    font-size: 0.9em;
-  }
-  @media print {
-    body { background: white; }
-    .controls, header { display: none; }
-    .container { box-shadow: none; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>Student Timetable Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --primary: #4a00e0;
+      --primary-light: #8e2de2;
+      --bg-gradient-start: #667eea;
+      --bg-gradient-end: #764ba2;
+      --card-radius: 15px;
+      --shadow-elevated: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow-elevated);
+      overflow: hidden;
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.1rem;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .controls {
+      padding: 20px;
+      background: #f8f9fa;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 140px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    input[type="time"],
+    select {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 0.95rem;
+      outline: none;
+      min-width: 120px;
+    }
+
+    input[type="time"]:focus,
+    select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 2px rgba(142, 45, 226, 0.2);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      padding: 10px 18px;
+      background: var(--primary-light);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      background: #7900c2;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    #timetableContainer {
+      padding: 0 20px 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 700px;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      position: relative;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    td:hover {
+      background: #f5f0ff;
+    }
+
+    .time-cell {
+      font-weight: 600;
+      background: #f3f4ff;
+      width: 120px;
+      white-space: nowrap;
+    }
+
+    .subject-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 0.95rem;
+      padding: 6px 4px;
+    }
+
+    .subject-input::placeholder {
+      color: #bbb;
+      font-size: 0.9rem;
+    }
+
+    .subject-input:focus {
+      outline: 2px solid var(--primary-light);
+      background: #fff;
+      border-radius: 6px;
+    }
+
+    .cell-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .color-picker {
+      width: 32px;
+      height: 32px;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      background: transparent;
+    }
+
+    .info-text {
+      font-size: 0.8rem;
+      color: #666;
+      text-align: center;
+      padding: 0 20px 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #333;
+      color: #ddd;
+      font-size: 0.85rem;
+      margin-top: 20px;
+      border-radius: 0 0 var(--card-radius) var(--card-radius);
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.7rem;
+      }
+
+      .controls {
+        align-items: stretch;
+      }
+
+      .control-group {
+        flex: 1 1 100%;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      .time-cell {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .controls,
+      header,
+      footer,
+      .info-text {
+        display: none !important;
+      }
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+      }
+      table {
+        font-size: 0.8rem;
+      }
+      th {
+        position: static;
+      }
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
   <header>
     <h1>Student Timetable Generator</h1>
-    <p>Create your weekly class schedule easily!</p>
+    <p>Create, color-code & save your weekly schedule easily.</p>
   </header>
 
   <div class="controls">
-    <div>
-      <label>Start Time:</label>
-      <input type="time" id="startTime" value="08:00">
+    <div class="control-group">
+      <label for="startTime">Start Time</label>
+      <input type="time" id="startTime" value="08:00" />
     </div>
-    <div>
-      <label>End Time:</label>
-      <input type="time" id="endTime" value="16:00">
+
+    <div class="control-group">
+      <label for="endTime">End Time</label>
+      <input type="time" id="endTime" value="16:00" />
     </div>
-    <div>
-      <label>Slot Duration (mins):</label>
+
+    <div class="control-group">
+      <label for="slotDuration">Slot Duration (mins)</label>
       <select id="slotDuration">
         <option value="30">30 min</option>
         <option value="45">45 min</option>
@@ -125,13 +291,21 @@
         <option value="90">90 min</option>
       </select>
     </div>
-    <button onclick="generateTimetable()">Generate Timetable</button>
-    <button onclick="clearTimetable()">Clear All</button>
-    <button onclick="window.print()">Print / Save as PDF</button>
+
+    <div class="button-row">
+      <button id="generateBtn">🔄 Generate Timetable</button>
+      <button id="clearBtn">🧹 Clear All</button>
+      <button id="printBtn">🖨 Print / Save as PDF</button>
+    </div>
   </div>
 
+  <p class="info-text">
+    Tip: Your timetable is automatically saved in this browser (localStorage).  
+    You can safely refresh the page without losing data.
+  </p>
+
   <div id="timetableContainer">
-    <!-- Table will be inserted here by JavaScript -->
+    <!-- Timetable will be injected here -->
   </div>
 </div>
 
@@ -140,144 +314,250 @@
 </footer>
 
 <script>
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const STORAGE_KEY = "studentTimetable_v2";
 
-function generateTimetable() {
-  const start = document.getElementById("startTime").value;
-  const end = document.getElementById("endTime").value;
-  const duration = parseInt(document.getElementById("slotDuration").value);
+  const startTimeInput = document.getElementById("startTime");
+  const endTimeInput = document.getElementById("endTime");
+  const slotDurationSelect = document.getElementById("slotDuration");
+  const timetableContainer = document.getElementById("timetableContainer");
 
-  if (!start || !end) {
-    alert("Please set both start and end times!");
-    return;
-  }
+  const generateBtn = document.getElementById("generateBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const printBtn = document.getElementById("printBtn");
 
-  const startDate = new Date(`2025-01-01 ${start}`);
-  const endDate = new Date(`2025-01-01 ${end}`);
+  generateBtn.addEventListener("click", generateTimetable);
+  clearBtn.addEventListener("click", clearTimetable);
+  printBtn.addEventListener("click", () => window.print());
 
-  if (endDate <= startDate) {
-    alert("End time must be after start time!");
-    return;
-  }
-
-  // Calculate total minutes and number of slots
-  const totalMinutes = (endDate - startDate) / 60000;
-  const slotsCount = totalMinutes / duration;
-
-  if (!Number.isInteger(slotsCount)) {
-    alert(`The selected duration (${duration} min) does not divide the time range evenly.`);
-    return;
-  }
-
-  // Generate time labels
-  const timeLabels = [];
-  let current = new Date(startDate);
-  for (let i = 0; i <= slotsCount; i++) {
-    timeLabels.push(current.toTimeString().slice(0,5));
-    current = new Date(current.getTime() + duration * 60000);
-  }
-
-  // Build table HTML
-  let tableHTML = `<table>
-    <thead>
-      <tr>
-        <th>Time / Day</th>
-        ${days.map(day => `<th>${day}</th>`).join("")}
-      </tr>
-    </thead>
-    <tbody>`;
-
-  for (let i = 0; i < timeLabels.length - 1; i++) {
-    const timeStart = timeLabels[i];
-    const timeEnd = timeLabels[i+1];
-    tableHTML += `
-      <tr>
-        <td><strong>${timeStart} - ${timeEnd}</strong></td>
-        ${days.map((day, dayIndex) => `
-          <td>
-            <input 
-              type="text" 
-              class="subject-input" 
-              placeholder="Subject..." 
-              data-day="${dayIndex}" 
-              data-slot="${i}"
-              onblur="saveToLocalStorage()">
-            <br><br>
-            <input 
-              type="color" 
-              class="color-picker" 
-              value="${getRandomColor()}"
-              onchange="applyColor(this, ${dayIndex}, ${i})">
-          </td>
-        `).join("")}
-      </tr>`;
-  }
-
-  tableHTML += `</tbody></table>`;
-  document.getElementById("timetableContainer").innerHTML = tableHTML;
-
-  loadFromLocalStorage();
-}
-
-function getRandomColor() {
-  const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FECA57", "#DDA0DD", "#98D8C8", "#F7DC6F"];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
-function applyColor(picker, day, slot) {
-  const input = picker.parentElement.querySelector(".subject-input");
-  input.style.backgroundColor = picker.value + "33"; // 20% opacity
-  saveToLocalStorage();
-}
-
-function saveToLocalStorage() {
-  const inputs = document.querySelectorAll(".subject-input");
-  const colors = document.querySelectorAll(".color-picker");
-  const data = {};
-
-  inputs.forEach(inp => {
-    const key = `${inp.dataset.day}-${inp.dataset.slot}`;
-    data[key] = { subject: inp.value };
+  // Generate default timetable on first load
+  document.addEventListener("DOMContentLoaded", () => {
+    generateTimetable();
   });
 
-  colors.forEach(col => {
-    const key = `${col.parentElement.querySelector(".subject-input").dataset.day}-${col.parentElement.querySelector(".subject-input").dataset.slot}`;
-    if (data[key]) data[key].color = col.value;
-  });
+  function generateTimetable() {
+    const start = startTimeInput.value;
+    const end = endTimeInput.value;
+    const duration = parseInt(slotDurationSelect.value, 10);
 
-  localStorage.setItem("studentTimetable", JSON.stringify(data));
-}
-
-function loadFromLocalStorage() {
-  const saved = localStorage.getItem("studentTimetable");
-  if (!saved) return;
-
-  const data = JSON.parse(saved);
-  document.querySelectorAll(".subject-input").forEach(inp => {
-    const key = `${inp.dataset.day}-${inp.dataset.slot}`;
-    if (data[key]) {
-      inp.value = data[key].subject || "";
-      const td = inp.parentElement;
-      const colorPicker = td.querySelector(".color-picker");
-      if (data[key].color) {
-        colorPicker.value = data[key].color;
-        inp.style.backgroundColor = data[key].color + "33";
-      }
+    if (!start || !end) {
+      alert("Please set both start and end times!");
+      return;
     }
-  });
-}
 
-function clearTimetable() {
-  if (confirm("Are you sure you want to clear the entire timetable?")) {
-    localStorage.removeItem("studentTimetable");
-    document.querySelectorAll(".subject-input").forEach(inp => inp.value = "");
-    document.querySelectorAll(".color-picker").forEach(p => p.value = getRandomColor());
-    document.querySelectorAll(".subject-input").forEach(inp => inp.style.backgroundColor = "");
+    const startDate = parseTimeToDate(start);
+    const endDate = parseTimeToDate(end);
+
+    if (endDate <= startDate) {
+      alert("End time must be after start time!");
+      return;
+    }
+
+    const totalMinutes = (endDate - startDate) / 60000;
+    const slotsCount = totalMinutes / duration;
+
+    if (!Number.isInteger(slotsCount)) {
+      alert(`The selected duration (${duration} min) does not divide the time range evenly.`);
+      return;
+    }
+
+    // Generate time labels
+    const timeLabels = [];
+    let current = new Date(startDate);
+
+    for (let i = 0; i <= slotsCount; i++) {
+      timeLabels.push(formatTime(current));
+      current = new Date(current.getTime() + duration * 60000);
+    }
+
+    // Build table markup
+    let tableHTML = `
+      <table aria-label="Student timetable">
+        <thead>
+          <tr>
+            <th>Time / Day</th>
+            ${DAYS.map(day => `<th>${day}</th>`).join("")}
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    for (let i = 0; i < timeLabels.length - 1; i++) {
+      const timeStart = timeLabels[i];
+      const timeEnd = timeLabels[i + 1];
+
+      tableHTML += `
+        <tr>
+          <td class="time-cell">${timeStart} – ${timeEnd}</td>
+          ${DAYS.map((day, dayIndex) => createCellHTML(dayIndex, i)).join("")}
+        </tr>
+      `;
+    }
+
+    tableHTML += `</tbody></table>`;
+    timetableContainer.innerHTML = tableHTML;
+
+    attachCellEventListeners();
+    loadFromLocalStorage();
   }
-}
 
-// Generate a default timetable on first load
-window.onload = () => generateTimetable();
+  function parseTimeToDate(timeString) {
+    // Using fixed date, only time matters
+    return new Date(`2025-01-01T${timeString}:00`);
+  }
+
+  function formatTime(date) {
+    // 24-hour HH:MM format
+    const hours = String(date.getHours()).padStart(2, "0");
+    const mins = String(date.getMinutes()).padStart(2, "0");
+    return `${hours}:${mins}`;
+  }
+
+  function createCellHTML(dayIndex, slotIndex) {
+    return `
+      <td>
+        <div class="cell-inner">
+          <input
+            type="text"
+            class="subject-input"
+            placeholder="Subject..."
+            data-day="${dayIndex}"
+            data-slot="${slotIndex}"
+          />
+          <input
+            type="color"
+            class="color-picker"
+            data-day="${dayIndex}"
+            data-slot="${slotIndex}"
+            value="${getRandomColor()}"
+          />
+        </div>
+      </td>
+    `;
+  }
+
+  function getRandomColor() {
+    const colors = [
+      "#FF6B6B",
+      "#4ECDC4",
+      "#45B7D1",
+      "#96CEB4",
+      "#FECA57",
+      "#DDA0DD",
+      "#98D8C8",
+      "#F7DC6F"
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  function attachCellEventListeners() {
+    const inputs = document.querySelectorAll(".subject-input");
+    const colorPickers = document.querySelectorAll(".color-picker");
+
+    inputs.forEach(inp => {
+      inp.addEventListener("input", handleSubjectChange);
+    });
+
+    colorPickers.forEach(picker => {
+      picker.addEventListener("input", handleColorChange);
+    });
+  }
+
+  function handleSubjectChange(event) {
+    const input = event.target;
+    // Background is already handled by color, but we could react here if needed
+    saveToLocalStorage();
+  }
+
+  function handleColorChange(event) {
+    const picker = event.target;
+    applyColor(picker);
+    saveToLocalStorage();
+  }
+
+  function applyColor(picker) {
+    const day = picker.dataset.day;
+    const slot = picker.dataset.slot;
+
+    const selector = `.subject-input[data-day="${day}"][data-slot="${slot}"]`;
+    const input = document.querySelector(selector);
+
+    if (input) {
+      // Add 20% opacity to the hex color using 8-digit hex
+      input.style.backgroundColor = picker.value + "33";
+    }
+  }
+
+  function saveToLocalStorage() {
+    const inputs = document.querySelectorAll(".subject-input");
+    const data = {};
+
+    inputs.forEach(inp => {
+      const key = `${inp.dataset.day}-${inp.dataset.slot}`;
+      if (!data[key]) data[key] = {};
+      data[key].subject = inp.value;
+    });
+
+    const colorPickers = document.querySelectorAll(".color-picker");
+    colorPickers.forEach(col => {
+      const key = `${col.dataset.day}-${col.dataset.slot}`;
+      if (!data[key]) data[key] = {};
+      data[key].color = col.value;
+    });
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function loadFromLocalStorage() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+
+    let data;
+    try {
+      data = JSON.parse(saved);
+    } catch (e) {
+      console.warn("Could not parse saved timetable data:", e);
+      return;
+    }
+
+    Object.entries(data).forEach(([key, value]) => {
+      const [day, slot] = key.split("-");
+      const subjectSelector = `.subject-input[data-day="${day}"][data-slot="${slot}"]`;
+      const colorSelector = `.color-picker[data-day="${day}"][data-slot="${slot}"]`;
+
+      const input = document.querySelector(subjectSelector);
+      const colorPicker = document.querySelector(colorSelector);
+
+      if (input && typeof value.subject === "string") {
+        input.value = value.subject;
+      }
+
+      if (colorPicker && value.color) {
+        colorPicker.value = value.color;
+        if (input) {
+          input.style.backgroundColor = value.color + "33";
+        }
+      }
+    });
+  }
+
+  function clearTimetable() {
+    if (!confirm("Are you sure you want to clear the entire timetable?")) return;
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    document.querySelectorAll(".subject-input").forEach(inp => {
+      inp.value = "";
+      inp.style.backgroundColor = "";
+    });
+
+    document.querySelectorAll(".color-picker").forEach(p => {
+      p.value = getRandomColor();
+    });
+
+    // Save cleared state
+    saveToLocalStorage();
+  }
 </script>
 
 </body>
