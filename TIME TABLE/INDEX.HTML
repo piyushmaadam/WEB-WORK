@@ -11,7 +11,7 @@
       --bg-gradient-start: #667eea;
       --bg-gradient-end: #764ba2;
       --card-radius: 15px;
-      --shadow-elevated: 0 10px 30px rgba(0,0,0,0.2);
+      --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     * {
@@ -53,6 +53,10 @@
       opacity: 0.9;
     }
 
+    main {
+      display: block;
+    }
+
     .controls {
       padding: 20px;
       background: #f8f9fa;
@@ -84,6 +88,7 @@
       font-size: 0.95rem;
       outline: none;
       min-width: 120px;
+      background-color: #fff;
     }
 
     input[type="time"]:focus,
@@ -116,7 +121,7 @@
 
     button:hover {
       background: #7900c2;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       transform: translateY(-1px);
     }
 
@@ -135,9 +140,12 @@
       min-width: 700px;
       border-collapse: collapse;
       margin-top: 20px;
+      border-radius: 10px;
+      overflow: hidden;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #ddd;
       padding: 10px;
       text-align: center;
@@ -153,6 +161,10 @@
       z-index: 1;
     }
 
+    tr:nth-child(even) td:not(.time-cell) {
+      background-color: #fafafa;
+    }
+
     td:hover {
       background: #f5f0ff;
     }
@@ -162,6 +174,9 @@
       background: #f3f4ff;
       width: 120px;
       white-space: nowrap;
+      position: sticky;
+      left: 0;
+      z-index: 2;
     }
 
     .subject-input {
@@ -171,6 +186,7 @@
       text-align: center;
       font-size: 0.95rem;
       padding: 6px 4px;
+      border-radius: 6px;
     }
 
     .subject-input::placeholder {
@@ -181,7 +197,6 @@
     .subject-input:focus {
       outline: 2px solid var(--primary-light);
       background: #fff;
-      border-radius: 6px;
     }
 
     .cell-inner {
@@ -244,20 +259,25 @@
         background: white;
         padding: 0;
       }
+
       .controls,
       header,
       footer,
       .info-text {
         display: none !important;
       }
+
       .container {
         box-shadow: none;
         border-radius: 0;
       }
+
       table {
         font-size: 0.8rem;
       }
-      th {
+
+      th,
+      .time-cell {
         position: static;
       }
     }
@@ -271,42 +291,44 @@
     <p>Create, color-code & save your weekly schedule easily.</p>
   </header>
 
-  <div class="controls">
-    <div class="control-group">
-      <label for="startTime">Start Time</label>
-      <input type="time" id="startTime" value="08:00" />
+  <main>
+    <div class="controls" aria-label="Timetable controls">
+      <div class="control-group">
+        <label for="startTime">Start Time</label>
+        <input type="time" id="startTime" value="08:00" />
+      </div>
+
+      <div class="control-group">
+        <label for="endTime">End Time</label>
+        <input type="time" id="endTime" value="16:00" />
+      </div>
+
+      <div class="control-group">
+        <label for="slotDuration">Slot Duration (mins)</label>
+        <select id="slotDuration">
+          <option value="30">30 min</option>
+          <option value="45">45 min</option>
+          <option value="60" selected>60 min</option>
+          <option value="90">90 min</option>
+        </select>
+      </div>
+
+      <div class="button-row">
+        <button id="generateBtn" type="button" aria-label="Generate timetable">🔄 Generate Timetable</button>
+        <button id="clearBtn" type="button" aria-label="Clear timetable">🧹 Clear All</button>
+        <button id="printBtn" type="button" aria-label="Print timetable">🖨 Print / Save as PDF</button>
+      </div>
     </div>
 
-    <div class="control-group">
-      <label for="endTime">End Time</label>
-      <input type="time" id="endTime" value="16:00" />
+    <p class="info-text">
+      Tip: Your timetable and settings are automatically saved in this browser (localStorage).  
+      You can refresh the page without losing data.
+    </p>
+
+    <div id="timetableContainer">
+      <!-- Timetable will be injected here -->
     </div>
-
-    <div class="control-group">
-      <label for="slotDuration">Slot Duration (mins)</label>
-      <select id="slotDuration">
-        <option value="30">30 min</option>
-        <option value="45">45 min</option>
-        <option value="60" selected>60 min</option>
-        <option value="90">90 min</option>
-      </select>
-    </div>
-
-    <div class="button-row">
-      <button id="generateBtn">🔄 Generate Timetable</button>
-      <button id="clearBtn">🧹 Clear All</button>
-      <button id="printBtn">🖨 Print / Save as PDF</button>
-    </div>
-  </div>
-
-  <p class="info-text">
-    Tip: Your timetable is automatically saved in this browser (localStorage).  
-    You can safely refresh the page without losing data.
-  </p>
-
-  <div id="timetableContainer">
-    <!-- Timetable will be injected here -->
-  </div>
+  </main>
 </div>
 
 <footer>
@@ -314,9 +336,12 @@
 </footer>
 
 <script>
+  // Constants
   const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const STORAGE_KEY = "studentTimetable_v2";
+  const STORAGE_SETTINGS_KEY = "studentTimetable_settings_v1";
 
+  // DOM elements
   const startTimeInput = document.getElementById("startTime");
   const endTimeInput = document.getElementById("endTime");
   const slotDurationSelect = document.getElementById("slotDuration");
@@ -326,15 +351,24 @@
   const clearBtn = document.getElementById("clearBtn");
   const printBtn = document.getElementById("printBtn");
 
-  generateBtn.addEventListener("click", generateTimetable);
-  clearBtn.addEventListener("click", clearTimetable);
-  printBtn.addEventListener("click", () => window.print());
-
-  // Generate default timetable on first load
-  document.addEventListener("DOMContentLoaded", () => {
+  // Event listeners
+  generateBtn.addEventListener("click", () => {
+    saveSettingsToLocalStorage();
     generateTimetable();
   });
 
+  clearBtn.addEventListener("click", clearTimetable);
+  printBtn.addEventListener("click", () => window.print());
+
+  // Auto-load on first load
+  document.addEventListener("DOMContentLoaded", () => {
+    loadSettingsFromLocalStorage();
+    generateTimetable();
+  });
+
+  /**
+   * Generate timetable table based on settings
+   */
   function generateTimetable() {
     const start = startTimeInput.value;
     const end = endTimeInput.value;
@@ -376,7 +410,7 @@
         <thead>
           <tr>
             <th>Time / Day</th>
-            ${DAYS.map(day => `<th>${day}</th>`).join("")}
+            ${DAYS.map(day => `<th scope="col">${day}</th>`).join("")}
           </tr>
         </thead>
         <tbody>
@@ -388,7 +422,7 @@
 
       tableHTML += `
         <tr>
-          <td class="time-cell">${timeStart} – ${timeEnd}</td>
+          <td class="time-cell" scope="row">${timeStart} – ${timeEnd}</td>
           ${DAYS.map((day, dayIndex) => createCellHTML(dayIndex, i)).join("")}
         </tr>
       `;
@@ -398,22 +432,30 @@
     timetableContainer.innerHTML = tableHTML;
 
     attachCellEventListeners();
-    loadFromLocalStorage();
+    loadFromLocalStorage(); // Restore cells from saved data
   }
 
+  /**
+   * Convert "HH:MM" to Date object (fixed date)
+   */
   function parseTimeToDate(timeString) {
-    // Using fixed date, only time matters
     return new Date(`2025-01-01T${timeString}:00`);
   }
 
+  /**
+   * Format Date to "HH:MM" (24-hour)
+   */
   function formatTime(date) {
-    // 24-hour HH:MM format
     const hours = String(date.getHours()).padStart(2, "0");
     const mins = String(date.getMinutes()).padStart(2, "0");
     return `${hours}:${mins}`;
   }
 
+  /**
+   * Create HTML for a timetable cell
+   */
   function createCellHTML(dayIndex, slotIndex) {
+    const randomColor = getRandomColor();
     return `
       <td>
         <div class="cell-inner">
@@ -429,13 +471,17 @@
             class="color-picker"
             data-day="${dayIndex}"
             data-slot="${slotIndex}"
-            value="${getRandomColor()}"
+            value="${randomColor}"
+            aria-label="Pick color for subject"
           />
         </div>
       </td>
     `;
   }
 
+  /**
+   * Get a visually pleasing random color
+   */
   function getRandomColor() {
     const colors = [
       "#FF6B6B",
@@ -450,31 +496,49 @@
     return colors[Math.floor(Math.random() * colors.length)];
   }
 
+  /**
+   * Attach listeners to subject inputs and color pickers
+   */
   function attachCellEventListeners() {
     const inputs = document.querySelectorAll(".subject-input");
     const colorPickers = document.querySelectorAll(".color-picker");
 
     inputs.forEach(inp => {
       inp.addEventListener("input", handleSubjectChange);
+      // Optional: clear subject on double-click
+      inp.addEventListener("dblclick", () => {
+        inp.value = "";
+        saveToLocalStorage();
+      });
     });
 
     colorPickers.forEach(picker => {
+      // Apply current picker color as a soft background on load
+      applyColor(picker);
       picker.addEventListener("input", handleColorChange);
     });
   }
 
-  function handleSubjectChange(event) {
-    const input = event.target;
-    // Background is already handled by color, but we could react here if needed
+  /**
+   * Handle typing in subject fields
+   */
+  function handleSubjectChange() {
+    // Only saving is needed here
     saveToLocalStorage();
   }
 
+  /**
+   * Handle color changes
+   */
   function handleColorChange(event) {
     const picker = event.target;
     applyColor(picker);
     saveToLocalStorage();
   }
 
+  /**
+   * Apply color from picker to matching subject input background
+   */
   function applyColor(picker) {
     const day = picker.dataset.day;
     const slot = picker.dataset.slot;
@@ -483,15 +547,18 @@
     const input = document.querySelector(selector);
 
     if (input) {
-      // Add 20% opacity to the hex color using 8-digit hex
+      // Add transparency to the hex color using 8-digit hex (33 ~ 20% opacity)
       input.style.backgroundColor = picker.value + "33";
     }
   }
 
+  /**
+   * Save timetable data (subjects + colors) to localStorage
+   */
   function saveToLocalStorage() {
-    const inputs = document.querySelectorAll(".subject-input");
     const data = {};
 
+    const inputs = document.querySelectorAll(".subject-input");
     inputs.forEach(inp => {
       const key = `${inp.dataset.day}-${inp.dataset.slot}`;
       if (!data[key]) data[key] = {};
@@ -505,9 +572,16 @@
       data[key].color = col.value;
     });
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      console.warn("Could not save timetable data:", e);
+    }
   }
 
+  /**
+   * Load timetable data from localStorage into current table
+   */
   function loadFromLocalStorage() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return;
@@ -541,10 +615,48 @@
     });
   }
 
+  /**
+   * Save global settings (start, end, duration) to localStorage
+   */
+  function saveSettingsToLocalStorage() {
+    const settings = {
+      startTime: startTimeInput.value,
+      endTime: endTimeInput.value,
+      duration: slotDurationSelect.value
+    };
+
+    try {
+      localStorage.setItem(STORAGE_SETTINGS_KEY, JSON.stringify(settings));
+    } catch (e) {
+      console.warn("Could not save timetable settings:", e);
+    }
+  }
+
+  /**
+   * Load global settings from localStorage
+   */
+  function loadSettingsFromLocalStorage() {
+    const savedSettings = localStorage.getItem(STORAGE_SETTINGS_KEY);
+    if (!savedSettings) return;
+
+    try {
+      const settings = JSON.parse(savedSettings);
+      if (settings.startTime) startTimeInput.value = settings.startTime;
+      if (settings.endTime) endTimeInput.value = settings.endTime;
+      if (settings.duration) slotDurationSelect.value = settings.duration;
+    } catch (e) {
+      console.warn("Could not parse timetable settings:", e);
+    }
+  }
+
+  /**
+   * Clear timetable and localStorage
+   */
   function clearTimetable() {
-    if (!confirm("Are you sure you want to clear the entire timetable?")) return;
+    if (!confirm("Are you sure you want to clear the entire timetable and settings?")) return;
 
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_SETTINGS_KEY);
 
     document.querySelectorAll(".subject-input").forEach(inp => {
       inp.value = "";
@@ -553,10 +665,13 @@
 
     document.querySelectorAll(".color-picker").forEach(p => {
       p.value = getRandomColor();
+      applyColor(p);
     });
 
-    // Save cleared state
-    saveToLocalStorage();
+    // Reset controls to default
+    startTimeInput.value = "08:00";
+    endTimeInput.value = "16:00";
+    slotDurationSelect.value = "60";
   }
 </script>
 
