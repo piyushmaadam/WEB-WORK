@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Mail Check Reminder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #222;
+    }
+    .card {
+      background: #fff;
+      padding: 24px 28px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+    .status {
+      margin: 10px 0 18px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    button {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      margin: 4px;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+    #doneBtn {
+      background: #4caf50;
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(76,175,80,0.4);
+    }
+    #resetBtn {
+      background: #eeeeee;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+    .pill {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #f3f4ff;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Did you check your email today?</h1>
+    <div class="status" id="statusText"></div>
+    <button id="doneBtn">✅ Yes, I checked it</button>
+    <button id="resetBtn">🔄 Clear for today</button>
+    <div class="pill" id="dateInfo"></div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "dailyMailCheck";
+    const statusText = document.getElementById("statusText");
+    const dateInfo = document.getElementById("dateInfo");
+    const doneBtn = document.getElementById("doneBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function getTodayString() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function loadStatus() {
+      const today = getTodayString();
+      const saved = localStorage.getItem(STORAGE_KEY);
+      let data = {};
+      if (saved) {
+        try { data = JSON.parse(saved); } catch (e) {}
+      }
+
+      const checked = data[today] === true;
+
+      if (checked) {
+        statusText.textContent = "Nice! You’ve already checked your mail today ✅";
+      } else {
+        statusText.textContent = "You still haven't checked your mail today 👀";
+      }
+
+      dateInfo.textContent = "Today: " + today;
+    }
+
+    function markDone() {
+      const today = getTodayString();
+      const saved = localStorage.getItem(STORAGE_KEY);
+      let data = {};
+      if (saved) {
+        try { data = JSON.parse(saved); } catch (e) {}
+      }
+      data[today] = true;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      loadStatus();
+    }
+
+    function resetToday() {
+      const today = getTodayString();
+      const saved = localStorage.getItem(STORAGE_KEY);
+      let data = {};
+      if (saved) {
+        try { data = JSON.parse(saved); } catch (e) {}
+      }
+      delete data[today];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      loadStatus();
+    }
+
+    doneBtn.addEventListener("click", markDone);
+    resetBtn.addEventListener("click", resetToday);
+
+    loadStatus();
+  </script>
+</body>
+</html>
