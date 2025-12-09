@@ -1,145 +1,510 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Daily Mail Check Reminder</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #222;
+    :root{
+      --bg-1: #f6f8ff;
+      --card-bg: #ffffff;
+      --accent: linear-gradient(90deg,#6d5df6,#9b6bff);
+      --muted: #6b7280;
+      --success: #16a34a;
+      --pill-bg: rgba(99,102,241,0.08);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: light;
     }
-    .card {
-      background: #fff;
-      padding: 24px 28px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      max-width: 360px;
-      width: 100%;
-      text-align: center;
+
+    @media (prefers-color-scheme:dark){
+      :root{
+        --bg-1: linear-gradient(135deg,#0f172a,#001219);
+        --card-bg: #071025;
+        --muted: #9ca3af;
+        --pill-bg: rgba(147,197,253,0.06);
+      }
+      body { color-scheme: dark; }
     }
-    h1 {
-      margin-top: 0;
-      font-size: 1.4rem;
+
+    html,body{
+      height:100%;
+      margin:0;
+      background: var(--bg-1);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+    }
+
+    .card{
+      width:100%;
+      max-width:420px;
+      background:var(--card-bg);
+      border-radius:14px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.12);
+      padding:20px;
+      box-sizing:border-box;
+      text-align:center;
+      border:1px solid rgba(99,102,241,0.06);
+    }
+
+    h1{
+      margin:0 0 8px 0;
+      font-size:1.2rem;
+      letter-spacing:-0.2px;
+      background:var(--accent);
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+      display:inline-block;
+      padding:0 6px;
+    }
+
+    p.desc{
+      margin:6px 0 16px 0;
+      font-size:0.95rem;
+      color:var(--muted);
+    }
+
     .status {
-      margin: 10px 0 18px;
-      font-size: 0.95rem;
-      color: #555;
+      margin:10px 0 16px;
+      font-size:0.98rem;
+      color:var(--muted);
+      min-height:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      flex-direction:column;
     }
-    button {
-      padding: 10px 16px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.95rem;
-      margin: 4px;
-      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+
+    .controls{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-bottom:12px;
     }
-    #doneBtn {
-      background: #4caf50;
-      color: #fff;
-      box-shadow: 0 4px 10px rgba(76,175,80,0.4);
+
+    button.btn{
+      border:0;
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(16,24,40,0.06);
+      transition:transform .08s ease, box-shadow .08s ease, opacity .12s ease;
+      user-select:none;
     }
-    #resetBtn {
-      background: #eeeeee;
+
+    button.btn:active{ transform:translateY(0); box-shadow: none; }
+    button.btn:focus{ outline:3px solid rgba(99,102,241,0.18); outline-offset:2px; }
+
+    .btn-check{
+      background: linear-gradient(90deg,#10b981,#11cdef);
+      color:#fff;
+      min-width:170px;
     }
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+    .btn-reset{
+      background:#eef2ff;
+      color:var(--muted);
+      min-width:140px;
     }
-    button:active {
-      transform: translateY(0);
-      box-shadow: none;
+
+    .pill{
+      display:inline-block;
+      margin-top:10px;
+      font-size:0.82rem;
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--pill-bg);
+      color:var(--muted);
     }
-    .pill {
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 0.8rem;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #f3f4ff;
-      color: #555;
+
+    .meta{
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .meta small{
+      display:block;
+      color:var(--muted);
+      font-size:0.8rem;
+    }
+
+    .small-actions{
+      margin-top:14px;
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .link{
+      background:transparent;
+      border:1px dashed rgba(99,102,241,0.12);
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      color:var(--muted);
+      font-size:0.86rem;
+    }
+
+    .sr-only{
+      position:absolute;
+      left:-9999px;
+      width:1px;
+      height:1px;
+      top:auto;
+      overflow:hidden;
+    }
+
+    /* toast */
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%) translateY(20px);
+      bottom:24px;
+      background: #0f172a;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:10px;
+      box-shadow:0 6px 20px rgba(2,6,23,0.3);
+      opacity:0;
+      transition:opacity .2s ease, transform .2s ease;
+      pointer-events:none;
+      z-index:9999;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+      pointer-events:auto;
+    }
+
+    /* responsive tweaks */
+    @media (max-width:420px){
+      .card{ padding:16px; border-radius:12px; }
+      .btn-check { min-width:150px; }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Did you check your email today?</h1>
-    <div class="status" id="statusText"></div>
-    <button id="doneBtn">✅ Yes, I checked it</button>
-    <button id="resetBtn">🔄 Clear for today</button>
-    <div class="pill" id="dateInfo"></div>
+  <div class="wrap">
+    <main class="card" role="application" aria-labelledby="title">
+      <h1 id="title">Did you check your email today?</h1>
+      <p class="desc">Small daily habit — check your inbox. Shortcut: <kbd>Space</kbd> = mark done, <kbd>R</kbd> = reset today.</p>
+
+      <div class="status" id="statusRegion" aria-live="polite">
+        <div id="statusText" style="font-weight:700;"></div>
+        <div id="subText" style="font-size:.9rem;color:var(--muted)"></div>
+      </div>
+
+      <div class="controls" role="group" aria-label="Actions">
+        <button class="btn btn-check" id="doneBtn" aria-pressed="false">✅ Yes — I checked</button>
+        <button class="btn btn-reset" id="resetBtn" aria-pressed="false">🔁 Clear today</button>
+      </div>
+
+      <div class="meta" aria-hidden="false">
+        <div class="pill" id="dateInfo" aria-hidden="true"></div>
+        <div class="pill" id="streakInfo" aria-hidden="true"></div>
+      </div>
+
+      <div class="small-actions" aria-hidden="true">
+        <button class="link" id="exportBtn" title="Export data">⬇ Export JSON</button>
+        <button class="link" id="importBtn" title="Import data">⬆ Import JSON</button>
+        <button class="link" id="clearAllBtn" title="Clear all stored data">🗑️ Clear all</button>
+      </div>
+
+      <div class="sr-only" id="help">Keyboard: Space toggles "checked"; R clears today's mark; click Export to download JSON of history.</div>
+    </main>
   </div>
 
-  <script>
-    const STORAGE_KEY = "dailyMailCheck";
-    const statusText = document.getElementById("statusText");
-    const dateInfo = document.getElementById("dateInfo");
-    const doneBtn = document.getElementById("doneBtn");
-    const resetBtn = document.getElementById("resetBtn");
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-    function getTodayString() {
-      const d = new Date();
+  <input id="importFile" type="file" accept="application/json" style="display:none" />
+
+  <script>
+    // --- config ---
+    const STORAGE_KEY = "dailyMailCheck_v1";
+    const KEEP_DAYS = 120; // how many days to retain
+    // --- helpers ---
+    function getTodayString(d = new Date()){
+      // yyyy-mm-dd
       const y = d.getFullYear();
       const m = String(d.getMonth() + 1).padStart(2, "0");
       const day = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${day}`;
     }
-
-    function loadStatus() {
-      const today = getTodayString();
-      const saved = localStorage.getItem(STORAGE_KEY);
-      let data = {};
-      if (saved) {
-        try { data = JSON.parse(saved); } catch (e) {}
+    function formatDateTime(ts){
+      try {
+        return new Intl.DateTimeFormat(undefined, {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }).format(new Date(ts));
+      } catch(e){
+        return new Date(ts).toLocaleString();
       }
+    }
+    function readData(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return {};
+      try { return JSON.parse(raw) || {}; } catch(e){ return {}; }
+    }
+    function writeData(data){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+    function pruneOld(data){
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - KEEP_DAYS);
+      const cutoffStr = getTodayString(cutoff);
+      for(const k of Object.keys(data)){
+        if(k < cutoffStr) delete data[k];
+      }
+    }
 
-      const checked = data[today] === true;
+    // --- UI nodes ---
+    const statusText = document.getElementById("statusText");
+    const subText = document.getElementById("subText");
+    const dateInfo = document.getElementById("dateInfo");
+    const streakInfo = document.getElementById("streakInfo");
+    const doneBtn = document.getElementById("doneBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const importBtn = document.getElementById("importBtn");
+    const clearAllBtn = document.getElementById("clearAllBtn");
+    const importFile = document.getElementById("importFile");
+    const toastEl = document.getElementById("toast");
 
-      if (checked) {
-        statusText.textContent = "Nice! You’ve already checked your mail today ✅";
+    // --- toast ---
+    let toastTimer = null;
+    function toast(msg, ms = 2000){
+      clearTimeout(toastTimer);
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      toastTimer = setTimeout(()=> toastEl.classList.remove("show"), ms);
+    }
+
+    // --- core logic ---
+    function loadStatus(){
+      const today = getTodayString();
+      const data = readData();
+      const checked = !!data[today]?.checked;
+      const lastCheckedTs = data.lastChecked || null;
+
+      if(checked){
+        statusText.textContent = "Nice — you checked your mail today ✅";
+        subText.textContent = lastCheckedTs ? ("Last checked: " + formatDateTime(lastCheckedTs)) : "";
+        doneBtn.setAttribute("aria-pressed","true");
       } else {
-        statusText.textContent = "You still haven't checked your mail today 👀";
+        statusText.textContent = "You haven't checked your mail today 👀";
+        subText.textContent = lastCheckedTs ? ("Last checked: " + formatDateTime(lastCheckedTs)) : "";
+        doneBtn.setAttribute("aria-pressed","false");
       }
 
       dateInfo.textContent = "Today: " + today;
+      updateStreak(data);
     }
 
-    function markDone() {
+    function markDone(){
       const today = getTodayString();
-      const saved = localStorage.getItem(STORAGE_KEY);
-      let data = {};
-      if (saved) {
-        try { data = JSON.parse(saved); } catch (e) {}
-      }
-      data[today] = true;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      const now = Date.now();
+      const data = readData();
+      data[today] = { checked: true, ts: now };
+      data.lastChecked = now;
+      pruneOld(data);
+      writeData(data);
       loadStatus();
+      toast("Marked done for today ✅");
     }
 
-    function resetToday() {
+    function resetToday(){
       const today = getTodayString();
-      const saved = localStorage.getItem(STORAGE_KEY);
-      let data = {};
-      if (saved) {
-        try { data = JSON.parse(saved); } catch (e) {}
-      }
-      delete data[today];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      const data = readData();
+      if(data[today]) delete data[today];
+      // keep lastChecked if other days exist, recompute
+      // recompute lastChecked
+      const days = Object.keys(data).filter(k => k !== "lastChecked").sort().reverse();
+      data.lastChecked = days.length ? data[days[0]].ts : null;
+      writeData(data);
       loadStatus();
+      toast("Cleared today's mark 🔁");
     }
 
+    function updateStreak(data){
+      // compute consecutive days ending today
+      const today = getTodayString();
+      const keys = Object.keys(data).filter(k => k !== "lastChecked").sort().reverse();
+      let streak = 0;
+      let day = new Date();
+      for(;;){
+        const s = getTodayString(day);
+        if(data[s] && data[s].checked){
+          streak++;
+        } else break;
+        day.setDate(day.getDate()-1);
+      }
+      streakInfo.textContent = "Streak: " + streak + " day" + (streak === 1 ? "" : "s");
+    }
+
+    // --- export / import ---
+    function exportData(){
+      const data = readData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `daily-mail-check-${getTodayString()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast("Export started");
+    }
+
+    function importDataFile(file){
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          if(typeof parsed !== "object" || parsed === null) throw new Error("Invalid JSON");
+          // merge safely
+          const cur = readData();
+          const merged = { ...cur, ...parsed };
+          pruneOld(merged);
+          writeData(merged);
+          loadStatus();
+          toast("Imported data ✔");
+        } catch(e){
+          toast("Import failed — invalid file");
+          console.error(e);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function clearAll(){
+      if(!confirm("Clear all saved history? This cannot be undone.")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      loadStatus();
+      toast("All data cleared 🗑️");
+    }
+
+    // --- keyboard shortcuts ---
+    window.addEventListener("keydown", (e) => {
+      if(e.code === "Space" && (document.activeElement === document.body || document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA")){
+        e.preventDefault();
+        markDone();
+      } else if(e.key === "r" || e.key === "R"){
+        e.preventDefault();
+        resetToday();
+      }
+    });
+
+    // --- Notification while page open (optional) ---
+    let reminderTimer = null;
+    function timeUntilNextReminder(){
+      const now = new Date();
+      // schedule at 21:00 local time (9pm) if not checked yet
+      const target = new Date(now);
+      target.setHours(21,0,0,0);
+      if(target <= now) target.setDate(target.getDate() + 1);
+      return target.getTime() - now.getTime();
+    }
+
+    function scheduleInPageReminder(){
+      // only schedule if Notifications allowed and page is visible
+      if(!("Notification" in window)) return;
+      // cancel old
+      if(reminderTimer) clearTimeout(reminderTimer);
+      const delay = timeUntilNextReminder();
+      reminderTimer = setTimeout(()=> {
+        const data = readData();
+        const today = getTodayString();
+        if(!data[today] || !data[today].checked){
+          if(Notification.permission === "granted"){
+            new Notification("Reminder — check your email", {
+              body: "You haven't marked today's mail check. Tap to return to the page.",
+              tag: "daily-mail-check"
+            }).onclick = () => window.focus();
+          } else {
+            // fallback toast if permission not granted
+            toast("Reminder: don't forget to check your email");
+          }
+        }
+        // schedule next
+        scheduleInPageReminder();
+      }, delay);
+    }
+
+    // request permission UI best-effort
+    function requestNotificationPermission(){
+      if(!("Notification" in window)) return;
+      if(Notification.permission === "default"){
+        try {
+          Notification.requestPermission().then(p => {
+            if(p === "granted"){
+              toast("Notifications enabled (in-page)");
+              scheduleInPageReminder();
+            } else {
+              toast("Notifications disabled");
+            }
+          });
+        } catch(e){
+          // ignore
+        }
+      } else if(Notification.permission === "granted"){
+        scheduleInPageReminder();
+      }
+    }
+
+    // --- events ---
     doneBtn.addEventListener("click", markDone);
     resetBtn.addEventListener("click", resetToday);
+    exportBtn.addEventListener("click", exportData);
+    importBtn.addEventListener("click", () => importFile.click());
+    importFile.addEventListener("change", (ev) => {
+      const f = ev.target.files?.[0];
+      importDataFile(f);
+      importFile.value = "";
+    });
+    clearAllBtn.addEventListener("click", clearAll);
 
-    loadStatus();
+    // initialize
+    (function init(){
+      // ensure structure exists
+      const data = readData();
+      // migrate older keys? kept v1 key in STORAGE_KEY
+      pruneOld(data);
+      writeData(data);
+      loadStatus();
+
+      // accessibility: announce initial status
+      // Request notification permission optionally after a short delay (don't spam)
+      setTimeout(requestNotificationPermission, 1500);
+
+      // If page is visible, schedule a reminder
+      if(document.visibilityState === "visible"){
+        scheduleInPageReminder();
+      }
+      document.addEventListener("visibilitychange", () => {
+        if(document.visibilityState === "visible"){
+          scheduleInPageReminder();
+        } else {
+          if(reminderTimer) clearTimeout(reminderTimer);
+        }
+      });
+    })();
   </script>
 </body>
 </html>
