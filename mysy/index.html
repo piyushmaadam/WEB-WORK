@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mukhyamantri Yuva Swavalamban Yojana — Notice Board</title>
+  <meta name="description" content="Mukhyamantri Yuva Swavalamban Yojana — Education Department, Gujarat State. Notice board, contact & application links."/>
+  <link rel="icon" href="Images/favicon.ico" type="image/x-icon" />
+  <style>
+    /* ---------- Variables & base ---------- */
+    :root{
+      --bg:#f4f6fb;
+      --card:#fff;
+      --accent:#561420;
+      --muted:#5D2832;
+      --muted-2:#6b6b6b;
+      --radius:12px;
+      --gap:12px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial;
+      color-scheme: light;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#f8fafc,var(--bg));color:#111}
+    a{color:var(--muted); text-decoration:none}
+    a:focus{outline:3px solid rgba(86,20,32,0.12);outline-offset:3px}
+    .container{max-width:1100px;margin:20px auto;padding:16px}
+
+    /* ---------- Header ---------- */
+    header.site{
+      background:linear-gradient(90deg, #fff, #fff);
+      border-radius: var(--radius);
+      padding:16px;
+      display:flex;
+      gap:16px;
+      align-items:center;
+      box-shadow:0 6px 18px rgba(18,18,18,0.06);
+    }
+    .brand {
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .brand img{width:64px;height:64px;object-fit:contain;border-radius:8px}
+    .brand h1{font-size:1.15rem;margin:0;line-height:1}
+    .brand p{margin:0;font-size:.9rem;color:var(--muted-2)}
+
+    /* ---------- Nav ---------- */
+    nav.topnav{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .nav-left{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+    .btn{
+      background:transparent;border:1px solid rgba(86,20,32,0.06);padding:10px 12px;border-radius:999px;font-weight:600;cursor:pointer;
+    }
+    .btn.primary{background:var(--accent);color:#fff;border:none}
+    .dropdown{position:relative}
+    .dropdown .menu{position:absolute;left:0;top:calc(100% + 8px);min-width:220px;background:var(--card);box-shadow:0 8px 30px rgba(0,0,0,0.08);border-radius:10px;padding:8px;display:none;z-index:40}
+    .dropdown.open .menu{display:block}
+    .menu a{display:block;padding:8px 10px;border-radius:8px}
+    .menu a:hover{background:#faf5f6}
+
+    /* mobile hamburger */
+    .hamburger{display:none;border:0;background:transparent;font-size:1.2rem; padding:6px}
+
+    /* ---------- Layout ---------- */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr}
+      .hamburger{display:inline-block}
+      .nav-left{display:none}
+      .nav-mobile{display:flex;gap:8px}
+      .mobile-open .nav-left{display:flex;flex-direction:column;width:100%}
+    }
+
+    /* ---------- Notice board ---------- */
+    .card{
+      background:var(--card);
+      padding:14px;
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(2,6,23,0.04);
+    }
+    .notice-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .notice-head h2{margin:0;font-size:1.05rem;color:var(--accent)}
+    .search{display:flex;gap:8px;align-items:center}
+    .search input{padding:8px 10px;border-radius:10px;border:1px solid #e6e6e6;width:260px}
+    .notice-list{margin-top:12px;padding:8px;border-radius:10px;border:1px dashed rgba(86,20,32,0.06);max-height:420px;overflow:auto}
+    .notice-list ul{list-style:disc;margin:8px 12px;padding-left:18px}
+    .notice-list li{margin:10px 0}
+    .notice-list li a{display:inline-block; padding:6px 8px; border-radius:8px}
+    .notice-list li a .new-badge{margin-left:8px;display:inline-block;background:#ffdede;color:#7a0510;padding:2px 6px;border-radius:999px;font-size:0.72rem}
+
+    /* ---------- Sidebar ---------- */
+    aside .info{display:grid;gap:8px}
+    .info .card{padding:12px}
+    .contact strong{display:block;margin-bottom:4px}
+    .social a{display:inline-block;margin-right:8px;padding:6px 10px;border-radius:8px;background:#fff;border:1px solid rgba(86,20,32,0.06)}
+    .footer{margin-top:18px;padding:12px;text-align:center;color:#fff;background:var(--accent);border-radius:10px}
+
+    /* ---------- Footer ---------- */
+    footer.site{margin-top:18px;padding:12px;text-align:center;color:#444;font-size:0.9rem}
+
+    /* accessible focus for list items */
+    .notice-list li a:focus{outline:3px solid rgba(86,20,32,0.12);outline-offset:4px}
+  </style>
+</head>
+<body>
+  <div class="container" id="page">
+    <header class="site" role="banner" aria-label="MYSY Header">
+      <div class="brand" aria-hidden="false">
+        <img src="Images/Emblem.png" alt="Government Emblem" />
+        <div>
+          <h1>Mukhyamantri Yuva Swavalamban Yojana</h1>
+          <p>Education Department, Gujarat State</p>
+        </div>
+      </div>
+
+      <nav class="topnav" role="navigation" aria-label="Primary navigation">
+        <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle menu">☰</button>
+
+        <div class="nav-left" id="mainNav">
+          <a class="btn" href="Noticeboard/MYSY FAQ 25-26.pdf" target="_blank" rel="noopener">FAQ's</a>
+
+          <div class="dropdown" id="userManual">
+            <button class="btn" aria-haspopup="true" aria-expanded="false">User manual ▾</button>
+            <div class="menu" role="menu" aria-label="User manual menu">
+              <a role="menuitem" href="frm_admin_inst.aspx" target="_blank" rel="noopener">For Officers (SSO users)</a>
+            </div>
+          </div>
+
+          <a class="btn" href="Frm_open_stat.aspx">Student status</a>
+          <a class="btn" href="Noticeboard/Department list new_latest.pdf" target="_blank" rel="noopener">Contact us</a>
+
+          <div class="dropdown" id="applyMenu">
+            <button class="btn primary" aria-haspopup="true" aria-expanded="false">Login/Register 2025-2026 ▾</button>
+            <div class="menu" role="menu" aria-label="Applications menu">
+              <a role="menuitem" href="Frm_Stu_Login.aspx" target="_self">Fresh Application</a>
+              <a role="menuitem" href="Frm_Stu_Login_ren.aspx" target="_self">Renewal Application</a>
+              <a role="menuitem" href="Frm_Del_notice.aspx" target="_self">Delayed Application</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-mobile" aria-hidden="true"></div>
+      </nav>
+    </header>
+
+    <div class="grid" role="main">
+      <!-- Main column -->
+      <section class="card" aria-labelledby="noticeTitle">
+        <div class="notice-head">
+          <h2 id="noticeTitle">Notice Board</h2>
+          <div class="search" role="search" aria-label="Search notices">
+            <input id="searchInput" type="search" placeholder="Search notices..." aria-label="Search notices" />
+            <button id="openAll" class="btn" title="Open all PDFs in new tabs">Open all</button>
+          </div>
+        </div>
+
+        <div class="notice-list" id="noticeList" tabindex="0" aria-live="polite">
+          <ul id="notices">
+            <li><a href="Noticeboard/MYSY-EDU-GR-07-10-15.pdf" target="_blank" rel="noopener">Education Department Resolution for Mukhyamantri Yuva Swavalamban Yojana</a></li>
+            <li><a href="Noticeboard/MYSY Education Department GR dated 04-06-2016.pdf" target="_blank" rel="noopener">MYSY - EDU. DEPT.GR. Dated:04/06/2016 regarding Income and Percentile Norms Relaxation</a></li>
+            <li><a href="Noticeboard/D2D_GR.pdf" target="_blank" rel="noopener">Education Department Resolution for MYSY for D2D students</a></li>
+            <li><a href="Noticeboard/29dec_gr.pdf" target="_blank" rel="noopener">Education Department Resolution for MYSY for Children of Martyr</a></li>
+            <li><a href="Noticeboard/MYSY_GR_15_07_2017.pdf" target="_blank" rel="noopener">MYSY GR Dated: 15/07/2017</a></li>
+            <li><a href="Noticeboard/MYSY_GR_19_07_2017.pdf" target="_blank" rel="noopener">MYSY GR Dated: 19/07/2017</a></li>
+            <li><a href="Noticeboard/mysy-23-4-18.PDF" target="_blank" rel="noopener">MYSY GR Dated: 23/04/2018</a></li>
+            <li><a href="Noticeboard/MYSY_GR_03082018.pdf" target="_blank" rel="noopener">MYSY GR Dated: 03/08/2018</a></li>
+            <li><a href="Noticeboard/MYSY_GR_30052019.pdf" target="_blank" rel="noopener">MYSY GR Dated: 30/05/2019</a></li>
+            <li><a href="Noticeboard/MYSY_Rs20_lakh_bond_GR.pdf" target="_blank" rel="noopener">Health & Family Welfare Dept. Resolution for Rs. 20 Lakh Bond Dated:14/08/2019 <span class="new-badge" aria-hidden="true">Important</span></a></li>
+            <li><a href="Noticeboard/MYSY GR 15_09_2020FORCORONAWARRIORS.pdf" target="_blank" rel="noopener">MYSY GR for Corona Warriors dated: 15/09/2020</a></li>
+            <li><a href="Noticeboard/New Government Resolution of Education department date - 28102022 (1).pdf" target="_blank" rel="noopener">MYSY GR 28_10_2022 FOR ITR</a></li>
+            <li><a href="Noticeboard/Important_instructions_other_scholarship.pdf" target="_blank" rel="noopener">Important Instructions for Universities & Colleges regarding MYSY and other scholarship</a></li>
+            <li><a href="Noticeboard/General Administration Department Resolution For Self-Declaration process Dated 25122021.pdf" target="_blank" rel="noopener">GAD Resolution for Self-Declaration process Dated: 25/12/2021</a></li>
+            <!-- Add or remove list items as needed -->
+          </ul>
+        </div>
+      </section>
+
+      <!-- Sidebar -->
+      <aside>
+        <div class="info">
+          <div class="card contact" aria-label="Contact information">
+            <strong>MYSY helpline numbers</strong>
+            <div>079-26566000, 7043333181 (10:30 AM to 6:00 PM)</div>
+            <div style="margin-top:8px">
+              <strong>Email:</strong> <a href="mailto:mysy-kcg@gujgov.edu.in">mysy-kcg@gujgov.edu.in</a>
+            </div>
+            <div style="margin-top:8px">
+              <a class="btn" href="Frm_Stu_contact.aspx">Contact Us</a>
+            </div>
+          </div>
+
+          <div class="card social" aria-label="Social">
+            <strong>Follow us</strong>
+            <div style="margin-top:6px">
+              <a href="https://instagram.com/mysykcg" target="_blank" rel="noopener">Instagram: @mysykcg</a>
+            </div>
+          </div>
+
+          <div class="card" aria-label="Quick actions">
+            <strong>Quick links</strong>
+            <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+              <a class="btn" href="Frm_Stu_Login.aspx">Fresh Application</a>
+              <a class="btn" href="Frm_Stu_Login_ren.aspx">Renewal Application</a>
+              <a class="btn" href="frm_stu_notice.aspx">Back to Notices</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="site" role="contentinfo" aria-label="Footer">
+      <div style="max-width:900px;margin:auto">
+        <p style="margin:.25rem 0">Designed, Developed & Hosted by: <a href="https://guj.nic.in/" target="_blank" rel="noopener">National Informatics Centre, Gujarat State Centre</a>. All Rights Reserved.</p>
+        <p style="margin:.25rem 0"><a href="javascript:void(0)" id="privacyLink">Privacy Policy</a></p>
+      </div>
+    </footer>
+  </div>
+
+  <noscript>
+    <div style="position:fixed;inset:0;background:#0009;color:#fff;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;z-index:9999">
+      Javascript is disabled. Please enable browser JavaScript and reload this page.
+    </div>
+  </noscript>
+
+  <script>
+    // Small, dependency-free interactivity
+
+    // Toggle dropdowns (delegation)
+    document.addEventListener('click', function (e) {
+      // open/close dropdowns
+      const btn = e.target.closest('.dropdown > button');
+      if (btn) {
+        const parent = btn.parentElement;
+        const isOpen = parent.classList.contains('open');
+        // close all first
+        document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+        document.querySelectorAll('.dropdown > button').forEach(b => b.setAttribute('aria-expanded','false'));
+        if (!isOpen) {
+          parent.classList.add('open');
+          btn.setAttribute('aria-expanded','true');
+        }
+        return;
+      }
+      // click outside => close all
+      if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+        document.querySelectorAll('.dropdown > button').forEach(b => b.setAttribute('aria-expanded','false'));
+      }
+    });
+
+    // Mobile hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const page = document.getElementById('page');
+    hamburger && hamburger.addEventListener('click', function () {
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', String(!expanded));
+      page.classList.toggle('mobile-open');
+    });
+
+    // Simple search for notices
+    const searchInput = document.getElementById('searchInput');
+    const noticesUL = document.getElementById('notices');
+    searchInput && searchInput.addEventListener('input', function () {
+      const q = this.value.trim().toLowerCase();
+      Array.from(noticesUL.children).forEach(li => {
+        const txt = li.textContent.trim().toLowerCase();
+        li.style.display = txt.includes(q) ? '' : 'none';
+      });
+    });
+
+    // Open all PDFs in new tabs (use carefully)
+    document.getElementById('openAll')?.addEventListener('click', function () {
+      const anchors = Array.from(noticesUL.querySelectorAll('a[href]'));
+      anchors.forEach(a => window.open(a.href, '_blank', 'noopener'));
+    });
+
+    // Privacy policy hook (if you use server-side __doPostBack, add here)
+    document.getElementById('privacyLink')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      // If your site uses server postback, call __doPostBack('ctl00$lnkPrvcy','')
+      // Otherwise navigate to a static privacy page:
+      window.location.href = 'frm_privacy.aspx';
+    });
+
+    // Accessibility: allow keyboard to open dropdowns with Enter/Space on buttons
+    document.querySelectorAll('.dropdown > button').forEach(btn => {
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
