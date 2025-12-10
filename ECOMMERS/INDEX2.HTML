@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleHub - Clothing Shop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 200px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            color: #ff6b6b;
+        }
+        .hero {
+            background-color: #eee;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .hero img {
+            max-width: 100%;
+            height: auto;
+        }
+        .hero h1 {
+            font-size: 2.5em;
+            margin: 20px 0;
+        }
+        .products {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .products h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            padding: 15px;
+        }
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+        }
+        .product-card h3 {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .product-card p {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        .product-card button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .product-card button:hover {
+            background-color: #ff6b6b;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://img.freepik.com/premium-vector/clothing-shop-simple-business-logo-template_278222-7234.jpg" alt="StyleHub Logo" class="logo">
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Men</a></li>
+                <li><a href="#">Women</a></li>
+                <li><a href="#">Kids</a></li>
+                <li><a href="#">Sale</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <img src="https://img.freepik.com/free-vector/fashion-sale-with-discount-template_23-2148936503.jpg?semt=ais_hybrid&w=740&q=80" alt="Fashion Sale Banner">
+        <h1>Welcome to StyleHub</h1>
+        <p>Discover the latest trends in clothing!</p>
+    </section>
+
+    <section class="products">
+        <h2>Featured Products</h2>
+        <div class="grid">
+            <div class="product-card">
+                <img src="https://media.tychesoftwares.com/wp-content/uploads/2018/11/69932-big.jpg" alt="Stylish Jacket">
+                <h3>Stylish Jacket</h3>
+                <p>$89.99</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://themehunk.com/wp-content/uploads/2021/06/women-fashion-shop-demo-image.png" alt="Elegant Dress">
+                <h3>Elegant Dress</h3>
+                <p>$129.99</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://images.reallygooddesigns.com/2024/11/Cool-Clothing-Brand-eCommerce-Website-for-Women.png" alt="Casual Shirt">
+                <h3>Casual Shirt</h3>
+                <p>$49.99</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://genovawebart.com/hubfs/img/webp/blog-article-best-shopify-clothing-stores-sportswear-products-ecosystem-alo-yoga-one-of-the-best-shopify-fashion-websites.webp" alt="Sportswear Set">
+                <h3>Sportswear Set</h3>
+                <p>$79.99</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://cdn.prod.website-files.com/666b0581f1b06bff8b48beb2/669916c97be99a97ab66b7cb_64db7cb5ba599b65be4db376_o4uIp6Z80mxmtBnmYkI0RccJ_MiVzUfyZ99DiFkMVKwLbN58gj4CeCPJvCjDx14M8O4s7V9OVGd1CpIEwKEuH708iAwUDcjAlwfGY_GX6cCLsNeVKUczpwtFdbBwlXt4kdKfY3OXOXXEzMAcGS6I2I4.png" alt="Trendy Outfit">
+                <h3>Trendy Outfit</h3>
+                <p>$99.99</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://media.tychesoftwares.com/wp-content/uploads/2018/11/71149-big.jpg" alt="Denim Jeans">
+                <h3>Denim Jeans</h3>
+                <p>$59.99</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 StyleHub. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
