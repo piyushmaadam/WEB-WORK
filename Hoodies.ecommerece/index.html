@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanThread | Hoodies & Joggers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS STYLES --- */
+        
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #555;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #000;
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* Hero Section */
+        header {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1556906781-9a412961c28c?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .cta-btn:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        /* Shop Section */
+        #shop {
+            padding: 50px 5%;
+            text-align: center;
+        }
+
+        .filters {
+            margin: 30px 0;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: 0.3s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            transition: transform 0.3s;
+            text-align: left;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .product-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .price {
+            color: #666;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            color: #fff;
+            border: none;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background: #333;
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            z-index: 200;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-cart {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f4f4f4;
+            padding-bottom: 10px;
+        }
+
+        .cart-footer {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: #28a745;
+            color: white;
+            border: none;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+            margin-top: 50px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .nav-links {
+                display: none; /* Simplified for mobile */
+            }
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">URBAN<span>THREAD</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#shop">Shop</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="cart-icon" onclick="toggleCart()">
+            <i class="fas fa-shopping-bag"></i>
+            <span id="cart-count">0</span>
+        </div>
+    </nav>
+
+    <header id="home">
+        <div class="hero-content">
+            <h1>Premium Comfort. Urban Style.</h1>
+            <p>Essential Hoodies & Joggers for the modern minimalist.</p>
+            <a href="#shop" class="cta-btn">Shop Collection</a>
+        </div>
+    </header>
+
+    <section id="shop">
+        <h2>The Collection</h2>
+        
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterProducts('all')">All</button>
+            <button class="filter-btn" onclick="filterProducts('hoodie')">Hoodies</button>
+            <button class="filter-btn" onclick="filterProducts('jogger')">Joggers</button>
+        </div>
+
+        <div class="product-container" id="product-list">
+            </div>
+    </section>
+
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p>Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <h3>Total: $<span id="cart-total">0</span></h3>
+            <button class="checkout-btn" onclick="checkout()">Checkout</button>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <p>&copy; 2025 UrbanThread. Designed for Comfort.</p>
+    </footer>
+
+    <script>
+        /* --- JAVASCRIPT LOGIC --- */
+
+        // 1. Product Data (Using placeholders for images)
+        const products = [
+            {
+                id: 1,
+                name: "Oversized Matte Black Hoodie",
+                price: 45.00,
+                category: "hoodie",
+                image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                id: 2,
+                name: "Heather Grey Street Joggers",
+                price: 35.00,
+                category: "jogger",
+                image: "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                id: 3,
+                name: "Essential Navy Pullover",
+                price: 40.00,
+                category: "hoodie",
+                image: "https://images.unsplash.com/photo-1620799140408-ed5341cd2431?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                id: 4,
+                name: "Slim Fit Cargo Joggers",
+                price: 38.00,
+                category: "jogger",
+                image: "https://images.unsplash.com/photo-1517445312882-6e16f39385d5?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                id: 5,
+                name: "Urban Beige Hoodie",
+                price: 42.00,
+                category: "hoodie",
+                image: "https://images.unsplash.com/photo-1564557287817-3785e38ec1f5?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                id: 6,
+                name: "Tech Fleece Black Bottoms",
+                price: 50.00,
+                category: "jogger",
+                image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1000&auto=format&fit=crop"
+            }
+        ];
+
+        // 2. Initialize Variables
+        const productList = document.getElementById('product-list');
+        const cartItems = document.getElementById('cart-items');
+        const cartTotalDisplay = document.getElementById('cart-total');
+        const cartCountDisplay = document.getElementById('cart-count');
+        let cart = [];
+
+        // 3. Render Products to DOM
+        function displayProducts(category = 'all') {
+            productList.innerHTML = ''; // Clear current products
+            
+            const filteredProducts = category === 'all' 
+                ? products 
+                : products.filter(product => product.category === category);
+
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p class="price">$${product.price.toFixed(2)}</p>
+                        <button class="add-btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                    </div>
+                `;
+                productList.appendChild(productCard);
+            });
+        }
+
+        // 4. Filter Functionality
+        function filterProducts(category) {
+            // Update active button style
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent.toLowerCase().includes(category === 'all' ? 'all' : category)) {
+                    btn.classList.add('active');
+                }
+            });
+            displayProducts(category);
+        }
+
+        // 5. Cart Functionality
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            updateCart();
+            toggleCart(); // Open cart to show addition
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function updateCart() {
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    cartItems.innerHTML += `
+                        <div class="cart-item">
+                            <div>
+                                <h4>${item.name}</h4>
+                                <p>$${item.price.toFixed(2)}</p>
+                            </div>
+                            <span style="color:red; cursor:pointer;" onclick="removeFromCart(${index})">&times;</span>
+                        </div>
+                    `;
+                });
+            }
+
+            cartTotalDisplay.innerText = total.toFixed(2);
+            cartCountDisplay.innerText = cart.length;
+        }
+
+        // 6. Toggle Cart Sidebar
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // 7. Dummy Checkout
+        function checkout() {
+            if(cart.length > 0) {
+                alert("Thank you for your purchase! (This is a demo)");
+                cart = [];
+                updateCart();
+                toggleCart();
+            } else {
+                alert("Your cart is empty!");
+            }
+        }
+
+        // Initial Load
+        displayProducts();
+    </script>
+</body>
+</html>
